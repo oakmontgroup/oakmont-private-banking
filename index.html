@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#10213a">
+
+<title>Oakmont Private Banking</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{margin:0;background:#f4f6f9;color:#202c3e;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+header{background:#10213a;color:white;padding:22px 20px;display:flex;align-items:center;gap:13px}
+
+.logo{height:46px;width:46px;border:1px solid #d5b879;color:#d5b879;display:grid;place-items:center;font-family:Georgia,serif;font-size:27px}
+
+h1{font:20px Georgia,serif;margin:0 0 5px}
+
+header p{font-size:10px;letter-spacing:2px;color:#d5b879;margin:0}
+
+main{max-width:850px;margin:28px auto;padding:0 16px}
+
+h2{font:28px Georgia,serif;margin:0 0 8px}
+
+.sub{font-size:13px;color:#788497;margin-bottom:23px}
+
+.card{background:linear-gradient(120deg,#10213a,#234365);color:white;padding:27px 23px;border-radius:15px;box-shadow:0 9px 25px #10213a18}
+
+.label{font-size:12px;color:#d7dfeb}
+
+.balance{font:36px Georgia,serif;margin:15px 0}
+
+.small{font-size:12px;color:#d7dfeb}
+
+.line{height:1px;background:#ffffff30;margin:22px 0 15px}
+
+.account{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px}
+
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+
+.actions button{background:white;border:1px solid #e4e8ee;border-radius:10px;padding:16px 5px;color:#10213a;font-size:12px;font-weight:600}
+
+.actions span{display:block;font-size:23px;margin-bottom:8px;color:#b19456}
+
+.panel{background:white;border:1px solid #e6eaf0;border-radius:12px;padding:20px;margin:18px 0}
+
+.panel h3{font:20px Georgia,serif;margin:0 0 15px}
+
+.tx{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid #edf0f4}
+
+.tx:last-child{border:0}
+
+.symbol{width:39px;height:39px;border-radius:50%;background:#f1eee7;color:#96783c;display:grid;place-items:center;flex-shrink:0}
+
+.info{flex:1;min-width:0}
+
+.info strong{font-size:13px;font-weight:600}
+
+.info small{display:block;font-size:11px;color:#8993a3;margin-top:5px}
+
+.amount{font-size:13px;font-weight:600;white-space:nowrap}
+
+.notice{font-size:11px;line-height:1.6;color:#74613b;background:#fff9e9;border:1px solid #efe1bd;border-radius:8px;padding:12px;margin-top:20px}
+
+footer{text-align:center;font-size:11px;line-height:1.7;color:#8993a3;padding:22px}
+
+button{cursor:pointer}
+
+button:focus-visible{outline:2px solid #b19456;outline-offset:3px}
+
+@media(max-width:420px){.balance{font-size:31px}.panel{padding:15px}.actions button{font-size:11px}.tx{gap:8px}.amount{font-size:12px}}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">O</div>
+
+<div>
+
+<h1>Oakmont Private Banking</h1>
+
+<p>PERSONAL ACCOUNT PORTAL</p>
+
+</div>
+
+</header>
+
+<main>
+
+<h2>Welcome to Oakmont</h2>
+
+<div class="sub">Your account overview at a glance.</div>
+
+<section class="card">
+
+<div class="label">Illustrative account balance</div>
+
+<div class="balance">CA$2,450.00</div>
+
+<div class="small">Canadian dollars (CAD)</div>
+
+<div class="line"></div>
+
+<div class="account">
+
+<span>Personal account</span>
+
+<span>Reference: OAK-••••-2841</span>
+
+</div>
+
+</section>
+
+<section class="actions">
+
+<button onclick="showMessage('Transfers are not connected to a real payment service.')"><span>↗</span>Transfer</button>
+
+<button onclick="showMessage('This website does not receive or send real funds.')"><span>↙</span>Request funds</button>
+
+<button onclick="document.getElementById('details').scrollIntoView({behavior:'smooth'})"><span>▤</span>Account details</button>
+
+</section>
+
+<section class="panel">
+
+<h3>Recent activity</h3>
+
+<div class="tx">
+
+<div class="symbol">↗</div>
+
+<div class="info"><strong>Coffee House</strong><small>October 6, 2026 · Illustrative entry</small></div>
+
+<div class="amount">−CA$8.50</div>
+
+</div>
+
+<div class="tx">
+
+<div class="symbol">↙</div>
+
+<div class="info"><strong>Sample deposit</strong><small>October 4, 2026 · Illustrative entry</small></div>
+
+<div class="amount" style="color:#188568">+CA$350.00</div>
+
+</div>
+
+<div class="tx">
+
+<div class="symbol">◇</div>
+
+<div class="info"><strong>Market & Grocery</strong><small>October 2, 2026 · Illustrative entry</small></div>
+
+<div class="amount">−CA$42.75</div>
+
+</div>
+
+<div class="tx">
+
+<div class="symbol">⌂</div>
+
+<div class="info"><strong>Sample payment</strong><small>September 29, 2026 · Illustrative entry</small></div>
+
+<div class="amount">−CA$75.00</div>
+
+</div>
+
+</section>
+
+<section class="panel" id="details">
+
+<h3>Account information</h3>
+
+<p><strong>Account name:</strong> Oakmont Private Banking</p>
+
+<p><strong>Currency:</strong> Canadian Dollar (CAD)</p>
+
+<p><strong>Account type:</strong> Personal account interface</p>
+
+<p><strong>Payment connection:</strong> Not connected</p>
+
+</section>
+
+<div class="notice">
+
+This independently created website is not a bank or payment service. Displayed balances and transactions are illustrative and do not represent real deposits or completed payments.
+
+</div>
+
+<div id="message" role="status" style="font-size:13px;margin-top:12px"></div>
+
+</main>
+
+<footer>
+
+Oakmont Private Banking<br>
+
+Independent website project · Canadian Dollar interface
+
+</footer>
+
+<script>
+
+function showMessage(text){
+
+document.getElementById("message").textContent=text;
+
+}
+
+</script>
+
+</body>
+
+</html>
