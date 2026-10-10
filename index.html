@@ -70,7 +70,15 @@
 
   <!-- Replace the placeholder below with your Supabase Publishable key. Never use a service_role or secret key here. -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const SUPABASE_URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
+  // Keep all your existing JavaScript here
+</script>
+
+  const SUPABASE_URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
+  // Keep all your existing JavaScript here
+</script>
     const SUPABASE_URL = ‘https://qzyxcboyjqtxqqcxveil.supabase.co’;
     const SUPABASE_PUBLISHABLE_KEY = ‘sb_publishable_km5xwN4pFYUp3-ZvCjniQw_CpMvDKBz’;
     const STARTING_BALANCE = 35000;
@@ -126,5 +134,5 @@
     $('signOutBtn').addEventListener('click',async()=>{if(db)await db.auth.signOut();});
     init();
   </script>
-</body>
+ </body>
 </html>
