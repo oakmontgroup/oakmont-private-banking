@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oakmont | Demo Dashboard</title>
+  <meta name="theme-color" content="#123b30">
+  <title>Oakmont | Private Client Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
 </head>
 <body class="dashboard-page">
-  <div class="demo-notice">
-    EDUCATIONAL DEMO · SAMPLE BALANCE ONLY · NO REAL TRANSACTIONS
-  </div>
   <header class="dashboard-header">
-    <a class="brand" href="dashboard.html">
+    <a class="brand" href="dashboard.html" aria-label="Oakmont home">
       <span class="brand-logo">O</span>
       <span>
         <strong>OAKMONT</strong>
-        <small>PRIVATE BANKING CONCEPT</small>
+        <small>PRIVATE CLIENT SERVICES</small>
       </span>
     </a>
     <div class="header-right">
@@ -25,7 +23,7 @@
         <span data-vancouver-date>Loading date...</span>
         <small>Vancouver, British Columbia</small>
       </div>
-      <button class="outline-button" id="signOutButton">
+      <button class="outline-button" id="signOutButton" type="button">
         Sign Out
       </button>
     </div>
@@ -33,13 +31,13 @@
   <div class="dashboard-layout">
     <aside class="sidebar">
       <div class="client-profile">
-        <div class="avatar" id="avatar">D</div>
+        <div class="avatar" id="avatar">T</div>
         <div>
-          <strong id="sidebarName">Demo Client</strong>
-          <small>Private Client · Demo</small>
+          <strong id="sidebarName" data-account-owner>Tianna Jack</strong>
+          <small>Private Client</small>
         </div>
       </div>
-      <nav class="navigation">
+      <nav class="navigation" aria-label="Main navigation">
         <a class="nav-link active" href="#overview">▦ Overview</a>
         <a class="nav-link" href="#account">◫ Accounts</a>
         <a class="nav-link" href="#transactions">↔ Activity</a>
@@ -49,17 +47,17 @@
       <div class="sidebar-help">
         <span class="help-icon">?</span>
         <strong>Need assistance?</strong>
-        <p>This demonstration is not connected to a bank.</p>
-        <a href="login.html">Return to sign in →</a>
+        <p>Explore the account overview and available website features.</p>
+        <a href="index.html">Return to home →</a>
       </div>
     </aside>
     <main class="dashboard-main" id="overview">
       <section class="page-heading">
         <div>
-          <p class="eyebrow">CLIENT OVERVIEW</p>
-          <h1>Good day, <span id="welcomeName">Demo Client</span></h1>
+          <p class="eyebrow">PRIVATE CLIENT OVERVIEW</p>
+          <h1>Good day, <span id="welcomeName" data-account-owner>Tianna Jack</span></h1>
           <p class="muted">
-            Here is an overview of your sample account.
+            Here is your account overview.
           </p>
         </div>
         <div class="date-panel">
@@ -68,68 +66,73 @@
           <span data-vancouver-date>Loading date...</span>
         </div>
       </section>
-      <section class="demo-alert">
+      <section class="demo-alert" aria-label="Account information notice">
         <span>ⓘ</span>
         <div>
-          <strong>Demonstration account</strong>
+          <strong>Account information</strong>
           <p>
-            All amounts and transactions shown here are fictional
-            sample data. No real money is held or transferred.
+            This is an educational website concept. The displayed balance
+            and account activity are illustrative and do not represent
+            real funds or completed financial transactions.
           </p>
         </div>
       </section>
       <section class="account-grid" id="account">
         <article class="balance-card">
           <div class="balance-top">
-            <span>Sample account balance</span>
+            <span>Account Balance</span>
             <span class="gold-symbol">◇</span>
           </div>
-          <h2>$50,000.00 <small>CAD</small></h2>
+          <h2>CAD $50,000.00</h2>
           <div class="balance-bottom">
-            <span><i></i> Demo balance</span>
+            <span><i></i> Illustrative balance</span>
             <span>Updated <b data-vancouver-time>—</b></span>
           </div>
           <span class="watermark">O</span>
         </article>
         <article class="stat-card">
           <span class="stat-icon">↗</span>
-          <p>Available in demo</p>
-          <h3>$50,000.00</h3>
-          <small>Fictional funds only</small>
+          <p>Available Balance</p>
+          <h3>CAD $50,000.00</h3>
+          <small>Illustrative amount only</small>
         </article>
         <article class="stat-card">
           <span class="stat-icon">▤</span>
-          <p>Recent activity</p>
+          <p>Recent Activity</p>
           <h3>04 <small>items</small></h3>
-          <small>Sample transactions</small>
+          <small>Illustrative entries</small>
         </article>
       </section>
       <section class="content-section" id="services">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">YOUR SERVICES</p>
-            <h2>Explore your dashboard</h2>
+            <p class="eyebrow">PRIVATE CLIENT SERVICES</p>
+            <h2>Account Services</h2>
           </div>
-          <span class="muted">Demo features</span>
+          <span class="muted">Available features</span>
         </div>
         <div class="services-grid">
           <article class="service-card">
             <span class="service-icon">▤</span>
-            <h3>Account overview</h3>
-            <p>Review your fictional balance and account summary.</p>
+            <h3>Account Overview</h3>
+            <p>Review your account summary and displayed balance.</p>
             <a href="#account">View account →</a>
           </article>
           <article class="service-card">
             <span class="service-icon">↔</span>
             <h3>Transfers</h3>
-            <p>Real transfers are disabled in this demonstration.</p>
-            <button type="button" class="text-button"
-                    id="transferButton">View demo notice →</button>
+            <p>Money transfers are not available on this website.</p>
+            <button
+              type="button"
+              class="text-button"
+              id="transferButton">
+              View information →
+            </button>
           </article>
           <article class="service-card">
             <span class="service-icon">▧</span>
-            <h3>Statements</h3>
-            <p>Review the example transactions below.</p>
+            <h3>Account Activity</h3>
+            <p>Review illustrative entries in the activity section.</p>
             <a href="#transactions">View activity →</a>
           </article>
         </div>
@@ -138,9 +141,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">ACCOUNT ACTIVITY</p>
-            <h2>Recent transactions</h2>
+            <h2>Recent Transactions</h2>
           </div>
-          <span class="demo-badge">SAMPLE DATA</span>
+          <span class="muted">Illustrative records</span>
         </div>
         <div class="table-container">
           <table>
@@ -155,32 +158,32 @@
             </thead>
             <tbody>
               <tr>
-                <td>Sample deposit</td>
+                <td>Illustrative deposit</td>
                 <td>Oct 08, 2026</td>
                 <td>Credit</td>
-                <td class="positive">+$2,500.00</td>
-                <td><span class="sample-status">Example</span></td>
+                <td class="positive">+CAD $2,500.00</td>
+                <td><span class="sample-status">Illustrative</span></td>
               </tr>
               <tr>
-                <td>Sample purchase</td>
+                <td>Illustrative purchase</td>
                 <td>Oct 06, 2026</td>
                 <td>Debit</td>
-                <td>−$128.40</td>
-                <td><span class="sample-status">Example</span></td>
+                <td>−CAD $128.40</td>
+                <td><span class="sample-status">Illustrative</span></td>
               </tr>
               <tr>
-                <td>Sample credit</td>
+                <td>Illustrative credit</td>
                 <td>Oct 03, 2026</td>
                 <td>Credit</td>
-                <td class="positive">+$850.00</td>
-                <td><span class="sample-status">Example</span></td>
+                <td class="positive">+CAD $850.00</td>
+                <td><span class="sample-status">Illustrative</span></td>
               </tr>
               <tr>
-                <td>Sample service fee</td>
+                <td>Illustrative service fee</td>
                 <td>Oct 01, 2026</td>
                 <td>Debit</td>
-                <td>−$15.00</td>
-                <td><span class="sample-status">Example</span></td>
+                <td>−CAD $15.00</td>
+                <td><span class="sample-status">Illustrative</span></td>
               </tr>
             </tbody>
           </table>
@@ -189,24 +192,33 @@
       <section class="banner">
         <p class="eyebrow">A LONG-TERM PERSPECTIVE</p>
         <h2>Plan with clarity.<br>Move forward with confidence.</h2>
-        <p>An illustrative private-client dashboard experience.</p>
+        <p>Explore a considered private-client website experience.</p>
       </section>
       <footer class="dashboard-footer" id="profile">
-        <span>© <span data-year></span> Oakmont Demo</span>
+        <span>© <span data-year></span> Oakmont</span>
         <span>Educational concept · Not a financial institution</span>
       </footer>
     </main>
   </div>
-  <div class="modal hidden" id="demoModal" role="dialog"
-       aria-modal="true" aria-labelledby="modalTitle">
+  <div
+    class="modal hidden"
+    id="demoModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle">
     <div class="modal-content">
-      <button class="modal-close" id="closeModal"
-              type="button" aria-label="Close">×</button>
+      <button
+        class="modal-close"
+        id="closeModal"
+        type="button"
+        aria-label="Close">
+        ×
+      </button>
       <span class="service-icon">ⓘ</span>
-      <h2 id="modalTitle">Demo feature only</h2>
+      <h2 id="modalTitle">Transfer Information</h2>
       <p>
-        This website cannot send, receive, or transfer real money.
-        Transfer functionality is intentionally disabled.
+        This website does not connect to a bank and cannot send,
+        receive, or transfer money.
       </p>
       <button class="primary-button" id="okayButton" type="button">
         Understood
