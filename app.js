@@ -1,8 +1,11 @@
-/* Oakmont educational demo.
-   This is not real banking authentication or payment software. */
+/* Oakmont educational website.
+   Account balances and activity are illustrative.
+   This is not real banking or authentication software. */
 (() => {
   "use strict";
+  // SETTINGS
   const TIME_ZONE = "America/Vancouver";
+  const ACCOUNT_OWNER_NAME = "Tianna Jack";
   const timeFormatter = new Intl.DateTimeFormat("en-CA", {
     timeZone: TIME_ZONE,
     hour: "2-digit",
@@ -22,41 +25,35 @@
     timeZone: TIME_ZONE,
     year: "numeric"
   });
+  // VANCOUVER CLOCK
   function updateVancouverClock() {
     const now = new Date();
     document.querySelectorAll("[data-vancouver-time]")
-      .forEach(element => {
+      .forEach((element) => {
         element.textContent = timeFormatter.format(now);
       });
     document.querySelectorAll("[data-vancouver-date]")
-      .forEach(element => {
+      .forEach((element) => {
         element.textContent = dateFormatter.format(now);
       });
     document.querySelectorAll("[data-year]")
-      .forEach(element => {
+      .forEach((element) => {
         element.textContent = yearFormatter.format(now);
       });
   }
-  // Display the correct Vancouver time immediately, then refresh every second.
   updateVancouverClock();
-  setInterval(updateVancouverClock, 1000);
-  function getDemoName() {
-    try {
-      return localStorage.getItem("oakmontDemoName") || "Demo Client";
-    } catch (error) {
-      return "Demo Client";
+  window.setInterval(updateVancouverClock, 1000);
+  // CONSISTENT ACCOUNT OWNER NAME
+  function updateAccountOwnerName() {
+    document.querySelectorAll(
+      "#sidebarName, #welcomeName, [data-account-owner]"
+    ).forEach((element) => {
+      element.textContent = ACCOUNT_OWNER_NAME;
+    });
+    const avatar = document.getElementById("avatar");
+    if (avatar) {
+      avatar.textContent = ACCOUNT_OWNER_NAME.charAt(0);
     }
-  }
-  function saveDemoName(name) {
-    const cleaned = String(name || "Demo Client")
-      .trim()
-      .slice(0, 48) || "Demo Client";
-    try {
-      localStorage.setItem("oakmontDemoName", cleaned);
-    } catch (error) {
-      // The demo still works with the default name if storage is unavailable.
-    }
-    return cleaned;
   }
   // LOGIN PAGE
   const loginForm = document.getElementById("loginForm");
@@ -66,47 +63,70 @@
     const nameLabel = document.getElementById("nameLabel");
     const submitButton = document.getElementById("submitButton");
     const message = document.getElementById("loginMessage");
-    document.querySelectorAll("[data-mode]").forEach(button => {
+    document.querySelectorAll("[data-mode]").forEach((button) => {
       button.addEventListener("click", () => {
         mode = button.dataset.mode;
-        document.querySelectorAll("[data-mode]").forEach(tab => {
+        document.querySelectorAll("[data-mode]").forEach((tab) => {
           tab.classList.toggle("active", tab === button);
         });
-        nameLabel.classList.toggle("hidden", mode !== "create");
-        title.textContent = mode === "create"
-          ? "Create your demo profile"
-          : "Welcome back";
-        submitButton.innerHTML = mode === "create"
-          ? 'Create Demo Profile <span>→</span>'
-          : 'Continue to Dashboard <span>→</span>';
-        message.textContent = "";
-        message.style.color = "";
+        if (nameLabel) {
+          nameLabel.classList.toggle("hidden", mode !== "create");
+        }
+        if (title) {
+          title.textContent = mode === "create"
+            ? "Create your profile"
+            : "Welcome back";
+        }
+        if (submitButton) {
+          submitButton.innerHTML = mode === "create"
+            ? 'Create Profile <span>→</span>'
+            : 'Continue to Dashboard <span>→</span>';
+        }
+        if (message) {
+          message.textContent = "";
+          message.style.color = "";
+        }
       });
     });
-    loginForm.addEventListener("submit", event => {
+    loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const typedName = document.getElementById("fullName").value;
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const fullNameInput = document.getElementById("fullName");
+      const email = emailInput ? emailInput.value.trim() : "";
+      const password = passwordInput ? passwordInput.value : "";
+      const typedName = fullNameInput
+        ? fullNameInput.value.trim()
+        : "";
       if (!email || password.length < 4) {
-        message.textContent =
-          "Enter a valid email and at least 4 characters for the demo password.";
+        if (message) {
+          message.textContent =
+            "Enter an email address and a password of at least 4 characters.";
+          message.style.color = "";
+        }
         return;
       }
-      // Only use a display name. Do not store the password.
-      let displayName = getDemoName();
-      if (mode === "create") {
-        if (!typedName.trim()) {
-          message.textContent = "Enter a display name for your demo profile.";
-          return;
+      if (mode === "create" && !typedName) {
+        if (message) {
+          message.textContent = "Please enter a profile name.";
+          message.style.color = "";
         }
-        displayName = saveDemoName(typedName);
-      } else {
-        displayName = saveDemoName(displayName);
+        return;
       }
-      message.style.color = "#267b54";
-      message.textContent =
-        "Demo profile ready. Opening your sample dashboard...";
+      // This is a front-end demonstration, not real sign-in.
+      // Never save the password.
+      try {
+        localStorage.setItem(
+          "oakmontDemoName",
+          ACCOUNT_OWNER_NAME
+        );
+      } catch (error) {
+        // The fixed owner name still works without browser storage.
+      }
+      if (message) {
+        message.style.color = "#267b54";
+        message.textContent = "Opening the account overview...";
+      }
       window.setTimeout(() => {
         window.location.href = "dashboard.html";
       }, 500);
@@ -114,32 +134,50 @@
   }
   // DASHBOARD PAGE
   if (document.body.classList.contains("dashboard-page")) {
-    const name = getDemoName();
-    const welcomeName = document.getElementById("welcomeName");
-    const sidebarName = document.getElementById("sidebarName");
-    const avatar = document.getElementById("avatar");
-    if (welcomeName) welcomeName.textContent = name;
-    if (sidebarName) sidebarName.textContent = name;
-    if (avatar) avatar.textContent = name.charAt(0).toUpperCase();
+    updateAccountOwnerName();
     const modal = document.getElementById("demoModal");
+    const transferButton = document.getElementById("transferButton");
+    const closeModalButton = document.getElementById("closeModal");
+    const okayButton = document.getElementById("okayButton");
+    const signOutButton = document.getElementById("signOutButton");
     function openModal() {
-      if (modal) modal.classList.remove("hidden");
+      if (modal) {
+        modal.classList.remove("hidden");
+      }
     }
     function closeModal() {
-      if (modal) modal.classList.add("hidden");
+      if (modal) {
+        modal.classList.add("hidden");
+      }
     }
-    document.getElementById("transferButton")
-      ?.addEventListener("click", openModal);
-    document.getElementById("closeModal")
-      ?.addEventListener("click", closeModal);
-    document.getElementById("okayButton")
-      ?.addEventListener("click", closeModal);
-    modal?.addEventListener("click", event => {
-      if (event.target === modal) closeModal();
-    });
-    document.getElementById("signOutButton")
-      ?.addEventListener("click", () => {
-        window.location.href = "login.html";
+    if (transferButton) {
+      transferButton.addEventListener("click", openModal);
+    }
+    if (closeModalButton) {
+      closeModalButton.addEventListener("click", closeModal);
+    }
+    if (okayButton) {
+      okayButton.addEventListener("click", closeModal);
+    }
+    if (modal) {
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          closeModal();
+        }
       });
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          !modal.classList.contains("hidden")
+        ) {
+          closeModal();
+        }
+      });
+    }
+    if (signOutButton) {
+      signOutButton.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+    }
   }
 })();
