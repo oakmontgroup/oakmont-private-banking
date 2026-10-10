@@ -1,242 +1,349 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_km5xwN4pFYUp3-ZvCjniQw_CpMvDKBz';
-const STARTING_BALANCE = 35000;
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-let currentUser = null;
-let account = null;
-const $ = id => document.getElementById(id);
-const money = n => new Intl.NumberFormat('en-CA', {
-  style: 'currency',
-  currency: 'CAD'
-}).format(Number(n) || 0);
-function message(id, text, ok = false) {
-  const el = $(id);
-  el.textContent = text;
-  el.className = 'msg ' + (ok ? 'success' : 'error');
-}
-function showDashboard(show) {
-  $('authView').classList.toggle('hidden', show);
-  $('dashboard').classList.toggle('hidden', !show);
-}
-$('showSignUp').addEventListener('click', () => {
-  $('signInPanel').classList.add('hidden');
-  $('signUpPanel').classList.remove('hidden');
-});
-$('showSignIn').addEventListener('click', () => {
-  $('signUpPanel').classList.add('hidden');
-  $('signInPanel').classList.remove('hidden');
-});
-function render() {
-  if (!account) return;
-  $('ownerName').textContent =
-    (account.owner_name || currentUser?.email || 'TIANNA JACK')
-      .toLocaleUpperCase();
-  $('balance').textContent = money(account.balance);
-  const list = Array.isArray(account.transactions)
-    ? account.transactions
-    : [];
-  $('transactions').replaceChildren();
-  if (!list.length) {
-    const empty = document.createElement('p');
-    empty.className = 'empty';
-    empty.textContent = 'No records yet. Add a personal record to begin.';
-    $('transactions').append(empty);
-    return;
-  }
-  list.slice().reverse().slice(0, 20).forEach(tx => {
-    const row = document.createElement('div');
-    row.className = 'tx';
-    const left = document.createElement('div');
-    const strong = document.createElement('strong');
-    strong.textContent = tx.description;
-    const small = document.createElement('small');
-    small.textContent = new Date(tx.created_at).toLocaleString();
-    left.append(strong, small);
-    const amount = document.createElement('div');
-    amount.className = 'amount';
-    amount.textContent =
-      (tx.type === 'credit' ? '+' : '−') + money(tx.amount);
-    amount.style.color =
-      tx.type === 'credit' ? 'var(--green)' : 'var(--red)';
-    row.append(left, amount);
-    $('transactions').append(row);
-  });
-}
-async function loadAccount(user) {
-  currentUser = user;
-  const { data, error } = await db
-    .from('demo_accounts')
-    .select('*')
-    .eq('user_id', user.id)
-    .maybeSingle();
-  if (error) throw error;
-  if (!data) {
-    const displayName = (
-      user.user_metadata?.display_name || 'TIANNA JACK'
-    ).toString().slice(0, 80).toLocaleUpperCase();
-    const { data: created, error: createError } = await db
-      .from('demo_accounts')
-      .insert({
-        user_id: user.id,
-        owner_name: displayName,
-        balance: STARTING_BALANCE,
-        transactions: []
-      })
-      .select()
-      .single();
-    if (createError) throw createError;
-    account = created;
-  } else {
-    account = data;
-  }
-  showDashboard(true);
-  render();
-}
-async function init() {
-  try {
-    const { data, error } = await db.auth.getSession();
-    if (error) throw error;
-    if (data.session) {
-      await loadAccount(data.session.user);
-    } else {
-      showDashboard(false);
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07120f">
+  <title>Oakmont Private Banking</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">O</div>
+        <div>
+          <h1>Oakmont</h1>
+          <p>Private Account Management</p>
+        </div>
+      </div>
+      <span class="status">Account Portal</span>
+    </header>
+
+    <div class="notice">
+      View and organize personal account records. Balances and entries are
+      user-managed records and are not verified bank funds.
+    </div>
+
+    <section class="hero">
+      <p class="eyebrow">Personal account services</p>
+      <h2>Your financial records, organized.</h2>
+      <p class="sub">Sign in to view and manage your personal account records.</p>
+    </section>
+
+    <section id="authView" class="grid">
+      <div id="signInPanel" class="card">
+        <h3>Welcome back</h3>
+        <p class="small">Sign in to your account.</p>
+        <form id="signInForm">
+          <div class="field">
+            <label for="signInEmail">Email address</label>
+            <input id="signInEmail" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="signInPassword">Password</label>
+            <input id="signInPassword" type="password" autocomplete="current-password" required>
+          </div>
+          <button class="btn" type="submit">Sign in</button>
+          <p id="signInMsg" class="msg" aria-live="polite"></p>
+        </form>
+        <button id="showSignUp" class="muted-btn" type="button">Create an account</button>
+      </div>
+
+      <div id="signUpPanel" class="card hidden">
+        <h3>Create account</h3>
+        <p class="small">Create a personal account to manage your records.</p>
+        <form id="signUpForm">
+          <div class="field">
+            <label for="signUpName">Account name</label>
+            <input id="signUpName" type="text" maxlength="80" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="signUpEmail">Email address</label>
+            <input id="signUpEmail" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="signUpPassword">Password (at least 8 characters)</label>
+            <input id="signUpPassword" type="password" minlength="8" autocomplete="new-password" required>
+          </div>
+          <button class="btn" type="submit">Create account</button>
+          <p id="signUpMsg" class="msg" aria-live="polite"></p>
+        </form>
+        <button id="showSignIn" class="muted-btn" type="button">Back to sign in</button>
+      </div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="userbar">
+        <span>Account holder: <strong id="ownerName"></strong></span>
+        <button id="signOutBtn" class="btn secondary" type="button">Sign out</button>
+      </div>
+
+      <div class="panel">
+        <p class="balance-label">Personal record balance</p>
+        <p id="balance" class="balance">—</p>
+        <p class="small">A personal recordkeeping balance, not a bank-verified balance.</p>
+      </div>
+
+      <div class="grid">
+        <section class="card">
+          <h3>Add a record</h3>
+          <form id="entryForm">
+            <div class="field">
+              <label for="entryDescription">Description</label>
+              <input id="entryDescription" maxlength="120" required>
+            </div>
+            <div class="field">
+              <label for="entryAmount">Amount (CAD)</label>
+              <input id="entryAmount" type="number" min="0.01" step="0.01" required>
+            </div>
+            <div class="field">
+              <label for="entryType">Record type</label>
+              <select id="entryType">
+                <option value="credit">Add to balance</option>
+                <option value="debit">Subtract from balance</option>
+              </select>
+            </div>
+            <button class="btn" type="submit">Save record</button>
+            <p id="entryMsg" class="msg" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="card">
+          <h3>Recent records</h3>
+          <div id="transactions" class="transactions">
+            <p class="empty">Your records will appear here.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Oakmont Account Management · Personal recordkeeping tools
+    </footer>
+  </main>
+
+  <script>
+  (() => {
+    const URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
+    const KEY = 'sb_publishable_km5xwN4pFYUp3-ZvCjniQw_CpMvDKBz';
+
+    const $ = id => document.getElementById(id);
+    const show = (id, visible) => $(id).classList.toggle('hidden', !visible);
+    const msg = (id, text, ok = false) => {
+      $(id).textContent = text;
+      $(id).className = 'msg ' + (ok ? 'success' : 'error');
+    };
+
+    if (!window.supabase) {
+      $('authView').classList.remove('hidden');
+      msg('signInMsg', 'The connection library did not load. Check your internet connection and reload.');
+      return;
     }
-    db.auth.onAuthStateChange((_event, session) => {
-      setTimeout(async () => {
-        try {
-          if (session) {
-            await loadAccount(session.user);
-          } else {
-            currentUser = null;
-            account = null;
-            showDashboard(false);
-          }
-        } catch (err) {
-          showDashboard(false);
-          message('signInMsg', 'Could not load account: ' + err.message);
-        }
-      }, 0);
+
+    const db = window.supabase.createClient(URL, KEY);
+    let currentUser = null;
+    let account = null;
+    let busy = false;
+
+    function setView(signedIn) {
+      show('authView', !signedIn);
+      show('dashboard', signedIn);
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat('en-CA', {
+        style: 'currency', currency: 'CAD'
+      }).format(Number(value) || 0);
+    }
+
+    function render() {
+      if (!account) return;
+      $('ownerName').textContent =
+        account.owner_name || currentUser?.email || 'Account holder';
+      $('balance').textContent = money(account.balance);
+
+      const list = $('transactions');
+      list.replaceChildren();
+      const records = Array.isArray(account.transactions)
+        ? account.transactions.slice().reverse().slice(0, 20) : [];
+
+      if (!records.length) {
+        const empty = document.createElement('p');
+        empty.className = 'empty';
+        empty.textContent = 'No personal records yet.';
+        list.append(empty);
+        return;
+      }
+
+      records.forEach(tx => {
+        const row = document.createElement('div');
+        row.className = 'tx';
+        const left = document.createElement('div');
+        const title = document.createElement('strong');
+        title.textContent = tx.description || 'Personal record';
+        const date = document.createElement('small');
+        date.textContent = tx.created_at
+          ? new Date(tx.created_at).toLocaleString() : '';
+        left.append(title, date);
+        const amount = document.createElement('span');
+        amount.className = 'amount';
+        amount.textContent = (tx.type === 'credit' ? '+' : '−') + money(tx.amount);
+        row.append(left, amount);
+        list.append(row);
+      });
+    }
+
+    async function loadAccount(user) {
+      currentUser = user;
+      const { data, error } = await db.from('demo_accounts')
+        .select('*').eq('user_id', user.id).maybeSingle();
+      if (error) throw error;
+
+      if (!data) {
+        const { data: created, error: createError } = await db
+          .from('demo_accounts')
+          .insert({
+            user_id: user.id,
+            owner_name: String(user.user_metadata?.display_name || 'Account holder').slice(0, 80),
+            balance: 0,
+            transactions: []
+          }).select().single();
+        if (createError) throw createError;
+        account = created;
+      } else {
+        account = data;
+      }
+      setView(true);
+      render();
+    }
+
+    $('showSignUp').addEventListener('click', () => {
+      show('signInPanel', false);
+      show('signUpPanel', true);
     });
-  } catch (err) {
-    showDashboard(false);
-    message('signInMsg', 'Connection error: ' + err.message);
-  }
-}
-$('signInForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  message('signInMsg', 'Signing in…', true);
-  const { error } = await db.auth.signInWithPassword({
-    email: $('signInEmail').value.trim(),
-    password: $('signInPassword').value
-  });
-  if (error) {
-    message('signInMsg', error.message);
-  } else {
-    message('signInMsg', 'Signed in successfully.', true);
-  }
-});
-$('signUpForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  message('signUpMsg', 'Creating account…', true);
-  const name = $('signUpName').value.trim();
-  const { data, error } = await db.auth.signUp({
-    email: $('signUpEmail').value.trim(),
-    password: $('signUpPassword').value,
-    options: {
-      data: { display_name: name }
+
+    $('showSignIn').addEventListener('click', () => {
+      show('signUpPanel', false);
+      show('signInPanel', true);
+    });
+
+    $('signInForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      if (busy) return;
+      busy = true;
+      msg('signInMsg', 'Signing in…', true);
+      try {
+        const { error } = await db.auth.signInWithPassword({
+          email: $('signInEmail').value.trim(),
+          password: $('signInPassword').value
+        });
+        if (error) throw error;
+        msg('signInMsg', 'Signed in.', true);
+      } catch (error) {
+        msg('signInMsg', 'Sign-in failed: ' + error.message);
+      } finally {
+        busy = false;
+      }
+    });
+
+    $('signUpForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      if (busy) return;
+      busy = true;
+      msg('signUpMsg', 'Creating account…', true);
+      try {
+        const { data, error } = await db.auth.signUp({
+          email: $('signUpEmail').value.trim(),
+          password: $('signUpPassword').value,
+          options: { data: { display_name: $('signUpName').value.trim() } }
+        });
+        if (error) throw error;
+        if (data.session) {
+          await loadAccount(data.session.user);
+          msg('signUpMsg', 'Account created.', true);
+        } else {
+          msg('signUpMsg', 'Check your email to confirm your account, then sign in.', true);
+        }
+      } catch (error) {
+        msg('signUpMsg', 'Could not create account: ' + error.message);
+      } finally {
+        busy = false;
+      }
+    });
+
+    $('entryForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!account || !currentUser || busy) return;
+      const amount = Number($('entryAmount').value);
+      const type = $('entryType').value;
+      const description = $('entryDescription').value.trim();
+      if (!description || !Number.isFinite(amount) || amount <= 0) {
+        msg('entryMsg', 'Enter a description and an amount greater than zero.');
+        return;
+      }
+      const nextBalance = Number(account.balance) + (type === 'credit' ? amount : -amount);
+      if (nextBalance < 0) {
+        msg('entryMsg', 'The record balance cannot be negative.');
+        return;
+      }
+
+      busy = true;
+      try {
+        const records = Array.isArray(account.transactions) ? account.transactions : [];
+        const { data, error } = await db.from('demo_accounts')
+          .update({
+            balance: nextBalance,
+            transactions: [...records, {
+              description, amount, type, created_at: new Date().toISOString()
+            }]
+          }).eq('user_id', currentUser.id).select().single();
+        if (error) throw error;
+        account = data;
+        render();
+        $('entryForm').reset();
+        msg('entryMsg', 'Record saved.', true);
+      } catch (error) {
+        msg('entryMsg', 'Could not save record: ' + error.message);
+      } finally {
+        busy = false;
+      }
+    });
+
+    $('signOutBtn').addEventListener('click', async () => {
+      const { error } = await db.auth.signOut();
+      if (error) msg('entryMsg', 'Sign-out failed: ' + error.message);
+    });
+
+    async function init() {
+      try {
+        const { data, error } = await db.auth.getSession();
+        if (error) throw error;
+        if (data.session) await loadAccount(data.session.user);
+        else setView(false);
+      } catch (error) {
+        setView(false);
+        msg('signInMsg', 'Connection error: ' + error.message);
+      }
     }
-  });
-  if (error) {
-    message('signUpMsg', error.message);
-    return;
-  }
-  if (data.session) {
-    try {
-      await loadAccount(data.session.user);
-      message('signUpMsg', 'Account created successfully.', true);
-    } catch (err) {
-      message('signUpMsg',
-        'Account created, but the database needs attention: ' + err.message);
-    }
-  } else {
-    message('signUpMsg',
-      'Check your email for the confirmation link, then sign in.', true);
-  }
-});
-$('entryForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  if (!account || !currentUser) return;
-  const amount = Number($('entryAmount').value);
-  const type = $('entryType').value;
-  const description = $('entryDescription').value.trim();
-  if (!description || !Number.isFinite(amount) || amount <= 0) {
-    message('entryMsg', 'Enter a description and an amount greater than zero.');
-    return;
-  }
-  const nextBalance = Number(account.balance) +
-    (type === 'credit' ? amount : -amount);
-  if (nextBalance < 0) {
-    message('entryMsg', 'The sample balance cannot be negative.');
-    return;
-  }
-  const nextTransactions = [
-    ...(account.transactions || []),
-    {
-      id: crypto.randomUUID(),
-      description,
-      amount,
-      type,
-      created_at: new Date().toISOString()
-    }
-  ];
-  const { data, error } = await db
-    .from('demo_accounts')
-    .update({
-      balance: nextBalance,
-      transactions: nextTransactions
-    })
-    .eq('user_id', currentUser.id)
-    .select()
-    .single();
-  if (error) {
-    message('entryMsg', 'Could not save: ' + error.message);
-    return;
-  }
-  account = data;
-  render();
-  $('entryForm').reset();
-  message('entryMsg', 'Record saved.', true);
-});
-$('resetBtn').addEventListener('click', async () => {
-  if (!account || !currentUser) return;
-  if (!confirm('Reset the sample balance to CA$35,000 and remove all records?')) {
-    return;
-  }
-  const { data, error } = await db
-    .from('demo_accounts')
-    .update({
-      balance: STARTING_BALANCE,
-      transactions: []
-    })
-    .eq('user_id', currentUser.id)
-    .select()
-    .single();
-  if (error) {
-    message('entryMsg', 'Could not reset: ' + error.message);
-    return;
-  }
-  account = data;
-  render();
-  message('entryMsg', 'Records reset.', true);
-});
-$('signOutBtn').addEventListener('click', async () => {
-  const { error } = await db.auth.signOut();
-  if (error) message('entryMsg', 'Sign-out error: ' + error.message);
-});
-init();
-</script>
+
+    db.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        loadAccount(session.user).catch(error => {
+          setView(false);
+          msg('signInMsg', 'Could not load account: ' + error.message);
+        });
+      } else {
+        currentUser = null;
+        account = null;
+        setView(false);
+      }
+    });
+
+    init();
+  })();
+  </script>
 </body>
 </html>
