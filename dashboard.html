@@ -1,229 +1,921 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#123b30">
-  <title>Oakmont | Private Client Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <meta name="theme-color" content="#001b15">
+  <title>Oakmont Private Banking | Dashboard</title>
+
+  <style>
+    :root {
+      --bg: #001a14;
+      --panel: #05251e;
+      --panel-light: #0a3027;
+      --gold: #d8b779;
+      --gold-light: #f0d49a;
+      --text: #f3f0e8;
+      --muted: #a9b8b0;
+      --border: rgba(216, 183, 121, .34);
+      --green: #82c9a2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 80% 10%, #103b2c 0%, transparent 42%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+    button, a {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .topbar {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 30px;
+      padding: 18px 5%;
+      border-bottom: 1px solid var(--gold);
+    }
+
+    .topbar a {
+      color: #ddd8ca;
+      transition: color .2s;
+    }
+
+    .topbar a:hover,
+    .topbar a.active {
+      color: var(--gold-light);
+    }
+
+    .secure-link {
+      border-left: 1px solid var(--border);
+      padding-left: 24px;
+    }
+
+    .brandbar {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 4%;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-tree {
+      font-size: 43px;
+      color: var(--gold);
+    }
+
+    .brand-name {
+      color: var(--gold-light);
+      font-family: Georgia, serif;
+      font-size: 26px;
+      letter-spacing: 2px;
+    }
+
+    .brand-subtitle {
+      margin-top: 4px;
+      text-align: center;
+      font-size: 9px;
+      letter-spacing: 3px;
+    }
+
+    .brand-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .icon-button {
+      border: 0;
+      background: transparent;
+      font-size: 23px;
+      padding: 8px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 1px solid var(--border);
+      padding-left: 20px;
+    }
+
+    .avatar {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      background: var(--panel-light);
+      color: var(--gold-light);
+      font-size: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 235px minmax(0, 1fr);
+      min-height: calc(100vh - 172px);
+    }
+
+    .sidebar {
+      padding: 28px 12px;
+      border-right: 1px solid var(--border);
+      background: rgba(0, 15, 11, .35);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 16px 14px;
+      margin-bottom: 5px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      color: #d7ded8;
+      background: transparent;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: linear-gradient(100deg, #16483a, #0b3026);
+      border-color: rgba(216, 183, 121, .1);
+    }
+
+    .nav-icon {
+      width: 25px;
+      font-size: 21px;
+      text-align: center;
+    }
+
+    .main {
+      width: 100%;
+      max-width: 1150px;
+      padding: 36px;
+      margin: 0 auto;
+    }
+
+    .welcome {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .welcome h1 {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: normal;
+      line-height: 1.5;
+    }
+
+    .customer-name {
+      display: block;
+      color: var(--gold-light);
+      font-size: 34px;
+    }
+
+    .welcome p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .date {
+      color: #d2d9d3;
+      white-space: nowrap;
+      padding-top: 10px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: linear-gradient(120deg, #09271f, #031d17 75%);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .12);
+    }
+
+    .balance-card {
+      position: relative;
+      overflow: hidden;
+      padding: 26px;
+      margin-bottom: 20px;
+      min-height: 185px;
+    }
+
+    .balance-card::after {
+      content: "♣";
+      position: absolute;
+      right: 15px;
+      bottom: -70px;
+      font-size: 220px;
+      color: rgba(216, 183, 121, .045);
+      pointer-events: none;
+    }
+
+    .balance-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+    }
+
+    .balance {
+      margin: 13px 0 24px;
+      color: var(--gold-light);
+      font-family: Georgia, serif;
+      font-size: clamp(30px, 4vw, 43px);
+      overflow-wrap: anywhere;
+    }
+
+    .balance-bottom {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .owner-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--gold-light);
+      font-size: 21px;
+    }
+
+    .owner-label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .owner-name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+
+    .action {
+      display: flex;
+      min-height: 100px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 5px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: linear-gradient(145deg, #06251d, #021a14);
+      transition: background .2s, transform .2s;
+    }
+
+    .action:hover {
+      background: #154638;
+      transform: translateY(-2px);
+    }
+
+    .action-icon {
+      font-size: 26px;
+      color: var(--gold-light);
+    }
+
+    .transactions {
+      margin-bottom: 24px;
+      padding: 0 20px;
+      overflow: hidden;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-heading h2 {
+      font-family: Georgia, serif;
+      font-size: 20px;
+      font-weight: normal;
+    }
+
+    .view-all {
+      color: var(--gold-light);
+      background: none;
+      border: none;
+    }
+
+    .transaction {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 65px;
+      border-bottom: 1px solid rgba(216, 183, 121, .18);
+    }
+
+    .transaction:last-child {
+      border-bottom: 0;
+    }
+
+    .transaction-icon {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #15382e;
+      font-size: 20px;
+    }
+
+    .transaction-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .transaction-title {
+      margin-bottom: 6px;
+    }
+
+    .transaction-date {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .transaction-amount {
+      white-space: nowrap;
+      text-align: right;
+      font-size: 13px;
+    }
+
+    .positive {
+      color: var(--green);
+    }
+
+    .negative {
+      color: #e5e7e2;
+    }
+
+    .promo {
+      position: relative;
+      isolation: isolate;
+      min-height: 195px;
+      padding: 27px;
+      overflow: hidden;
+      background: #17372d;
+    }
+
+    .promo::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(2, 25, 19, .97), rgba(2, 25, 19, .72) 50%, rgba(2, 25, 19, .12)),
+        url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85")
+        center 55% / cover no-repeat;
+    }
+
+    .promo h2 {
+      max-width: 360px;
+      font-family: Georgia, serif;
+      font-size: 23px;
+      font-weight: normal;
+      line-height: 1.25;
+    }
+
+    .promo p {
+      max-width: 350px;
+      margin: 12px 0 17px;
+      color: #e0e6df;
+      line-height: 1.6;
+    }
+
+    .gold-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 12px 23px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(100deg, #e4c48b, #cda461);
+      color: #10271d;
+      font-weight: bold;
+    }
+
+    .security-note {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 23px 5px 5px;
+      color: #c8d4cc;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .security-icon {
+      color: var(--gold-light);
+      font-size: 27px;
+    }
+
+    .demo-notice {
+      margin-top: 18px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    #page-message {
+      display: none;
+      padding: 18px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--gold-light);
+    }
+
+    @media (min-width: 1400px) {
+      .main {
+        padding: 45px 55px;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .topbar {
+        min-height: 55px;
+        gap: 17px;
+        padding: 15px;
+        font-size: 12px;
+      }
+
+      .brandbar {
+        min-height: 82px;
+        padding: 15px;
+      }
+
+      .brand-name {
+        font-size: 20px;
+      }
+
+      .brand-tree {
+        font-size: 34px;
+      }
+
+      .brand-right {
+        gap: 8px;
+      }
+
+      .profile {
+        gap: 8px;
+        padding-left: 10px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        padding: 9px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-link {
+        flex: 0 0 auto;
+        width: auto;
+        margin: 0;
+        padding: 12px;
+        font-size: 12px;
+      }
+
+      .nav-icon {
+        width: auto;
+      }
+
+      .main {
+        padding: 24px 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        justify-content: center;
+        gap: 16px;
+        font-size: 11px;
+      }
+
+      .secure-link {
+        padding-left: 12px;
+      }
+
+      .brand-name {
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
+
+      .brand-subtitle {
+        font-size: 7px;
+        letter-spacing: 2px;
+      }
+
+      .brand-tree {
+        font-size: 28px;
+      }
+
+      .brand {
+        gap: 7px;
+      }
+
+      .profile {
+        border: 0;
+        padding: 0;
+      }
+
+      .profile .profile-name,
+      .notification {
+        display: none;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .main {
+        padding: 23px 13px;
+      }
+
+      .welcome h1 {
+        font-size: 23px;
+      }
+
+      .customer-name {
+        font-size: 28px;
+      }
+
+      .welcome p {
+        font-size: 13px;
+      }
+
+      .date {
+        font-size: 11px;
+      }
+
+      .balance-card {
+        padding: 19px;
+      }
+
+      .balance {
+        font-size: 31px;
+      }
+
+      .action-grid {
+        gap: 7px;
+      }
+
+      .action {
+        min-height: 83px;
+        font-size: 12px;
+      }
+
+      .action-icon {
+        font-size: 22px;
+      }
+
+      .transactions {
+        padding: 0 12px;
+      }
+
+      .transaction {
+        gap: 9px;
+      }
+
+      .transaction-icon {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+      }
+
+      .transaction-title {
+        font-size: 12px;
+      }
+
+      .transaction-date {
+        font-size: 10px;
+      }
+
+      .transaction-amount {
+        font-size: 11px;
+      }
+
+      .promo {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
-<body class="dashboard-page">
-  <header class="dashboard-header">
-    <a class="brand" href="dashboard.html" aria-label="Oakmont home">
-      <span class="brand-logo">O</span>
+
+<body>
+  <nav class="topbar" aria-label="Main navigation">
+    <a href="#" class="active" data-page="Home">Home</a>
+    <a href="#" data-page="About">About</a>
+    <a href="#" data-page="Services">Services</a>
+    <a href="#" data-page="Contact">Contact</a>
+    <a href="login.html" class="secure-link">♙ Secure Access</a>
+  </nav>
+
+  <header class="brandbar">
+    <a class="brand" href="#" aria-label="Oakmont home">
+      <span class="brand-tree">♣</span>
       <span>
-        <strong>OAKMONT</strong>
-        <small>PRIVATE CLIENT SERVICES</small>
+        <span class="brand-name">OAKMONT</span>
+        <span class="brand-subtitle" style="display:block">
+          PRIVATE BANKING
+        </span>
       </span>
     </a>
-    <div class="header-right">
-      <div class="clock dashboard-clock">
-        <strong data-vancouver-time>Loading time...</strong>
-        <span data-vancouver-date>Loading date...</span>
-        <small>Vancouver, British Columbia</small>
+
+    <div class="brand-right">
+      <button class="icon-button notification"
+        aria-label="Notifications" title="Notifications">♧</button>
+
+      <div class="profile">
+        <div class="avatar">♙</div>
+        <span class="profile-name">TIANNA JACK</span>
+        <button class="icon-button" aria-label="Profile menu"
+          id="profile-button">⌄</button>
       </div>
-      <button class="outline-button" id="signOutButton" type="button">
-        Sign Out
-      </button>
     </div>
   </header>
-  <div class="dashboard-layout">
-    <aside class="sidebar">
-      <div class="client-profile">
-        <div class="avatar" id="avatar">T</div>
-        <div>
-          <strong id="sidebarName" data-account-owner>Tianna Jack</strong>
-          <small>Private Client</small>
-        </div>
-      </div>
-      <nav class="navigation" aria-label="Main navigation">
-        <a class="nav-link active" href="#overview">▦ Overview</a>
-        <a class="nav-link" href="#account">◫ Accounts</a>
-        <a class="nav-link" href="#transactions">↔ Activity</a>
-        <a class="nav-link" href="#services">◇ Services</a>
-        <a class="nav-link" href="#profile">♙ Profile</a>
-      </nav>
-      <div class="sidebar-help">
-        <span class="help-icon">?</span>
-        <strong>Need assistance?</strong>
-        <p>Explore the account overview and available website features.</p>
-        <a href="index.html">Return to home →</a>
-      </div>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Dashboard menu">
+      <a href="#" class="nav-link active" data-page="Dashboard">
+        <span class="nav-icon">⌂</span> Dashboard
+      </a>
+      <a href="#" class="nav-link" data-page="Accounts">
+        <span class="nav-icon">▤</span> Accounts
+      </a>
+      <a href="#" class="nav-link" data-page="Transactions">
+        <span class="nav-icon">⇄</span> Transactions
+      </a>
+      <a href="#" class="nav-link" data-page="Transfers">
+        <span class="nav-icon">➤</span> Transfers
+      </a>
+      <a href="#" class="nav-link" data-page="Statements">
+        <span class="nav-icon">▧</span> Statements
+      </a>
+      <a href="#" class="nav-link" data-page="Profile">
+        <span class="nav-icon">♙</span> Profile
+      </a>
+      <a href="#" class="nav-link" data-page="Settings">
+        <span class="nav-icon">⚙</span> Settings
+      </a>
+      <a href="login.html" class="nav-link">
+        <span class="nav-icon">⇥</span> Sign Out
+      </a>
     </aside>
-    <main class="dashboard-main" id="overview">
-      <section class="page-heading">
+
+    <main class="main">
+      <div id="page-message" role="status"></div>
+
+      <section class="welcome">
         <div>
-          <p class="eyebrow">PRIVATE CLIENT OVERVIEW</p>
-          <h1>Good day, <span id="welcomeName" data-account-owner>Tianna Jack</span></h1>
-          <p class="muted">
-            Here is your account overview.
-          </p>
+          <h1>Welcome back,
+            <span class="customer-name">TIANNA JACK</span>
+          </h1>
+          <p>Here's your account overview.</p>
         </div>
-        <div class="date-panel">
-          <small>VANCOUVER LOCAL TIME</small>
-          <strong data-vancouver-time>Loading time...</strong>
-          <span data-vancouver-date>Loading date...</span>
+        <div class="date" id="current-date">Account Overview</div>
+      </section>
+
+      <section class="card balance-card">
+        <div class="balance-top">
+          <span>Total Account Balance</span>
+          <button class="icon-button" id="toggle-balance"
+            aria-label="Hide balance" title="Show or hide balance">◉</button>
         </div>
-      </section>
-      <section class="demo-alert" aria-label="Account information notice">
-        <span>ⓘ</span>
-        <div>
-          <strong>Account information</strong>
-          <p>
-            This is an educational website concept. The displayed balance
-            and account activity are illustrative and do not represent
-            real funds or completed financial transactions.
-          </p>
-        </div>
-      </section>
-      <section class="account-grid" id="account">
-        <article class="balance-card">
-          <div class="balance-top">
-            <span>Account Balance</span>
-            <span class="gold-symbol">◇</span>
-          </div>
-          <h2>CAD $50,000.00</h2>
-          <div class="balance-bottom">
-            <span><i></i> Illustrative balance</span>
-            <span>Updated <b data-vancouver-time>—</b></span>
-          </div>
-          <span class="watermark">O</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon">↗</span>
-          <p>Available Balance</p>
-          <h3>CAD $50,000.00</h3>
-          <small>Illustrative amount only</small>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon">▤</span>
-          <p>Recent Activity</p>
-          <h3>04 <small>items</small></h3>
-          <small>Illustrative entries</small>
-        </article>
-      </section>
-      <section class="content-section" id="services">
-        <div class="section-heading">
+
+        <div class="balance" id="balance-value">CA$ 35,000.00</div>
+
+        <div class="balance-bottom">
+          <div class="owner-icon">♙</div>
           <div>
-            <p class="eyebrow">PRIVATE CLIENT SERVICES</p>
-            <h2>Account Services</h2>
+            <div class="owner-label">Account Owner</div>
+            <div class="owner-name">TIANNA JACK</div>
           </div>
-          <span class="muted">Available features</span>
-        </div>
-        <div class="services-grid">
-          <article class="service-card">
-            <span class="service-icon">▤</span>
-            <h3>Account Overview</h3>
-            <p>Review your account summary and displayed balance.</p>
-            <a href="#account">View account →</a>
-          </article>
-          <article class="service-card">
-            <span class="service-icon">↔</span>
-            <h3>Transfers</h3>
-            <p>Money transfers are not available on this website.</p>
-            <button
-              type="button"
-              class="text-button"
-              id="transferButton">
-              View information →
-            </button>
-          </article>
-          <article class="service-card">
-            <span class="service-icon">▧</span>
-            <h3>Account Activity</h3>
-            <p>Review illustrative entries in the activity section.</p>
-            <a href="#transactions">View activity →</a>
-          </article>
         </div>
       </section>
-      <section class="content-section" id="transactions">
+
+      <section class="action-grid" aria-label="Quick actions">
+        <button class="action" data-action="Deposit">
+          <span class="action-icon">♧</span>
+          <span>Deposit</span>
+        </button>
+        <button class="action" data-action="Transfer">
+          <span class="action-icon">⇄</span>
+          <span>Transfer</span>
+        </button>
+        <button class="action" data-action="Pay Bills">
+          <span class="action-icon">▤</span>
+          <span>Pay Bills</span>
+        </button>
+        <button class="action" data-action="More">
+          <span class="action-icon">•••</span>
+          <span>More</span>
+        </button>
+      </section>
+
+      <section class="card transactions">
         <div class="section-heading">
-          <div>
-            <p class="eyebrow">ACCOUNT ACTIVITY</p>
-            <h2>Recent Transactions</h2>
+          <h2>Recent Transactions</h2>
+          <button class="view-all" id="view-all">View All</button>
+        </div>
+
+        <div id="transaction-list">
+          <div class="transaction">
+            <div class="transaction-icon">↓</div>
+            <div class="transaction-info">
+              <div class="transaction-title">Funds Deposit</div>
+              <div class="transaction-date">May 28, 2025</div>
+            </div>
+            <div class="transaction-amount positive">+ CA$ 10,000.00</div>
           </div>
-          <span class="muted">Illustrative records</span>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>DESCRIPTION</th>
-                <th>DATE</th>
-                <th>TYPE</th>
-                <th>AMOUNT</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Illustrative deposit</td>
-                <td>Oct 08, 2026</td>
-                <td>Credit</td>
-                <td class="positive">+CAD $2,500.00</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-              <tr>
-                <td>Illustrative purchase</td>
-                <td>Oct 06, 2026</td>
-                <td>Debit</td>
-                <td>−CAD $128.40</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-              <tr>
-                <td>Illustrative credit</td>
-                <td>Oct 03, 2026</td>
-                <td>Credit</td>
-                <td class="positive">+CAD $850.00</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-              <tr>
-                <td>Illustrative service fee</td>
-                <td>Oct 01, 2026</td>
-                <td>Debit</td>
-                <td>−CAD $15.00</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-            </tbody>
-          </table>
+
+          <div class="transaction">
+            <div class="transaction-icon">⇄</div>
+            <div class="transaction-info">
+              <div class="transaction-title">Online Transfer</div>
+              <div class="transaction-date">May 25, 2025</div>
+            </div>
+            <div class="transaction-amount negative">- CA$ 2,500.00</div>
+          </div>
+
+          <div class="transaction">
+            <div class="transaction-icon">▣</div>
+            <div class="transaction-info">
+              <div class="transaction-title">ATM Withdrawal</div>
+              <div class="transaction-date">May 22, 2025</div>
+            </div>
+            <div class="transaction-amount negative">- CA$ 1,000.00</div>
+          </div>
+
+          <div class="transaction">
+            <div class="transaction-icon">▤</div>
+            <div class="transaction-info">
+              <div class="transaction-title">Account Fee</div>
+              <div class="transaction-date">May 20, 2025</div>
+            </div>
+            <div class="transaction-amount negative">- CA$ 15.00</div>
+          </div>
         </div>
       </section>
-      <section class="banner">
-        <p class="eyebrow">A LONG-TERM PERSPECTIVE</p>
-        <h2>Plan with clarity.<br>Move forward with confidence.</h2>
-        <p>Explore a considered private-client website experience.</p>
+
+      <section class="card promo">
+        <h2>Building a stronger<br>financial future together</h2>
+        <p>Discover personalized banking solutions designed for your goals.</p>
+        <a href="#" class="gold-button" id="learn-more">
+          Learn More <span>›</span>
+        </a>
       </section>
-      <footer class="dashboard-footer" id="profile">
-        <span>© <span data-year></span> Oakmont</span>
-        <span>Educational concept · Not a financial institution</span>
+
+      <footer class="security-note">
+        <span class="security-icon">♧</span>
+        <p>This is a demonstration dashboard. Do not enter sensitive
+          financial information here. A real account requires secure,
+          verified authentication and a trusted banking backend.</p>
       </footer>
+
+      <div class="demo-notice">
+        Demonstration only — all account information and transactions
+        displayed on this page are sample content.
+      </div>
     </main>
   </div>
-  <div
-    class="modal hidden"
-    id="demoModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitle">
-    <div class="modal-content">
-      <button
-        class="modal-close"
-        id="closeModal"
-        type="button"
-        aria-label="Close">
-        ×
-      </button>
-      <span class="service-icon">ⓘ</span>
-      <h2 id="modalTitle">Transfer Information</h2>
-      <p>
-        This website does not connect to a bank and cannot send,
-        receive, or transfer money.
-      </p>
-      <button class="primary-button" id="okayButton" type="button">
-        Understood
-      </button>
-    </div>
-  </div>
+
+  <script>
+    const dateElement = document.getElementById("current-date");
+
+    dateElement.textContent = new Date().toLocaleDateString("en-CA", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
+    const balanceElement = document.getElementById("balance-value");
+    const balanceButton = document.getElementById("toggle-balance");
+    const originalBalance = balanceElement.textContent;
+    let balanceVisible = true;
+
+    balanceButton.addEventListener("click", () => {
+      balanceVisible = !balanceVisible;
+      balanceElement.textContent = balanceVisible
+        ? originalBalance
+        : "CA$ ••••••••";
+      balanceButton.setAttribute(
+        "aria-label",
+        balanceVisible ? "Hide balance" : "Show balance"
+      );
+    });
+
+    function showMessage(message) {
+      const box = document.getElementById("page-message");
+      box.textContent = message;
+      box.style.display = "block";
+      box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    document.querySelectorAll("[data-page]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+
+        document.querySelectorAll("[data-page]").forEach(item => {
+          item.classList.remove("active");
+        });
+
+        link.classList.add("active");
+        showMessage(
+          link.dataset.page +
+          " selected. Connect this menu item to your actual page or service."
+        );
+      });
+    });
+
+    document.querySelectorAll("[data-action]").forEach(button => {
+      button.addEventListener("click", () => {
+        showMessage(
+          button.dataset.action +
+          " is a demonstration action. Connect it to your secure backend to enable it."
+        );
+      });
+    });
+
+    document.getElementById("view-all").addEventListener("click", () => {
+      showMessage(
+        "These are sample transactions. Connect your verified data source to display real account activity."
+      );
+    });
+
+    document.getElementById("profile-button").addEventListener("click", () => {
+      showMessage("Profile menu selected.");
+    });
+
+    document.getElementById("learn-more").addEventListener("click", event => {
+      event.preventDefault();
+      showMessage("Connect this link to your services or information page.");
+    });
+  </script>
 </body>
 </html>
