@@ -1,195 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0c1714">
-<title>Oakmont Private Banking</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#082b54"><title>Oakmont Private Banking | Account Management</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--ink:#0c1714;--ink2:#142720;--gold:#d9bb7c;--gold2:#f1dfb5;--paper:#f5f4f0;--muted:#78857f;--line:#e6e8e1;--green:#24745b;--red:#a74e47}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:#1b2923;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}
-header{background:var(--ink);color:#fff;padding:20px max(20px,calc((100vw - 1120px)/2));display:flex;align-items:center;gap:13px;border-bottom:1px solid #2a3b32}
-.logo{height:47px;width:47px;border:1px solid var(--gold);color:var(--gold);display:grid;place-items:center;font:30px Georgia,serif;border-radius:12px}
-.brand{flex:1}.brand h1{font:21px Georgia,serif;margin:0 0 5px;letter-spacing:.3px}.brand p{font-size:9px;letter-spacing:2.2px;color:var(--gold);margin:0}
-.header-right{display:flex;align-items:center;gap:10px;color:#d7e0da;font-size:12px}
-.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#263b30;color:var(--gold2);border:1px solid #476052;font-weight:700}
-main{max-width:1120px;margin:28px auto;padding:0 20px 40px}
-.welcome{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:22px}.eyebrow{color:#9a7c43;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
-h2{font:clamp(26px,4vw,34px) Georgia,serif;margin:0 0 8px;color:#15251e}.sub{font-size:13px;color:var(--muted)}
-.date-pill{border:1px solid #e0e2db;border-radius:999px;padding:9px 13px;color:#627168;background:#fff;font-size:11px;white-space:nowrap}
-.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.85fr);gap:18px}
-.balance-card{background:radial-gradient(circle at 90% 0%,#315343 0,transparent 38%),linear-gradient(125deg,#0c1714,#203d2e);color:#fff;padding:26px;border-radius:19px;box-shadow:0 14px 34px #0c17141b;position:relative;overflow:hidden}
-.balance-card:after{content:"O";position:absolute;right:18px;bottom:-62px;font:220px Georgia,serif;color:#ffffff08;pointer-events:none}
-.card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.card-label{font-size:12px;color:#d1dcd4}.status{font-size:10px;color:#d9e6d9;border:1px solid #597665;padding:7px 9px;border-radius:999px}
-.balance{font:clamp(33px,5vw,44px) Georgia,serif;letter-spacing:-.5px;margin:17px 0 6px;color:#f6e5bd}.currency{font-size:11px;color:#c4d0c8}
-.card-bottom{border-top:1px solid #ffffff24;margin-top:24px;padding-top:17px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;color:#d3ddd6}.card-bottom strong{display:block;color:#fff;font-size:12px;margin-top:5px;font-weight:500}
-.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0 18px}
-.action{border:1px solid var(--line);background:#fff;border-radius:13px;padding:15px 7px;text-align:center;color:#21352b;box-shadow:0 2px 8px #10201805;transition:transform .15s,border-color .15s}
-.action:hover{transform:translateY(-2px);border-color:#cdb57f}.action-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#f4f0e4;color:#9c7b3b;margin:0 auto 9px;font-size:20px}.action strong{display:block;font-size:11px}
-.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:17px}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.panel h3{font:20px Georgia,serif;margin:0}.muted-link{border:0;background:transparent;color:#94763c;font-size:11px;font-weight:700;padding:5px}
-.tx{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #edf0eb}.tx:last-child{border:0;padding-bottom:2px}
-.symbol{width:40px;height:40px;border-radius:13px;background:#f2f0e8;color:#92753e;display:grid;place-items:center;flex-shrink:0;font-size:17px}
-.info{flex:1;min-width:0}.info strong{font-size:12px;font-weight:650}.info small{display:block;font-size:10px;color:#8b968f;margin-top:5px}.amount{font-size:12px;font-weight:700;white-space:nowrap}.positive{color:var(--green)}.negative{color:#28372f}
-.side-stack{display:flex;flex-direction:column;gap:17px}
-.mini-card{border-radius:16px;background:#fff;border:1px solid var(--line);padding:20px}.mini-title{font:18px Georgia,serif;margin:0 0 15px}
+:root{--navy:#082b54;--blue:#145b96;--ink:#152b42;--muted:#66788a;--line:#dce4ed;--bg:#f3f6fa;--white:#fff;--green:#197252;--red:#c6283d}*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:12px 16px;background:var(--navy);color:#fff;font-weight:650}button.secondary{background:#edf2f6;color:var(--navy);border:1px solid var(--line)}button:disabled{opacity:.5;cursor:not-allowed}.top{background:var(--navy);color:#fff;padding:18px max(18px,calc((100vw - 1050px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;letter-spacing:.04em;font-size:18px}.brand small{display:block;font-size:11px;font-weight:500;letter-spacing:.14em;opacity:.7}.wrap{max-width:1050px;margin:28px auto;padding:0 16px 48px}.notice{background:#fff8e7;border:1px solid #f0dfb0;border-radius:12px;padding:13px 15px;color:#694e12;font-size:13px;margin-bottom:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel,.balance{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 3px 14px #152e4010}.balance{background:linear-gradient(135deg,#102b46,#1d5b86);color:#fff;grid-column:1/-1}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;opacity:.75}.amount{font-size:clamp(30px,6vw,44px);font-weight:750;letter-spacing:-.04em;margin:8px 0}.sub{font-size:13px;opacity:.8}.panel h2{font-size:17px;margin:0 0 14px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:13px;font-weight:650;color:#405565}.field input,.field select{width:100%;padding:12px;border:1px solid #ccd7df;border-radius:9px;background:#fff;color:var(--ink)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.hidden{display:none!important}.msg{margin-top:12px;font-size:13px;color:var(--blue);overflow-wrap:anywhere}.msg.error{color:var(--red)}.muted{color:var(--muted);font-size:13px}.transactions{grid-column:1/-1}.txn{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}.txn:last-child{border-bottom:0}.txn-title{font-weight:650;overflow-wrap:anywhere}.txn-meta{font-size:12px;color:var(--muted)}.positive{color:var(--green);font-weight:750}.negative{color:var(--red);font-weight:750}.pill{display:inline-block;background:#edf2f6;color:#395064;border-radius:20px;padding:3px 8px;font-size:11px;margin-left:6px}.footer{font-size:12px;color:var(--muted);text-align:center;margin-top:24px}@media(max-width:700px){.grid{grid-template-columns:1fr}.balance,.transactions{grid-column:auto}.panel,.balance{padding:18px}.top{padding:15px 18px}.wrap{margin-top:18px}}
 
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #edf0eb;font-size:12px}.stat-row:last-child{border:0}.stat-row span{color:#7f8b83}.stat-row strong{font-weight:650}.progress{height:6px;background:#edf0e8;border-radius:20px;overflow:hidden;margin:12px 0 8px}.progress span{display:block;height:100%;width:62%;background:linear-gradient(90deg,#9a7c43,#d8bc80);border-radius:20px}
-.notice{font-size:10px;line-height:1.65;color:#6d6248;background:#fbf7ec;border:1px solid #ece0bf;border-radius:10px;padding:12px;margin-top:18px}
-footer{text-align:center;font-size:10px;line-height:1.7;color:#89948d;padding:18px 20px 28px}
-.modal-backdrop{position:fixed;inset:0;background:#08100dd9;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal-backdrop.open{display:flex}
-.modal{width:min(100%,460px);background:#fff;border-radius:18px;padding:23px;box-shadow:0 25px 80px #0005;max-height:90vh;overflow:auto}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.modal h3{font:23px Georgia,serif;margin:0}.close{border:0;background:#f0f2ed;border-radius:9px;width:35px;height:35px;font-size:20px;color:#3a493f}.modal-desc{font-size:12px;color:#7a867e;line-height:1.5;margin:0 0 18px}
-.field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:700;color:#46564b;margin-bottom:7px}.field input,.field select{width:100%;border:1px solid #dfe4dc;border-radius:10px;padding:12px;background:#fff;color:#203128;outline:none}.field input:focus,.field select:focus{border-color:#a78a4e;box-shadow:0 0 0 3px #d9bb7c25}
-.primary{width:100%;border:0;border-radius:10px;background:#183629;color:#fff;padding:13px;font-weight:700;margin-top:8px}.primary:hover{background:#254b39}.cancel{width:100%;border:1px solid #dfe4dc;border-radius:10px;background:#fff;color:#4e5a52;padding:11px;margin-top:8px}
-.feedback{font-size:12px;line-height:1.5;padding:11px;border-radius:9px;margin-top:12px;display:none}.feedback.show{display:block}.feedback.good{background:#edf7f0;color:#226144}.feedback.bad{background:#fbefed;color:#8c3f37}
-.empty{font-size:12px;color:#89948d;padding:18px 0}
-@media(max-width:760px){main{margin:22px auto;padding:0 14px 28px}.layout{grid-template-columns:1fr}.side-stack{display:grid;grid-template-columns:1fr 1fr;align-items:start}.welcome{align-items:start;flex-direction:column}.date-pill{display:none}.balance-card{padding:22px}.quick-actions{gap:7px}.action{padding:13px 4px}.panel{padding:17px}}
-@media(max-width:460px){header{padding:16px}.brand h1{font-size:18px}.header-right .secure-text{display:none}.side-stack{grid-template-columns:1fr}.balance{font-size:34px}.card-bottom{font-size:10px}.quick-actions{grid-template-columns:repeat(4,1fr)}.action-icon{width:32px;height:32px}.action strong{font-size:10px}.panel-head h3{font-size:19px}}
-</style>
-</head>
+/* Refined, professional account-management presentation */
+:root{--navy:#082b54;--blue:#145b96;--ink:#152b42;--muted:#66788a;--line:#dce4ed;--bg:#f3f6fa;--green:#197252;--red:#c6283d}
+body{font-size:14px;letter-spacing:.005em}
+.top{min-height:82px;box-shadow:0 3px 14px #082b5418;border-bottom:4px solid #c6283d}
+.brandlockup{display:flex;align-items:center;gap:13px;min-width:0}.brandmark{width:42px;height:42px;border:2px solid #fff;border-radius:11px;display:grid;place-items:center;position:relative;flex:0 0 auto;background:linear-gradient(145deg,#fff 0 47%,#c6283d 48% 57%,#fff 58%);color:#082b54;font-weight:900;font-size:21px;box-shadow:0 0 0 2px #ffffff25}.brand{font-size:19px;letter-spacing:.055em}.brand small{margin-top:3px;letter-spacing:.15em}.top .secondary{background:#fff;color:#082b54;border-color:#d7e0e9}
+.wrap{max-width:1120px;margin:34px auto}
+.notice{border-radius:9px;box-shadow:0 2px 8px #152e4007}
+.panel,.balance{border-radius:12px;box-shadow:0 5px 18px #152e4008}
+.panel h2{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.amount{font-size:clamp(32px,5vw,46px);font-variant-numeric:tabular-nums}
+button{border-radius:8px;transition:background .15s ease,transform .15s ease}
+button:not(:disabled):active{transform:translateY(1px)}
+button.secondary{background:#f5f8fa}
+.field input:focus,.field select:focus{outline:3px solid #1d5b8625;border-color:#1d5b86}
+.txn{align-items:center}.txn-meta{margin-top:3px}
+.footer{line-height:1.7;max-width:720px;margin:26px auto 0}
+@media(max-width:700px){.wrap{margin-top:20px}.top{min-height:66px}.brandmark{width:36px;height:36px;font-size:18px}.brand{font-size:15px}.brand small{font-size:9px;letter-spacing:.1em}}
+</style></head>
 <body>
-<header>
-  <div class="logo" aria-hidden="true">O</div>
-  <div class="brand"><h1>Oakmont Private Banking</h1><p>PRIVATE CHECKING ACCOUNT</p></div>
-  <div class="header-right"><span class="secure-text">Checking account</span><div class="avatar" aria-label="Tianna Jack">TJ</div></div>
-</header>
-<main>
-  <div class="welcome">
-    <div><div class="eyebrow">Private client overview</div><h2>Welcome back, Tianna.</h2><div class="sub">Your finances, thoughtfully organized.</div></div>
-    <div class="date-pill">◷ &nbsp; Account overview</div>
-  </div>
-  <div class="layout">
-    <div>
-      <section class="balance-card" aria-label="Account balance">
-        <div class="card-top"><div class="card-label">Total available balance</div><div class="status">● &nbsp; Account overview</div></div>
-        <div class="balance" id="balance">CA$35,000.00</div>
-        <div class="currency">Canadian dollars · CAD</div>
-        <div class="card-bottom">
-          <div>ACCOUNT HOLDER<strong>Tianna Jack</strong></div>
-          <div>ACCOUNT TYPE<strong>Checking account</strong></div>
-          <div>REFERENCE<strong>OAK •••• 2841</strong></div>
-        </div>
-      </section>
-      <section class="quick-actions" aria-label="Account actions">
-        <button class="action" onclick="openModal('transfer')"><span class="action-icon">↗</span><strong>Transfer</strong></button>
-        <button class="action" onclick="openModal('payment')"><span class="action-icon">⌁</span><strong>Pay a bill</strong></button>
-        <button class="action" onclick="openModal('receive')"><span class="action-icon">↙</span><strong>Request funds</strong></button>
-        <button class="action" onclick="document.getElementById('activity').scrollIntoView({behavior:'smooth'})"><span class="action-icon">◷</span><strong>Activity</strong></button>
-      </section>
-      <section class="panel" id="activity">
-        <div class="panel-head"><h3>Recent activity</h3><button class="muted-link" onclick="clearActivity()">Clear history</button></div>
-        <div id="transactions">
-        </div>
-      </section>
-    </div>
-    <aside class="side-stack">
-      <section class="mini-card">
-        <h3 class="mini-title">Monthly spending</h3>
-        <div class="stat-row"><span>Recorded spending</span><strong id="spending">CA$126.25</strong></div>
-        <div class="progress"><span id="progressBar"></span></div>
-        <div class="stat-row"><span>Monthly budget</span><strong>CA$2,000.00</strong></div>
-        <div class="stat-row"><span>Budget remaining</span><strong id="remaining">CA$1,873.75</strong></div>
-      </section>
-      <section class="mini-card">
-        <h3 class="mini-title">Account shortcuts</h3>
-        <div class="stat-row"><span>Account details</span><button class="muted-link" onclick="openModal('details')">View</button></div>
-        <div class="stat-row"><span>Monthly summary</span><button class="muted-link" onclick="showToast('Your monthly summary is shown in the spending panel.')">Open</button></div>
-        <div class="stat-row"><span>Notifications</span><button class="muted-link" onclick="showToast('You have no new interface notifications.')">View</button></div>
-      </section>
-    </aside>
-  </div>
-  <div class="notice">This account overview is a personal recordkeeping interface. It is not connected to a financial institution, and actions entered here do not process transfers, payments, or requests or move money.</div>
+<header class="top"><div class="brandlockup"><div class="brandmark" aria-label="Oakmont logo" role="img">O</div><div class="brand">OAKMONT PRIVATE BANKING <small>PRIVATE CHECKING ACCOUNT</small></div></div><div id="topActions" class="row hidden" style="flex:0 1 auto"><button class="secondary" id="signOut">Sign out</button></div></header>
+<main class="wrap">
+<div class="notice"><strong>Account information:</strong> Balances and activity shown here are user-entered records and are not verified bank balances.</div>
+<section id="authPanel" class="panel" style="max-width:520px;margin:0 auto"><h2 id="authHeading">Welcome back</h2><p class="muted">Sign in to securely access your personal account records.</p>
+<form id="authForm"><div class="field" id="nameField"><label for="fullName">Full name (for new accounts)</label><input id="fullName" autocomplete="name" maxlength="80" placeholder="Your name"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters"></div><button id="authSubmit" type="submit" style="width:100%">Sign in</button></form>
+<div class="row" style="margin-top:12px"><button id="toggleAuth" class="secondary" type="button">Create account</button><button id="resetPassword" class="secondary" type="button">Forgot password?</button></div><div id="authMsg" class="msg" role="status"></div></section>
+<section id="dashboard" class="hidden"><div class="grid" style="margin-bottom:18px"><div class="balance"><div class="eyebrow">Account overview · Recorded balance <span class="pill">CAD</span></div><div class="amount" id="balance">CA$0.00</div><div class="sub">A personal recordkeeping figure, not verified bank funds.</div></div>
+<div class="panel"><h2>Account details</h2><div class="field"><label for="profileName">Account holder name</label><input id="profileName" maxlength="80" autocomplete="name"></div><button id="saveProfile">Save name</button><div id="profileMsg" class="msg" role="status"></div></div>
+<div class="panel"><h2>Manage account records</h2><form id="entryForm"><div class="field"><label for="kind">Entry type</label><select id="kind"><option value="credit">Add to recorded balance</option><option value="debit">Subtract from recorded balance</option><option value="request">Log a request (no balance change)</option></select></div><div class="field"><label for="description">Description</label><input id="description" required maxlength="120" placeholder="e.g. Monthly budget entry"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" type="number" min="0.01" max="100000000" step="0.01" required placeholder="0.00" inputmode="decimal"></div><button id="entrySubmit" type="submit">Save record</button></form><div id="entryMsg" class="msg" role="status"></div></div>
+<div class="panel transactions"><div class="row" style="justify-content:space-between"><h2 style="margin:0">Transaction history</h2><button id="refresh" class="secondary" type="button">Refresh</button></div><div id="txns" style="margin-top:10px"><p class="muted">Sign in to load your records.</p></div></div></div></section>
+<div class="footer">Oakmont Private Banking · Secure sign-in and account access</div>
 </main>
-<footer>Oakmont Private Banking · CAD</footer>
-
-<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-head"><h3 id="modalTitle">Transfer</h3><button class="close" onclick="closeModal()" aria-label="Close">×</button></div>
-    <p class="modal-desc" id="modalDesc">Record a transfer entry in this account overview. Entries made here are not sent to a bank.</p>
-    <form id="actionForm" onsubmit="submitAction(event)">
-      <div id="formFields"></div>
-      <button class="primary" id="submitButton" type="submit">Record simulated transfer</button>
-      <button class="cancel" type="button" onclick="closeModal()">Cancel</button>
-      <div id="feedback" class="feedback" role="status"></div>
-    </form>
-  </div>
-</div>
 <script>
-const initialBalance = 35000;
-let balance = initialBalance;
-let transactions = [];
-let currentAction = "transfer";
-const cad = n => "CA$" + Math.abs(n).toLocaleString("en-CA",{minimumFractionDigits:2,maximumFractionDigits:2});
-function render(){
-  document.getElementById("balance").textContent=cad(balance);
-  const list=document.getElementById("transactions");
-  if(!transactions.length){list.innerHTML='<div class="empty">No activity to display yet.</div>'}
-  else {list.innerHTML=transactions.map(t=>`<div class="tx"><div class="symbol">${escapeHtml(t.icon)}</div><div class="info"><strong>${escapeHtml(t.name)}</strong><small>${escapeHtml(t.date)}</small></div><div class="amount ${t.amount>=0?'positive':'negative'}">${t.amount>=0?'+':'−'}${cad(t.amount)}</div></div>`).join("")}
-  const spending=transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0);
-  document.getElementById("spending").textContent=cad(spending);
-  document.getElementById("remaining").textContent=cad(Math.max(0,2000-spending));
-  document.getElementById("progressBar").style.width=Math.min(100,spending/2000*100)+"%";
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function openModal(type){
-  currentAction=type;
-  const title=document.getElementById("modalTitle"),desc=document.getElementById("modalDesc"),fields=document.getElementById("formFields"),button=document.getElementById("submitButton"),feedback=document.getElementById("feedback");
-  feedback.className="feedback";feedback.textContent="";
-  if(type==="details"){
-    title.textContent="Account information";desc.textContent="Account details for this personal recordkeeping interface.";
-    fields.innerHTML='<div class="stat-row"><span>Account holder</span><strong>Tianna Jack</strong></div><div class="stat-row"><span>Currency</span><strong>Canadian dollar (CAD)</strong></div><div class="stat-row"><span>Account reference</span><strong>OAK •••• 2841</strong></div><div class="stat-row"><span>Service status</span><strong>Personal recordkeeping interface</strong></div>';
-    button.style.display="none";
-  }else{
-    button.style.display="block";
-    if(type==="transfer"){
-      title.textContent="Make a transfer";desc.textContent="Record a simulated transfer. No real bank details are needed.";
-      fields.innerHTML='<div class="field"><label for="recipient">Recipient name</label><input id="recipient" name="recipient" maxlength="60" required placeholder="Enter recipient name"></div><div class="field"><label for="reference">Payment reference (optional)</label><input id="reference" name="reference" maxlength="80" placeholder="e.g. Personal transfer"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" name="amount" type="number" min="0.01" max="35000" step="0.01" required placeholder="0.00"></div>';
-      button.textContent="Record simulated transfer";
-    }else if(type==="payment"){
-      title.textContent="Pay a bill";desc.textContent="Record a simulated bill payment in the account activity.";
-      fields.innerHTML='<div class="field"><label for="recipient">Company or bill name</label><input id="recipient" name="recipient" maxlength="60" required placeholder="e.g. Utilities"></div><div class="field"><label for="reference">Payment note (optional)</label><input id="reference" name="reference" maxlength="80" placeholder="e.g. October bill"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" name="amount" type="number" min="0.01" max="35000" step="0.01" required placeholder="0.00"></div>';
-      button.textContent="Record simulated payment";
-    }else{
-      title.textContent="Request funds";desc.textContent="Add a clearly simulated incoming-funds entry to this local interface.";
-      fields.innerHTML='<div class="field"><label for="recipient">From (name)</label><input id="recipient" name="recipient" maxlength="60" required placeholder="Enter a name"></div><div class="field"><label for="reference">Request note (optional)</label><input id="reference" name="reference" maxlength="80" placeholder="e.g. Shared expenses"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" name="amount" type="number" min="0.01" max="1000000" step="0.01" required placeholder="0.00"></div>';
-      button.textContent="Add simulated request";
-    }
-  }
-  document.getElementById("modalBackdrop").classList.add("open");
-}
-function closeModal(){document.getElementById("modalBackdrop").classList.remove("open")}
-function submitAction(event){
-  event.preventDefault();
-  if(currentAction==="details")return;
-  const form=new FormData(document.getElementById("actionForm"));
-  const name=String(form.get("recipient")||"").trim(),note=String(form.get("reference")||"").trim(),amount=Number(form.get("amount"));
-  const feedback=document.getElementById("feedback");
-  if(!name||!Number.isFinite(amount)||amount<=0){feedback.className="feedback bad show";feedback.textContent="Enter a valid name and amount.";return}
-  if(currentAction!=="receive"&&amount>balance){feedback.className="feedback bad show";feedback.textContent="The amount is greater than the displayed balance.";return}
-  let signed=amount,icon="↙",label=name;
-  if(currentAction==="transfer"){signed=-amount;icon="↗";label="Transfer to "+name;balance-=amount}
-  else if(currentAction==="payment"){signed=-amount;icon="⌁";label="Bill payment · "+name;balance-=amount}
-  else {label="Funds requested · "+name;icon="↙"}
-  const suffix=note?" · "+note:"";
-  transactions.unshift({name:label,date:"Just now · Simulated entry"+suffix,amount:signed,icon,kind:currentAction});
-  render();
-  feedback.className="feedback good show";
-  feedback.textContent=currentAction==="receive"?"Simulated request added to the activity list. No funds were received.":"Simulated entry recorded and the displayed balance updated. No real money was moved.";
-  document.getElementById("submitButton").disabled=true;
-  document.getElementById("submitButton").style.opacity=".65";
-  setTimeout(()=>{closeModal();document.getElementById("submitButton").disabled=false;document.getElementById("submitButton").style.opacity="1";},1600);
-}
-function clearActivity(){if(confirm("Clear the activity list shown on this page?")){transactions=[];render();showToast("Activity list cleared.")}}
-function showToast(text){
-  const el=document.getElementById("toast");el.textContent=text;el.style.display="block";
-  clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display="none",3000);
-}
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-render();
-</script>
-<div id="toast" role="status" style="display:none;position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:calc(100% - 30px);background:#142720;color:#fff;padding:13px 17px;border-radius:11px;font-size:12px;box-shadow:0 8px 30px #0002;z-index:20"></div>
-</body>
-</html>
+// Replace these two placeholders with the Project URL and publishable/anon key from Supabase > Project Settings > API.
+const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY';
+const configured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
+const $ = id => document.getElementById(id);
+let client = null, mode = 'signin';
+const money = value => new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(value||0));
+function message(id,text,error=false){$(id).textContent=text;$(id).classList.toggle('error',error)}
+function setMode(next){mode=next;$('authHeading').textContent=mode==='signup'?'Create your account':'Sign in to your account';$('authSubmit').textContent=mode==='signup'?'Create account':'Sign in';$('toggleAuth').textContent=mode==='signup'?'I already have an account':'Create account';$('nameField').classList.toggle('hidden',mode!=='signup');$('password').autocomplete=mode==='signup'?'new-password':'current-password';message('authMsg','')}
+$('toggleAuth').onclick=()=>setMode(mode==='signup'?'signin':'signup');
+async function loadDashboard(){const {data:{user},error:userErr}=await client.auth.getUser();if(userErr||!user){showSignedOut();return} $('authPanel').classList.add('hidden');$('dashboard').classList.remove('hidden');$('topActions').classList.remove('hidden');await loadRecords()}
+function showSignedOut(){$('authPanel').classList.remove('hidden');$('dashboard').classList.add('hidden');$('topActions').classList.add('hidden')}
+async function loadRecords(){message('entryMsg','');const {data:profile,error:pe}=await client.from('profiles').select('full_name').maybeSingle();if(pe){message('profileMsg',pe.message,true)}else if(profile){$('profileName').value=profile.full_name||''}
+const {data:account,error:ae}=await client.from('accounts').select('balance,currency').maybeSingle();if(ae){message('entryMsg',ae.message,true);return}if(!account){message('entryMsg','No account record found. Check the SQL setup.',true);return}$('balance').textContent=money(account.balance);
+const {data:rows,error:te}=await client.from('transactions').select('id,kind,description,amount,created_at').order('created_at',{ascending:false}).limit(50);if(te){$('txns').textContent='Could not load activity: '+te.message;return}if(!rows||rows.length===0){$('txns').innerHTML='<p class="muted">No records yet. Add your first record above.</p>';return}const list=document.createElement('div');for(const t of rows){const item=document.createElement('div');item.className='txn';const left=document.createElement('div');const title=document.createElement('div');title.className='txn-title';title.textContent=t.description;const meta=document.createElement('div');meta.className='txn-meta';meta.textContent=t.kind.toUpperCase()+' · '+new Date(t.created_at).toLocaleString();left.append(title,meta);const right=document.createElement('div');right.className=t.kind==='credit'?'positive':t.kind==='debit'?'negative':'';right.textContent=(t.kind==='credit'?'+':t.kind==='debit'?'−':'')+money(t.amount);item.append(left,right);list.append(item)}$('txns').replaceChildren(list)}
+$('authForm').addEventListener('submit',async e=>{e.preventDefault();if(!configured){message('authMsg','Setup needed: add your Supabase Project URL and publishable/anon key in this file, then commit it.',true);return}if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);const email=$('email').value.trim(),password=$('password').value;const btn=$('authSubmit');btn.disabled=true;message('authMsg','Please wait…');try{if(mode==='signup'){const full_name=$('fullName').value.trim()||'Account holder';const {data,error}=await client.auth.signUp({email,password,options:{data:{full_name},emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){message('authMsg','Account created. Loading your records…');await loadDashboard()}else{message('authMsg','Check your email to confirm your account, then return here to sign in.')}}else{const {error}=await client.auth.signInWithPassword({email,password});if(error)throw error;message('authMsg','Signed in.');await loadDashboard()}}catch(err){message('authMsg',err.message||'Unable to continue.',true)}finally{btn.disabled=false}});
+$('entryForm').addEventListener('submit',async e=>{e.preventDefault();if(!client)return;const btn=$('entrySubmit');btn.disabled=true;message('entryMsg','Saving record…');try{const {data,error}=await client.rpc('record_account_entry',{p_kind:$('kind').value,p_description:$('description').value.trim(),p_amount:Number($('amount').value)});if(error)throw error;if(!data||data.ok!==true)throw new Error('Record was not confirmed.');$('description').value='';$('amount').value='';message('entryMsg','Record saved. This is user-entered recordkeeping data.');await loadRecords()}catch(err){message('entryMsg',err.message||'Unable to save record.',true)}finally{btn.disabled=false}});
+$('saveProfile').onclick=async()=>{if(!client)return;const name=$('profileName').value.trim();if(!name||name.length>80){message('profileMsg','Enter a name up to 80 characters.',true);return}const {error}=await client.from('profiles').update({full_name:name}).eq('user_id',(await client.auth.getUser()).data.user.id);message('profileMsg',error?error.message:'Name saved.',!!error)};
+$('refresh').onclick=loadRecords;$('signOut').onclick=async()=>{if(client)await client.auth.signOut();showSignedOut();message('authMsg','You have signed out.')};
+$('resetPassword').onclick=async()=>{if(!configured){message('authMsg','Add your Supabase project URL and public key first.',true);return}if(!client)client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);const email=$('email').value.trim();if(!email){message('authMsg','Enter your email address first.',true);return}const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});message('authMsg',error?error.message:'If this email is registered, a password reset link will be sent.',!!error)};
+if(configured){client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);client.auth.onAuthStateChange((_event,session)=>{if(session)loadDashboard();else showSignedOut()});client.auth.getSession().then(({data})=>data.session?loadDashboard():showSignedOut())}else{showSignedOut();message('authMsg','First configure this page with your Supabase Project URL and publishable/anon key.')}
+</script></body></html>
