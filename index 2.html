@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0c1714">
+<title>Oakmont Private Banking</title>
+<style>
+:root{--ink:#0c1714;--ink2:#142720;--gold:#d9bb7c;--gold2:#f1dfb5;--paper:#f5f4f0;--muted:#78857f;--line:#e6e8e1;--green:#24745b;--red:#a74e47}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:#1b2923;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+header{background:var(--ink);color:#fff;padding:20px max(20px,calc((100vw - 1120px)/2));display:flex;align-items:center;gap:13px;border-bottom:1px solid #2a3b32}
+.logo{height:47px;width:47px;border:1px solid var(--gold);color:var(--gold);display:grid;place-items:center;font:30px Georgia,serif;border-radius:12px}
+.brand{flex:1}.brand h1{font:21px Georgia,serif;margin:0 0 5px;letter-spacing:.3px}.brand p{font-size:9px;letter-spacing:2.2px;color:var(--gold);margin:0}
+.header-right{display:flex;align-items:center;gap:10px;color:#d7e0da;font-size:12px}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#263b30;color:var(--gold2);border:1px solid #476052;font-weight:700}
+main{max-width:1120px;margin:28px auto;padding:0 20px 40px}
+.welcome{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:22px}.eyebrow{color:#9a7c43;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+h2{font:clamp(26px,4vw,34px) Georgia,serif;margin:0 0 8px;color:#15251e}.sub{font-size:13px;color:var(--muted)}
+.date-pill{border:1px solid #e0e2db;border-radius:999px;padding:9px 13px;color:#627168;background:#fff;font-size:11px;white-space:nowrap}
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.85fr);gap:18px}
+.balance-card{background:radial-gradient(circle at 90% 0%,#315343 0,transparent 38%),linear-gradient(125deg,#0c1714,#203d2e);color:#fff;padding:26px;border-radius:19px;box-shadow:0 14px 34px #0c17141b;position:relative;overflow:hidden}
+.balance-card:after{content:"O";position:absolute;right:18px;bottom:-62px;font:220px Georgia,serif;color:#ffffff08;pointer-events:none}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.card-label{font-size:12px;color:#d1dcd4}.status{font-size:10px;color:#d9e6d9;border:1px solid #597665;padding:7px 9px;border-radius:999px}
+.balance{font:clamp(33px,5vw,44px) Georgia,serif;letter-spacing:-.5px;margin:17px 0 6px;color:#f6e5bd}.currency{font-size:11px;color:#c4d0c8}
+.card-bottom{border-top:1px solid #ffffff24;margin-top:24px;padding-top:17px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px;color:#d3ddd6}.card-bottom strong{display:block;color:#fff;font-size:12px;margin-top:5px;font-weight:500}
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0 18px}
+.action{border:1px solid var(--line);background:#fff;border-radius:13px;padding:15px 7px;text-align:center;color:#21352b;box-shadow:0 2px 8px #10201805;transition:transform .15s,border-color .15s}
+.action:hover{transform:translateY(-2px);border-color:#cdb57f}.action-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#f4f0e4;color:#9c7b3b;margin:0 auto 9px;font-size:20px}.action strong{display:block;font-size:11px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:17px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.panel h3{font:20px Georgia,serif;margin:0}.muted-link{border:0;background:transparent;color:#94763c;font-size:11px;font-weight:700;padding:5px}
+.tx{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #edf0eb}.tx:last-child{border:0;padding-bottom:2px}
+.symbol{width:40px;height:40px;border-radius:13px;background:#f2f0e8;color:#92753e;display:grid;place-items:center;flex-shrink:0;font-size:17px}
+.info{flex:1;min-width:0}.info strong{font-size:12px;font-weight:650}.info small{display:block;font-size:10px;color:#8b968f;margin-top:5px}.amount{font-size:12px;font-weight:700;white-space:nowrap}.positive{color:var(--green)}.negative{color:#28372f}
+.side-stack{display:flex;flex-direction:column;gap:17px}
+.mini-card{border-radius:16px;background:#fff;border:1px solid var(--line);padding:20px}.mini-title{font:18px Georgia,serif;margin:0 0 15px}
+
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #edf0eb;font-size:12px}.stat-row:last-child{border:0}.stat-row span{color:#7f8b83}.stat-row strong{font-weight:650}.progress{height:6px;background:#edf0e8;border-radius:20px;overflow:hidden;margin:12px 0 8px}.progress span{display:block;height:100%;width:62%;background:linear-gradient(90deg,#9a7c43,#d8bc80);border-radius:20px}
+.notice{font-size:10px;line-height:1.65;color:#6d6248;background:#fbf7ec;border:1px solid #ece0bf;border-radius:10px;padding:12px;margin-top:18px}
+footer{text-align:center;font-size:10px;line-height:1.7;color:#89948d;padding:18px 20px 28px}
+.modal-backdrop{position:fixed;inset:0;background:#08100dd9;display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal-backdrop.open{display:flex}
+.modal{width:min(100%,460px);background:#fff;border-radius:18px;padding:23px;box-shadow:0 25px 80px #0005;max-height:90vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.modal h3{font:23px Georgia,serif;margin:0}.close{border:0;background:#f0f2ed;border-radius:9px;width:35px;height:35px;font-size:20px;color:#3a493f}.modal-desc{font-size:12px;color:#7a867e;line-height:1.5;margin:0 0 18px}
+.field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:700;color:#46564b;margin-bottom:7px}.field input,.field select{width:100%;border:1px solid #dfe4dc;border-radius:10px;padding:12px;background:#fff;color:#203128;outline:none}.field input:focus,.field select:focus{border-color:#a78a4e;box-shadow:0 0 0 3px #d9bb7c25}
+.primary{width:100%;border:0;border-radius:10px;background:#183629;color:#fff;padding:13px;font-weight:700;margin-top:8px}.primary:hover{background:#254b39}.cancel{width:100%;border:1px solid #dfe4dc;border-radius:10px;background:#fff;color:#4e5a52;padding:11px;margin-top:8px}
+.feedback{font-size:12px;line-height:1.5;padding:11px;border-radius:9px;margin-top:12px;display:none}.feedback.show{display:block}.feedback.good{background:#edf7f0;color:#226144}.feedback.bad{background:#fbefed;color:#8c3f37}
+.empty{font-size:12px;color:#89948d;padding:18px 0}
+
+.auth-shell{max-width:510px;margin:30px auto;padding:0 16px 28px}.auth-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 30px #10201808}.auth-card h2{font-size:28px}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}.auth-tabs button{border:1px solid var(--line);border-radius:10px;padding:11px;background:#fff;color:#425248;font-weight:700}.auth-tabs button.active{background:#183629;color:#fff;border-color:#183629}.auth-form{display:none}.auth-form.active{display:block}.auth-link{border:0;background:transparent;color:#94763c;font-size:12px;font-weight:700;padding:10px 0}.auth-notice{font-size:11px;line-height:1.6;color:#6d6248;background:#fbf7ec;border:1px solid #ece0bf;border-radius:10px;padding:12px;margin-top:16px}.auth-feedback{font-size:12px;line-height:1.5;padding:11px;border-radius:9px;margin-top:12px;display:none}.auth-feedback.show{display:block}.auth-feedback.good{background:#edf7f0;color:#226144}.auth-feedback.bad{background:#fbefed;color:#8c3f37}.hidden{display:none!important}.header-right .logout{border:1px solid #52665a;border-radius:9px;background:transparent;color:#fff;padding:8px 10px;font-size:11px}.profile-form{display:flex;gap:8px;align-items:center}.profile-form input{min-width:0;flex:1;border:1px solid #dfe4dc;border-radius:9px;padding:10px}.profile-form button{border:0;border-radius:9px;background:#183629;color:#fff;padding:10px;font-size:11px;font-weight:700}
+@media(max-width:760px){main{margin:22px auto;padding:0 14px 28px}.layout{grid-template-columns:1fr}.side-stack{display:grid;grid-template-columns:1fr 1fr;align-items:start}.welcome{align-items:start;flex-direction:column}.date-pill{display:none}.balance-card{padding:22px}.quick-actions{gap:7px}.action{padding:13px 4px}.panel{padding:17px}}
+@media(max-width:460px){header{padding:16px}.brand h1{font-size:18px}.header-right .secure-text{display:none}.side-stack{grid-template-columns:1fr}.balance{font-size:34px}.card-bottom{font-size:10px}.quick-actions{grid-template-columns:repeat(4,1fr)}.action-icon{width:32px;height:32px}.action strong{font-size:10px}.panel-head h3{font-size:19px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-hidden="true">O</div>
+  <div class="brand"><h1>Oakmont Private Banking</h1><p>PRIVATE CHECKING ACCOUNT</p></div>
+  <div class="header-right"><span class="secure-text">Demo account</span><div class="avatar" id="avatar" aria-label="Signed-in user">—</div><button class="logout hidden" id="logoutButton" type="button" onclick="logout()">Log out</button></div>
+</header>
+<section class="auth-shell" id="authShell">
+  <div class="auth-card">
+    <div class="eyebrow">Personal recordkeeping demo</div>
+    <h2 id="authTitle">Welcome to Oakmont</h2>
+    <p class="sub" id="authIntro">Create an account or sign in to access your private demo records.</p>
+    <div class="auth-tabs" id="authTabs"><button type="button" id="loginTab" class="active" onclick="showAuthForm('login')">Log in</button><button type="button" id="signupTab" onclick="showAuthForm('signup')">Create account</button></div>
+    <form id="loginForm" class="auth-form active" onsubmit="login(event)">
+      <div class="field"><label for="loginEmail">Email address</label><input id="loginEmail" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" minlength="8" required></div>
+      <button class="primary" type="submit">Log in securely</button>
+      <button class="auth-link" type="button" onclick="showAuthForm('forgot')">Forgot your password?</button>
+    </form>
+    <form id="signupForm" class="auth-form" onsubmit="signup(event)">
+      <div class="field"><label for="signupName">Your name</label><input id="signupName" autocomplete="name" maxlength="80" required></div>
+      <div class="field"><label for="signupEmail">Email address</label><input id="signupEmail" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="signupPassword">Create password (8+ characters)</label><input id="signupPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+      <button class="primary" type="submit">Create demo account</button>
+    </form>
+    <form id="forgotForm" class="auth-form" onsubmit="sendReset(event)">
+      <div class="field"><label for="resetEmail">Email address</label><input id="resetEmail" type="email" autocomplete="email" required></div>
+      <button class="primary" type="submit">Send password reset email</button><button class="auth-link" type="button" onclick="showAuthForm('login')">Back to login</button>
+    </form>
+    <form id="newPasswordForm" class="auth-form" onsubmit="setNewPassword(event)">
+      <div class="field"><label for="newPassword">New password (8+ characters)</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required></div>
+      <button class="primary" type="submit">Save new password</button>
+    </form>
+    <div id="authFeedback" class="auth-feedback" role="status" aria-live="polite"></div>
+    <div class="auth-notice"><strong>Demonstration only.</strong> Oakmont is a personal recordkeeping interface, not a bank or financial institution. Sample balances and entries are illustrative. This site does not hold money, connect to bank accounts, or process payments or transfers.</div>
+  </div>
+</section>
+<main id="accountApp" class="hidden">
+  <div class="welcome">
+    <div><div class="eyebrow">Private client overview</div><h2>Welcome back, <span id="welcomeName">there</span>.</h2><div class="sub">Your finances, thoughtfully organized.</div></div>
+    <div class="date-pill">◷ &nbsp; Account overview</div>
+  </div>
+  <div class="layout">
+    <div>
+      <section class="balance-card" aria-label="Account balance">
+        <div class="card-top"><div class="card-label">Sample balance · demo only</div><div class="status">● &nbsp; Account overview</div></div>
+        <div class="balance" id="balance">CA$35,000.00</div>
+        <div class="currency">Canadian dollars · CAD</div>
+        <div class="card-bottom">
+          <div>PROFILE<strong id="accountHolder">Your profile</strong></div>
+          <div>ACCOUNT TYPE<strong>Checking account</strong></div>
+          <div>REFERENCE<strong>OAK •••• 2841</strong></div>
+        </div>
+      </section>
+      <section class="quick-actions" aria-label="Account actions">
+        <button class="action" onclick="openModal('transfer')"><span class="action-icon">↗</span><strong>Transfer</strong></button>
+        <button class="action" onclick="openModal('payment')"><span class="action-icon">⌁</span><strong>Pay a bill</strong></button>
+        <button class="action" onclick="openModal('receive')"><span class="action-icon">↙</span><strong>Request funds</strong></button>
+        <button class="action" onclick="document.getElementById('activity').scrollIntoView({behavior:'smooth'})"><span class="action-icon">◷</span><strong>Activity</strong></button>
+      </section>
+      <section class="panel" id="activity">
+        <div class="panel-head"><h3>Recent activity</h3><button class="muted-link" onclick="clearActivity()">Clear history</button></div>
+        <div id="transactions">
+        </div>
+      </section>
+    </div>
+    <aside class="side-stack">
+      <section class="mini-card">
+        <h3 class="mini-title">Monthly spending</h3>
+        <div class="stat-row"><span>Recorded spending</span><strong id="spending">CA$126.25</strong></div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <div class="stat-row"><span>Monthly budget</span><strong>CA$2,000.00</strong></div>
+        <div class="stat-row"><span>Budget remaining</span><strong id="remaining">CA$1,873.75</strong></div>
+      </section>
+      <section class="mini-card">
+        <h3 class="mini-title">Your profile</h3>
+        <form id="profileForm" onsubmit="saveProfile(event)">
+          <div class="field"><label for="profileName">Display name</label><input id="profileName" maxlength="80" required></div>
+          <button class="primary" type="submit">Save profile</button>
+        </form>
+      </section>
+      <section class="mini-card">
+        <h3 class="mini-title">Account shortcuts</h3>
+        <div class="stat-row"><span>Account details</span><button class="muted-link" onclick="openModal('details')">View</button></div>
+        <div class="stat-row"><span>Monthly summary</span><button class="muted-link" onclick="showToast('Your monthly summary is shown in the spending panel.')">Open</button></div>
+        <div class="stat-row"><span>Notifications</span><button class="muted-link" onclick="showToast('You have no new interface notifications.')">View</button></div>
+      </section>
+    </aside>
+  </div>
+  <div class="notice">This account overview is a personal recordkeeping interface. It is not connected to a financial institution, and actions entered here do not process transfers, payments, or requests or move money.</div>
+</main>
+<footer>Oakmont · Personal recordkeeping demonstration · Not a bank · CAD</footer>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Transfer</h3><button class="close" onclick="closeModal()" aria-label="Close">×</button></div>
+    <p class="modal-desc" id="modalDesc">Record a transfer entry in this account overview. Entries made here are not sent to a bank.</p>
+    <form id="actionForm" onsubmit="submitAction(event)">
+      <div id="formFields"></div>
+      <button class="primary" id="submitButton" type="submit">Record simulated transfer</button>
+      <button class="cancel" type="button" onclick="closeModal()">Cancel</button>
+      <div id="feedback" class="feedback" role="status"></div>
+    </form>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const initialBalance = 35000;
+let balance = initialBalance;
+let transactions = [];
+let currentAction = "transfer";
+const cad = n => "CA$" + Math.abs(n).toLocaleString("en-CA",{minimumFractionDigits:2,maximumFractionDigits:2});
+function render(){
+  document.getElementById("balance").textContent=cad(balance);
+  const list=document.getElementById("transactions");
+  if(!transactions.length){list.innerHTML='<div class="empty">No activity to display yet.</div>'}
+  else {list.innerHTML=transactions.map(t=>`<div class="tx"><div class="symbol">${escapeHtml(t.icon)}</div><div class="info"><strong>${escapeHtml(t.name)}</strong><small>${escapeHtml(t.date)}</small></div><div class="amount ${t.amount>=0?'positive':'negative'}">${t.amount>=0?'+':'−'}${cad(t.amount)}</div></div>`).join("")}
+  const spending=transactions.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0);
+  document.getElementById("spending").textContent=cad(spending);
+  document.getElementById("remaining").textContent=cad(Math.max(0,2000-spending));
+  document.getElementById("progressBar").style.width=Math.min(100,spending/2000*100)+"%";
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function openModal(type){
+  currentAction=type;
+  const title=document.getElementById("modalTitle"),desc=document.getElementById("modalDesc"),fields=document.getElementById("formFields"),button=document.getElementById("submitButton"),feedback=document.getElementById("feedback");
+  feedback.className="feedback";feedback.textContent="";
+  if(type==="details"){
+    title.textContent="Account information";desc.textContent="Account details for this personal recordkeeping interface.";
+    fields.innerHTML='<div class="stat-row"><span>Profile name</span><strong>'+escapeHtml(document.getElementById("profileName").value||"Your profile")+'</strong></div><div class="stat-row"><span>Currency</span><strong>Canadian dollar (CAD)</strong></div><div class="stat-row"><span>Service status</span><strong>Demo only · Not a bank</strong></div>';
+    button.style.display="none";
+  }else{
+    button.style.display="block";
+    if(type==="transfer"){
+      title.textContent="Make a transfer";desc.textContent="Record a simulated transfer. No real bank details are needed.";
+      fields.innerHTML='<div class="field"><label for="recipient">Recipient name</label><input id="recipient" name="recipient" maxlength="60" required placeholder="Enter recipient name"></div><div class="field"><label for="reference">Payment reference (optional)</label><input id="reference" name="reference" maxlength="80" placeholder="e.g. Personal transfer"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" name="amount" type="number" min="0.01" max="35000" step="0.01" required placeholder="0.00"></div>';
+      button.textContent="Record simulated transfer";
+    }else if(type==="payment"){
+      title.textContent="Pay a bill";desc.textContent="Record a simulated bill payment in the account activity.";
+      fields.innerHTML='<div class="field"><label for="recipient">Company or bill name</label><input id="recipient" name="recipient" maxlength="60" required placeholder="e.g. Utilities"></div><div class="field"><label for="reference">Payment note (optional)</label><input id="reference" name="reference" maxlength="80" placeholder="e.g. October bill"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" name="amount" type="number" min="0.01" max="35000" step="0.01" required placeholder="0.00"></div>';
+      button.textContent="Record simulated payment";
+    }else{
+      title.textContent="Request funds";desc.textContent="Add a clearly simulated incoming-funds entry to this local interface.";
+      fields.innerHTML='<div class="field"><label for="recipient">From (name)</label><input id="recipient" name="recipient" maxlength="60" required placeholder="Enter a name"></div><div class="field"><label for="reference">Request note (optional)</label><input id="reference" name="reference" maxlength="80" placeholder="e.g. Shared expenses"></div><div class="field"><label for="amount">Amount (CAD)</label><input id="amount" name="amount" type="number" min="0.01" max="1000000" step="0.01" required placeholder="0.00"></div>';
+      button.textContent="Add simulated request";
+    }
+  }
+  document.getElementById("modalBackdrop").classList.add("open");
+}
+function closeModal(){document.getElementById("modalBackdrop").classList.remove("open")}
+function submitAction(event){
+  event.preventDefault();
+  if(currentAction==="details")return;
+  const form=new FormData(document.getElementById("actionForm"));
+  const name=String(form.get("recipient")||"").trim(),note=String(form.get("reference")||"").trim(),amount=Number(form.get("amount"));
+  const feedback=document.getElementById("feedback");
+  if(!name||!Number.isFinite(amount)||amount<=0){feedback.className="feedback bad show";feedback.textContent="Enter a valid name and amount.";return}
+  if(currentAction!=="receive"&&amount>balance){feedback.className="feedback bad show";feedback.textContent="The amount is greater than the displayed balance.";return}
+  let signed=amount,icon="↙",label=name;
+  if(currentAction==="transfer"){signed=-amount;icon="↗";label="Transfer to "+name;balance-=amount}
+  else if(currentAction==="payment"){signed=-amount;icon="⌁";label="Bill payment · "+name;balance-=amount}
+  else {label="Funds requested · "+name;icon="↙"}
+  const suffix=note?" · "+note:"";
+  transactions.unshift({name:label,date:"Just now · Simulated entry"+suffix,amount:signed,icon,kind:currentAction});
+  render();
+  saveDashboard();
+  feedback.className="feedback good show";
+  feedback.textContent=currentAction==="receive"?"Simulated request added to the activity list. No funds were received.":"Simulated entry recorded and the displayed balance updated. No real money was moved.";
+  document.getElementById("submitButton").disabled=true;
+  document.getElementById("submitButton").style.opacity=".65";
+  setTimeout(()=>{closeModal();document.getElementById("submitButton").disabled=false;document.getElementById("submitButton").style.opacity="1";},1600);
+}
+function clearActivity(){if(confirm("Clear the activity list saved to your demo account?")){transactions=[];render();saveDashboard();showToast("Activity list cleared.")}}
+function showToast(text){
+  const el=document.getElementById("toast");el.textContent=text;el.style.display="block";
+  clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display="none",3000);
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+// Supabase setup: replace these two placeholders with your project's URL and publishable key.
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+let supabaseClient = null;
+let currentUser = null;
+let profileName = "";
+let stateLoaded = false;
+let authBusy = false;
+
+function authMessage(message, kind="good"){
+  const el=document.getElementById("authFeedback");el.textContent=message;el.className="auth-feedback show "+kind;
+}
+function clearAuthMessage(){const el=document.getElementById("authFeedback");el.textContent="";el.className="auth-feedback"}
+function showAuthForm(which){
+  clearAuthMessage();
+  document.querySelectorAll(".auth-form").forEach(f=>f.classList.remove("active"));
+  const tabs=document.getElementById("authTabs");tabs.classList.toggle("hidden",which==="forgot"||which==="reset");
+  document.getElementById("loginTab").classList.toggle("active",which==="login");document.getElementById("signupTab").classList.toggle("active",which==="signup");
+  const map={login:"loginForm",signup:"signupForm",forgot:"forgotForm",reset:"newPasswordForm"};
+  if(map[which])document.getElementById(map[which]).classList.add("active");
+  document.getElementById("authTitle").textContent=which==="signup"?"Create your account":which==="forgot"?"Reset your password":which==="reset"?"Choose a new password":"Welcome to Oakmont";
+  document.getElementById("authIntro").textContent=which==="signup"?"Register to save your own profile and demo records.":which==="forgot"?"We’ll email you a secure password reset link.":which==="reset"?"Choose a new password for your account.":"Sign in to access your private demo records.";
+}
+function setAuthBusy(form,busy){const b=form.querySelector('button[type="submit"]');if(b){b.disabled=busy;b.style.opacity=busy?".65":"1"}}
+async function signup(event){
+  event.preventDefault();const form=event.currentTarget;setAuthBusy(form,true);clearAuthMessage();
+  try{const name=document.getElementById("signupName").value.trim();const email=document.getElementById("signupEmail").value.trim();const password=document.getElementById("signupPassword").value;
+    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:window.location.href}});if(error)throw error;
+    if(data.session){authMessage("Account created. Opening your private demo account…");await handleSession(data.session)}else{authMessage("Registration started. Check your email for the verification link, then return here and log in.")}
+  }catch(e){authMessage(e.message||"Could not create the account. Please try again.","bad")}finally{setAuthBusy(form,false)}
+}
+async function login(event){
+  event.preventDefault();const form=event.currentTarget;setAuthBusy(form,true);clearAuthMessage();
+  try{const email=document.getElementById("loginEmail").value.trim();const password=document.getElementById("loginPassword").value;const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;if(data.session)await handleSession(data.session)}catch(e){authMessage(e.message||"Login failed. Check your email and password.","bad")}finally{setAuthBusy(form,false)}
+}
+async function sendReset(event){
+  event.preventDefault();const form=event.currentTarget;setAuthBusy(form,true);clearAuthMessage();
+  try{const email=document.getElementById("resetEmail").value.trim();const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});if(error)throw error;authMessage("If an account exists for that email, a password reset link has been sent. Check your inbox.")}
+  catch(e){authMessage(e.message||"Could not send the reset email.","bad")}finally{setAuthBusy(form,false)}
+}
+async function setNewPassword(event){
+  event.preventDefault();const form=event.currentTarget;setAuthBusy(form,true);clearAuthMessage();
+  try{const password=document.getElementById("newPassword").value;const {error}=await supabaseClient.auth.updateUser({password});if(error)throw error;await supabaseClient.auth.signOut();showAuthForm("login");authMessage("Password updated successfully. Log in with your new password.")}
+  catch(e){authMessage(e.message||"Could not update the password. Open the newest reset link and try again.","bad")}finally{setAuthBusy(form,false)}
+}
+async function logout(){await supabaseClient.auth.signOut();currentUser=null;stateLoaded=false;document.getElementById("accountApp").classList.add("hidden");document.getElementById("authShell").classList.remove("hidden");document.getElementById("logoutButton").classList.add("hidden");document.getElementById("avatar").textContent="—";showAuthForm("login");authMessage("You have logged out.")}
+async function handleSession(session){
+  if(!session||!session.user){currentUser=null;stateLoaded=false;document.getElementById("accountApp").classList.add("hidden");document.getElementById("authShell").classList.remove("hidden");document.getElementById("logoutButton").classList.add("hidden");return}
+  if(currentUser&&currentUser.id===session.user.id&&stateLoaded)return;
+  currentUser=session.user;stateLoaded=false;
+  try{
+    const {data,error}=await supabaseClient.from("oakmont_user_data").select("user_id,display_name,balance,transactions").eq("user_id",currentUser.id).maybeSingle();if(error)throw error;
+    if(data){profileName=data.display_name||currentUser.user_metadata?.full_name||currentUser.email||"User";balance=Number(data.balance??initialBalance);transactions=Array.isArray(data.transactions)?data.transactions:[]}
+    else{profileName=currentUser.user_metadata?.full_name||currentUser.email||"User";balance=initialBalance;transactions=[];const {error:insertError}=await supabaseClient.from("oakmont_user_data").insert({user_id:currentUser.id,display_name:profileName,balance,transactions});if(insertError)throw insertError}
+    stateLoaded=true;document.getElementById("profileName").value=profileName;document.getElementById("accountHolder").textContent=profileName;document.getElementById("welcomeName").textContent=profileName;document.getElementById("avatar").textContent=profileName.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();document.getElementById("authShell").classList.add("hidden");document.getElementById("accountApp").classList.remove("hidden");document.getElementById("logoutButton").classList.remove("hidden");render();
+  }catch(e){currentUser=null;stateLoaded=false;document.getElementById("accountApp").classList.add("hidden");document.getElementById("authShell").classList.remove("hidden");authMessage("Could not load your saved demo records. Confirm that the Supabase SQL setup was completed. Details: "+(e.message||"unknown error"),"bad")}
+}
+async function saveDashboard(){
+  if(!currentUser||!stateLoaded)return;
+  const {error}=await supabaseClient.from("oakmont_user_data").upsert({user_id:currentUser.id,display_name:profileName,balance,transactions,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+  if(error)showToast("Your changes could not be saved. Check your connection and database setup.");
+}
+async function saveProfile(event){
+  event.preventDefault();const next=document.getElementById("profileName").value.trim();if(!next){showToast("Enter a display name first.");return}profileName=next;
+  const {error}=await supabaseClient.auth.updateUser({data:{full_name:profileName}});if(error){showToast("Profile could not be updated. Please try again.");return}
+  document.getElementById("accountHolder").textContent=profileName;document.getElementById("welcomeName").textContent=profileName;document.getElementById("avatar").textContent=profileName.split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();await saveDashboard();showToast("Profile saved to your demo account.");
+}
+function initializeAuth(){
+  if(!window.supabase||SUPABASE_URL==="YOUR_SUPABASE_PROJECT_URL"||SUPABASE_PUBLISHABLE_KEY==="YOUR_SUPABASE_PUBLISHABLE_KEY"){
+    authMessage("Setup needed: create a Supabase project, add your Project URL and publishable key in this file, and run the SQL setup. No account data can be saved until setup is complete.","bad");return;
+  }
+  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+  supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){setTimeout(()=>{showAuthForm("reset");document.getElementById("authShell").classList.remove("hidden");document.getElementById("accountApp").classList.add("hidden")},0);return}setTimeout(()=>handleSession(session),0)});
+  if(window.location.hash.includes("type=recovery"))showAuthForm("reset");
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+initializeAuth();
+</script>
+<div id="toast" role="status" style="display:none;position:fixed;left:50%;bottom:20px;transform:translateX(-50%);max-width:calc(100% - 30px);background:#142720;color:#fff;padding:13px 17px;border-radius:11px;font-size:12px;box-shadow:0 8px 30px #0002;z-index:20"></div>
+</body>
+</html>
