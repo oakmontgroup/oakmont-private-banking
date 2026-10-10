@@ -3,216 +3,405 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#123b30">
-  <title>Oakmont | Private Client Services</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <meta name="theme-color" content="#001c15">
+  <title>Oakmont | Private Banking</title>
+  <style>
+    :root {
+      --green: #001c15;
+      --green-light: #052a20;
+      --gold: #d9b574;
+      --gold-light: #efd39b;
+      --white: #f8f5ef;
+      --muted: #c3cbd0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--green);
+      color: var(--white);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Arial, sans-serif;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    button {
+      font: inherit;
+    }
+    .site-header {
+      height: 76px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #00150f;
+      border-bottom: 2px solid var(--gold);
+      padding: 8px 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .tree-mark {
+      color: var(--gold);
+      font-size: 43px;
+      line-height: 1;
+    }
+    .brand-name {
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(25px, 5vw, 37px);
+      letter-spacing: 3px;
+      line-height: 1.1;
+    }
+    .brand-subtitle {
+      margin-top: 4px;
+      color: #eee5d5;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-align: center;
+    }
+    .hero {
+      position: relative;
+      height: clamp(290px, 65vw, 430px);
+      overflow: hidden;
+      background: #102a28;
+    }
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 55%;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 15, 12, 0.05) 20%,
+        rgba(0, 22, 16, 0.15) 45%,
+        rgba(0, 28, 21, 0.94) 100%
+      );
+    }
+    .hero-caption {
+      position: absolute;
+      z-index: 1;
+      right: 16px;
+      bottom: 20px;
+      left: 16px;
+      color: #fff;
+      font-size: 12px;
+      text-align: center;
+      text-shadow: 0 2px 8px #000;
+    }
+    .main-content {
+      position: relative;
+      z-index: 2;
+      width: min(100% - 42px, 480px);
+      margin: -2px auto 0;
+      padding-bottom: 45px;
+      text-align: center;
+    }
+    .main-brand {
+      margin-top: -5px;
+    }
+    .main-brand .tree-mark {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 55px;
+    }
+    .main-brand .brand-name {
+      font-size: clamp(32px, 7vw, 43px);
+      letter-spacing: 3px;
+    }
+    .main-brand .brand-subtitle {
+      font-size: 12px;
+      letter-spacing: 4px;
+    }
+    .tagline {
+      margin: 30px 0 5px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(23px, 5.2vw, 30px);
+      font-weight: 500;
+    }
+    .tagline-subtitle {
+      margin: 10px 0 28px;
+      color: #c9d0d7;
+      font-size: 17px;
+    }
+    .action-list {
+      display: grid;
+      gap: 24px;
+    }
+    .action-card {
+      display: flex;
+      min-height: 118px;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 24px;
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      background: rgba(0, 23, 17, 0.76);
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .action-card:hover {
+      background: #0b3024;
+      border-color: var(--gold-light);
+    }
+    .action-icon {
+      display: grid;
+      width: 64px;
+      flex: 0 0 64px;
+      place-items: center;
+      color: var(--gold);
+      font-size: 43px;
+      font-weight: 300;
+    }
+    .action-copy {
+      flex: 1;
+      min-width: 0;
+    }
+    .action-copy strong {
+      display: block;
+      font-size: 22px;
+      font-weight: 600;
+    }
+    .action-copy span {
+      display: block;
+      margin-top: 5px;
+      color: #c8ced3;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .action-arrow {
+      color: var(--white);
+      font-size: 31px;
+      font-weight: 300;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 58px 0 48px;
+    }
+    .feature {
+      min-width: 0;
+      padding: 0 8px;
+      border-right: 1px solid rgba(217, 181, 116, 0.35);
+    }
+    .feature:last-child {
+      border-right: 0;
+    }
+    .feature-icon {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--gold);
+      font-size: 31px;
+    }
+    .feature span:last-child {
+      display: block;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .security-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      margin: 0 auto;
+      max-width: 380px;
+      color: #c7ced1;
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: left;
+    }
+    .security-note .shield {
+      flex: 0 0 auto;
+      color: var(--gold);
+      font-size: 25px;
+      line-height: 1.4;
+    }
+    .site-footer {
+      display: flex;
+      min-height: 75px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 20px max(22px, calc((100% - 900px) / 2));
+      border-top: 1px solid rgba(217, 181, 116, 0.55);
+      background: #00150f;
+      color: #c8c9c3;
+      font-size: 10px;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-links a:hover {
+      color: var(--gold-light);
+    }
+    .footer-disclosure {
+      width: 100%;
+      color: #aebbb3;
+      font-size: 10px;
+      text-align: center;
+    }
+    @media (min-width: 700px) {
+      .hero {
+        height: 410px;
+      }
+      .main-content {
+        margin-top: -5px;
+      }
+      .action-card {
+        min-height: 112px;
+      }
+    }
+    @media (max-width: 380px) {
+      .main-content {
+        width: calc(100% - 30px);
+      }
+      .action-card {
+        gap: 12px;
+        padding: 17px 13px;
+      }
+      .action-icon {
+        width: 48px;
+        flex-basis: 48px;
+        font-size: 36px;
+      }
+      .action-copy strong {
+        font-size: 19px;
+      }
+      .action-copy span {
+        font-size: 12px;
+      }
+      .feature {
+        padding: 0 4px;
+      }
+      .feature span:last-child {
+        font-size: 11px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="dashboard-page">
-  <header class="dashboard-header">
+<body>
+  <header class="site-header">
     <a class="brand" href="index.html" aria-label="Oakmont home">
-      <span class="brand-logo">O</span>
+      <span class="tree-mark" aria-hidden="true">♣</span>
       <span>
-        <strong>OAKMONT</strong>
-        <small>PRIVATE CLIENT SERVICES</small>
+        <span class="brand-name">OAKMONT</span>
+        <span class="brand-subtitle" style="display:block">
+          PRIVATE BANKING
+        </span>
       </span>
     </a>
-    <div class="header-right">
-      <div class="clock dashboard-clock">
-        <strong data-vancouver-time>Loading time...</strong>
-        <span data-vancouver-date>Loading date...</span>
-        <small>Vancouver, British Columbia</small>
-      </div>
-      <button class="outline-button" id="signOutButton" type="button">
-        Sign Out
-      </button>
-    </div>
   </header>
-  <div class="dashboard-layout">
-    <aside class="sidebar">
-      <div class="client-profile">
-        <div class="avatar" id="avatar">T</div>
-        <div>
-          <strong id="sidebarName" data-account-owner>Tianna Jack</strong>
-          <small>Private Client</small>
-        </div>
-      </div>
-      <nav class="navigation" aria-label="Main navigation">
-        <a class="nav-link active" href="#overview">▦ Overview</a>
-        <a class="nav-link" href="#account">◫ Accounts</a>
-        <a class="nav-link" href="#transactions">↔ Activity</a>
-        <a class="nav-link" href="#services">◇ Services</a>
-        <a class="nav-link" href="#profile">♙ Profile</a>
-      </nav>
-      <div class="sidebar-help">
-        <span class="help-icon">?</span>
-        <strong>Client Support</strong>
-        <p>Find your way around the account interface.</p>
-        <a href="index.html">Return to homepage →</a>
-      </div>
-    </aside>
-    <main class="dashboard-main" id="overview">
-      <section class="page-heading">
-        <div>
-          <p class="eyebrow">PRIVATE CLIENT OVERVIEW</p>
-          <h1>Good day, <span id="welcomeName" data-account-owner>Tianna Jack</span></h1>
-          <p class="muted">
-            Your account overview and recent activity.
-          </p>
-        </div>
-        <div class="date-panel">
-          <small>VANCOUVER LOCAL TIME</small>
-          <strong data-vancouver-time>Loading time...</strong>
-          <span data-vancouver-date>Loading date...</span>
-        </div>
-      </section>
-      <section class="account-grid" id="account">
-        <article class="balance-card">
-          <div class="balance-top">
-            <span>Account Balance</span>
-            <span class="gold-symbol">◇</span>
-          </div>
-          <h2>CAD $50,000.00</h2>
-          <div class="balance-bottom">
-            <span><i></i> Account Overview</span>
-            <span>As of <b data-vancouver-time>—</b></span>
-          </div>
-          <span class="watermark">O</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon">↗</span>
-          <p>Available Balance</p>
-          <h3>CAD $50,000.00</h3>
-          <small>Displayed account amount</small>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon">▤</span>
-          <p>Recent Activity</p>
-          <h3>04 <small>entries</small></h3>
-          <small>Account activity overview</small>
-        </article>
-      </section>
-      <section class="content-section" id="services">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">CLIENT SERVICES</p>
-            <h2>Account Services</h2>
-          </div>
-          <span class="muted">Your overview</span>
-        </div>
-        <div class="services-grid">
-          <article class="service-card">
-            <span class="service-icon">▤</span>
-            <h3>Accounts</h3>
-            <p>Review your displayed account balance and summary.</p>
-            <a href="#account">View accounts →</a>
-          </article>
-          <article class="service-card">
-            <span class="service-icon">↔</span>
-            <h3>Transfers</h3>
-            <p>Review information about transfer functionality.</p>
-            <button
-              type="button"
-              class="text-button"
-              id="transferButton">
-              Transfer information →
-            </button>
-          </article>
-          <article class="service-card">
-            <span class="service-icon">▧</span>
-            <h3>Activity</h3>
-            <p>Review the entries displayed in your activity table.</p>
-            <a href="#transactions">View activity →</a>
-          </article>
-        </div>
-      </section>
-      <section class="content-section" id="transactions">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">ACCOUNT MANAGEMENT</p>
-            <h2>Recent Activity</h2>
-          </div>
-          <span class="muted">Account records</span>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>DESCRIPTION</th>
-                <th>DATE</th>
-                <th>TYPE</th>
-                <th>AMOUNT</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Deposit entry</td>
-                <td>Oct 08, 2026</td>
-                <td>Credit</td>
-                <td class="positive">+CAD $2,500.00</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-              <tr>
-                <td>Purchase entry</td>
-                <td>Oct 06, 2026</td>
-                <td>Debit</td>
-                <td>−CAD $128.40</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-              <tr>
-                <td>Credit entry</td>
-                <td>Oct 03, 2026</td>
-                <td>Credit</td>
-                <td class="positive">+CAD $850.00</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-              <tr>
-                <td>Service fee entry</td>
-                <td>Oct 01, 2026</td>
-                <td>Debit</td>
-                <td>−CAD $15.00</td>
-                <td><span class="sample-status">Illustrative</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-      <section class="banner">
-        <p class="eyebrow">A LONG-TERM PERSPECTIVE</p>
-        <h2>Plan with clarity.<br>Move forward with confidence.</h2>
-        <p>A considered approach to private-client account management.</p>
-      </section>
-      <footer class="dashboard-footer" id="profile">
-        <span>© <span data-year></span> Oakmont</span>
-        <span>Account information is provided for illustrative purposes.</span>
-      </footer>
-    </main>
-  </div>
-  <div
-    class="modal hidden"
-    id="demoModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitle">
-    <div class="modal-content">
-      <button
-        class="modal-close"
-        id="closeModal"
-        type="button"
-        aria-label="Close">
-        ×
-      </button>
-      <span class="service-icon">ⓘ</span>
-      <h2 id="modalTitle">Transfer Information</h2>
-      <p>
-        Transfers are unavailable through this website.
-        No funds are sent or received.
-      </p>
-      <button class="primary-button" id="okayButton" type="button">
-        Close
-      </button>
+  <section class="hero" aria-label="City skyline at sunset">
+    <img
+      class="hero-image"
+      src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1400&q=85"
+      alt="City skyline illuminated at dusk"
+    >
+    <div class="hero-caption">A considered approach to private client services.</div>
+  </section>
+  <main class="main-content">
+    <div class="main-brand" aria-label="Oakmont Private Banking">
+      <span class="tree-mark" aria-hidden="true">♣</span>
+      <div class="brand-name">OAKMONT</div>
+      <div class="brand-subtitle">PRIVATE BANKING</div>
     </div>
-  </div>
+    <h1 class="tagline">Your Wealth. Our Priority.</h1>
+    <p class="tagline-subtitle">Secure. Trusted. Global.</p>
+    <nav class="action-list" aria-label="Account options">
+      <a class="action-card" href="login.html">
+        <span class="action-icon" aria-hidden="true">♙</span>
+        <span class="action-copy">
+          <strong>Sign In</strong>
+          <span>Access your account interface</span>
+        </span>
+        <span class="action-arrow" aria-hidden="true">›</span>
+      </a>
+      <a class="action-card" href="login.html?mode=create">
+        <span class="action-icon" aria-hidden="true">⊕</span>
+        <span class="action-copy">
+          <strong>Create Account</strong>
+          <span>Set up your client profile</span>
+        </span>
+        <span class="action-arrow" aria-hidden="true">›</span>
+      </a>
+    </nav>
+    <section class="features" aria-label="Platform features">
+      <div class="feature">
+        <span class="feature-icon" aria-hidden="true">♧</span>
+        <span>Secure<br>Access</span>
+      </div>
+      <div class="feature">
+        <span class="feature-icon" aria-hidden="true">♙</span>
+        <span>Trusted<br>Platform</span>
+      </div>
+      <div class="feature">
+        <span class="feature-icon" aria-hidden="true">◎</span>
+        <span>Global<br>Banking</span>
+      </div>
+      <div class="feature">
+        <span class="feature-icon" aria-hidden="true">♧</span>
+        <span>Client<br>Support</span>
+      </div>
+    </section>
+    <div class="security-note">
+      <span class="shield" aria-hidden="true">♢</span>
+      <span>
+        Protect your personal information. Never share passwords or
+        sensitive account details on an unverified website.
+      </span>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <span>© <span id="currentYear">2026</span> Oakmont Private Banking</span>
+    <nav class="footer-links" aria-label="Legal links">
+      <a href="#privacy">Privacy Policy</a>
+      <span aria-hidden="true">|</span>
+      <a href="#terms">Terms of Service</a>
+    </nav>
+    <div class="footer-disclosure" id="terms">
+      Illustrative account interface; not a financial institution.
+    </div>
+  </footer>
+  <script>
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+    const createLink = document.querySelector(
+      'a[href="login.html?mode=create"]'
+    );
+    createLink.addEventListener("click", function () {
+      try {
+        sessionStorage.setItem("oakmontRequestedMode", "create");
+      } catch (error) {
+        // The sign-in page remains available if storage is disabled.
+      }
+    });
+  </script>
 </body>
 </html>
