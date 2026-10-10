@@ -6,15 +6,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#081727">
-
   <title>Oakmont | Private Banking</title>
-
   <link rel="stylesheet" href="./style.css">
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="./app.js"></script>
 </head>
-
 <body>
   <header class="topbar">
     <a class="brand" href="#" aria-label="Oakmont Private Banking home">
@@ -24,12 +20,10 @@
         <small>PRIVATE BANKING</small>
       </span>
     </a>
-
     <button id="signOutBtn" class="btn outline hidden" type="button">
       Sign out
     </button>
   </header>
-
   <main>
     <!-- SIGN-IN AND REGISTRATION -->
     <section id="authView" class="auth-wrap">
@@ -38,23 +32,19 @@
         <h1>Welcome to<br><em>Oakmont.</em></h1>
         <p>Secure access to your account overview and activity.</p>
       </div>
-
       <div class="panel">
         <div class="tabs">
           <button id="loginTab" class="tab active" type="button">
             Sign in
           </button>
-
           <button id="signupTab" class="tab" type="button">
             Create account
           </button>
         </div>
-
         <form id="authForm">
           <label id="fullNameLabel" for="fullName" class="hidden">
             Full name
           </label>
-
           <input
             id="fullName"
             class="hidden"
@@ -62,7 +52,6 @@
             autocomplete="name"
             placeholder="Full name"
           >
-
           <label for="email">Email address</label>
           <input
             id="email"
@@ -71,7 +60,6 @@
             required
             placeholder="you@example.com"
           >
-
           <label for="password">Password</label>
           <input
             id="password"
@@ -81,20 +69,16 @@
             minlength="8"
             placeholder="At least 8 characters"
           >
-
           <button id="authSubmit" class="btn primary full" type="submit">
             Sign in securely
           </button>
-
           <p id="authMessage" class="message" role="status"></p>
         </form>
-
         <p class="fineprint">
           Never share your password or verification codes.
         </p>
       </div>
     </section>
-
     <!-- ACCOUNT DASHBOARD -->
     <section id="dashboardView" class="hidden">
       <div class="welcome-row">
@@ -103,43 +87,35 @@
           <h1>Welcome, <span id="ownerName">Client</span></h1>
           <p class="muted">Your account overview, all in one place.</p>
         </div>
-
         <span class="pill">ACCOUNT ACCESS</span>
       </div>
-
       <!-- ACCOUNT BALANCE -->
       <section class="balance-card">
         <div class="balance-top">
           <span>Account Balance</span>
           <span class="account-type">CHECKING</span>
         </div>
-
         <p id="balance" class="balance">CA$—</p>
-
         <div class="balance-bottom">
           <span>CAD · Account Information</span>
           <span id="accountUpdated">Account record</span>
         </div>
       </section>
-
       <!-- ACCOUNT SERVICES -->
       <div class="section-head">
         <h2>Account Services</h2>
         <span class="muted small">Overview</span>
       </div>
-
       <div class="service-grid">
         <article class="service-card">
           <span class="service-icon" aria-hidden="true">▤</span>
           <h3>Account Details</h3>
           <p>Review your account balance and information.</p>
         </article>
-
         <article class="service-card">
           <span class="service-icon" aria-hidden="true">↗</span>
           <h3>Transfers</h3>
           <p>Transfer between registered accounts.</p>
-
           <button
             id="showTransferBtn"
             class="text-btn"
@@ -148,19 +124,16 @@
             Start a transfer →
           </button>
         </article>
-
         <article class="service-card">
           <span class="service-icon" aria-hidden="true">◷</span>
           <h3>Transaction History</h3>
           <p>Review posted account activity.</p>
         </article>
       </div>
-
       <!-- TRANSFER FORM -->
       <section id="transferPanel" class="panel transfer-panel hidden">
         <div class="section-head">
           <h2>Transfer funds</h2>
-
           <button
             id="hideTransferBtn"
             class="text-btn"
@@ -169,12 +142,10 @@
             Close
           </button>
         </div>
-
         <p class="muted small">
           Internal transfers within this application only.
           Confirm the recipient account ID before proceeding.
         </p>
-
         <form id="transferForm">
           <label for="recipientId">Recipient account user ID</label>
           <input
@@ -183,7 +154,6 @@
             required
             placeholder="Recipient's Supabase user UUID"
           >
-
           <label for="transferAmount">Amount (CAD)</label>
           <input
             id="transferAmount"
@@ -194,7 +164,6 @@
             required
             placeholder="0.00"
           >
-
           <label for="transferMemo">Description (optional)</label>
           <input
             id="transferMemo"
@@ -202,26 +171,21 @@
             maxlength="120"
             placeholder="Transfer description"
           >
-
           <button class="btn primary" type="submit">
             Review and send transfer
           </button>
-
           <p id="transferMessage" class="message" role="status"></p>
         </form>
       </section>
-
       <!-- ADMINISTRATOR PANEL -->
       <section id="adminPanel" class="panel hidden">
         <div class="section-head">
           <h2>Administrator</h2>
           <span class="pill">ROLE-RESTRICTED</span>
         </div>
-
         <p class="muted small">
           Access depends on the server-verified administrator role.
         </p>
-
         <button
           id="loadAdminBtn"
           class="btn outline-dark"
@@ -229,9 +193,7 @@
         >
           Load account records
         </button>
-
         <p id="adminMessage" class="message" role="status"></p>
-
         <div class="table-wrap">
           <table>
             <thead>
@@ -241,39 +203,32 @@
                 <th>Balance</th>
               </tr>
             </thead>
-
             <tbody id="adminRows"></tbody>
           </table>
         </div>
       </section>
-
       <!-- RECENT TRANSACTIONS -->
       <div class="section-head">
         <h2>Recent Activity</h2>
-
         <button id="refreshBtn" class="text-btn" type="button">
           Refresh ↻
         </button>
       </div>
-
       <section class="panel activity-panel">
         <div id="transactions" class="transactions">
           <p class="muted">Loading account activity…</p>
         </div>
       </section>
-
       <p class="fineprint page-note">
         This application is not itself a licensed bank or payment network.
         Internal ledger transfers do not move money through Canadian banks.
       </p>
     </section>
   </main>
-
   <footer>
     <div class="footer-brand">OAKMONT PRIVATE BANKING</div>
     <div>Account Data</div>
   </footer>
-
   <div id="toast" class="toast hidden" role="status"></div>
 </body>
 </html>
