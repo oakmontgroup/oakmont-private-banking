@@ -3,109 +3,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oakmont Private Banking | Sign In</title>
+  <meta name="theme-color" content="#123b30">
+  <title>Oakmont | Private Client Services</title>
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
 </head>
-<body class="login-page">
-  <div class="demo-notice">
-    EDUCATIONAL DEMO · NO REAL BANKING SERVICES
-  </div>
-  <header class="header">
-    <a class="brand" href="login.html">
+<body class="dashboard-page">
+  <header class="dashboard-header">
+    <a class="brand" href="index.html" aria-label="Oakmont home">
       <span class="brand-logo">O</span>
       <span>
         <strong>OAKMONT</strong>
-        <small>PRIVATE BANKING CONCEPT</small>
+        <small>PRIVATE CLIENT SERVICES</small>
       </span>
     </a>
-    <div class="clock">
-      <strong data-vancouver-time>Loading time...</strong>
-      <span data-vancouver-date>Loading date...</span>
-      <small>Vancouver, British Columbia</small>
+    <div class="header-right">
+      <div class="clock dashboard-clock">
+        <strong data-vancouver-time>Loading time...</strong>
+        <span data-vancouver-date>Loading date...</span>
+        <small>Vancouver, British Columbia</small>
+      </div>
+      <button class="outline-button" id="signOutButton" type="button">
+        Sign Out
+      </button>
     </div>
   </header>
-  <main class="login-container">
-    <section class="welcome">
-      <p class="eyebrow">PRIVATE CLIENT EXPERIENCE</p>
-      <h1>Your Wealth.<br>
-        <span>Our Priority.</span>
-      </h1>
-      <p class="welcome-text">
-        A modern private banking interface designed around
-        clarity, confidence, and a personalized experience.
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <div class="client-profile">
+        <div class="avatar" id="avatar">T</div>
+        <div>
+          <strong id="sidebarName" data-account-owner>Tianna Jack</strong>
+          <small>Private Client</small>
+        </div>
+      </div>
+      <nav class="navigation" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview">▦ Overview</a>
+        <a class="nav-link" href="#account">◫ Accounts</a>
+        <a class="nav-link" href="#transactions">↔ Activity</a>
+        <a class="nav-link" href="#services">◇ Services</a>
+        <a class="nav-link" href="#profile">♙ Profile</a>
+      </nav>
+      <div class="sidebar-help">
+        <span class="help-icon">?</span>
+        <strong>Client Support</strong>
+        <p>Find your way around the account interface.</p>
+        <a href="index.html">Return to homepage →</a>
+      </div>
+    </aside>
+    <main class="dashboard-main" id="overview">
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">PRIVATE CLIENT OVERVIEW</p>
+          <h1>Good day, <span id="welcomeName" data-account-owner>Tianna Jack</span></h1>
+          <p class="muted">
+            Your account overview and recent activity.
+          </p>
+        </div>
+        <div class="date-panel">
+          <small>VANCOUVER LOCAL TIME</small>
+          <strong data-vancouver-time>Loading time...</strong>
+          <span data-vancouver-date>Loading date...</span>
+        </div>
+      </section>
+      <section class="account-grid" id="account">
+        <article class="balance-card">
+          <div class="balance-top">
+            <span>Account Balance</span>
+            <span class="gold-symbol">◇</span>
+          </div>
+          <h2>CAD $50,000.00</h2>
+          <div class="balance-bottom">
+            <span><i></i> Account Overview</span>
+            <span>As of <b data-vancouver-time>—</b></span>
+          </div>
+          <span class="watermark">O</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon">↗</span>
+          <p>Available Balance</p>
+          <h3>CAD $50,000.00</h3>
+          <small>Displayed account amount</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon">▤</span>
+          <p>Recent Activity</p>
+          <h3>04 <small>entries</small></h3>
+          <small>Account activity overview</small>
+        </article>
+      </section>
+      <section class="content-section" id="services">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CLIENT SERVICES</p>
+            <h2>Account Services</h2>
+          </div>
+          <span class="muted">Your overview</span>
+        </div>
+        <div class="services-grid">
+          <article class="service-card">
+            <span class="service-icon">▤</span>
+            <h3>Accounts</h3>
+            <p>Review your displayed account balance and summary.</p>
+            <a href="#account">View accounts →</a>
+          </article>
+          <article class="service-card">
+            <span class="service-icon">↔</span>
+            <h3>Transfers</h3>
+            <p>Review information about transfer functionality.</p>
+            <button
+              type="button"
+              class="text-button"
+              id="transferButton">
+              Transfer information →
+            </button>
+          </article>
+          <article class="service-card">
+            <span class="service-icon">▧</span>
+            <h3>Activity</h3>
+            <p>Review the entries displayed in your activity table.</p>
+            <a href="#transactions">View activity →</a>
+          </article>
+        </div>
+      </section>
+      <section class="content-section" id="transactions">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ACCOUNT MANAGEMENT</p>
+            <h2>Recent Activity</h2>
+          </div>
+          <span class="muted">Account records</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>DESCRIPTION</th>
+                <th>DATE</th>
+                <th>TYPE</th>
+                <th>AMOUNT</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Deposit entry</td>
+                <td>Oct 08, 2026</td>
+                <td>Credit</td>
+                <td class="positive">+CAD $2,500.00</td>
+                <td><span class="sample-status">Illustrative</span></td>
+              </tr>
+              <tr>
+                <td>Purchase entry</td>
+                <td>Oct 06, 2026</td>
+                <td>Debit</td>
+                <td>−CAD $128.40</td>
+                <td><span class="sample-status">Illustrative</span></td>
+              </tr>
+              <tr>
+                <td>Credit entry</td>
+                <td>Oct 03, 2026</td>
+                <td>Credit</td>
+                <td class="positive">+CAD $850.00</td>
+                <td><span class="sample-status">Illustrative</span></td>
+              </tr>
+              <tr>
+                <td>Service fee entry</td>
+                <td>Oct 01, 2026</td>
+                <td>Debit</td>
+                <td>−CAD $15.00</td>
+                <td><span class="sample-status">Illustrative</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="banner">
+        <p class="eyebrow">A LONG-TERM PERSPECTIVE</p>
+        <h2>Plan with clarity.<br>Move forward with confidence.</h2>
+        <p>A considered approach to private-client account management.</p>
+      </section>
+      <footer class="dashboard-footer" id="profile">
+        <span>© <span data-year></span> Oakmont</span>
+        <span>Account information is provided for illustrative purposes.</span>
+      </footer>
+    </main>
+  </div>
+  <div
+    class="modal hidden"
+    id="demoModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <button
+        class="modal-close"
+        id="closeModal"
+        type="button"
+        aria-label="Close">
+        ×
+      </button>
+      <span class="service-icon">ⓘ</span>
+      <h2 id="modalTitle">Transfer Information</h2>
+      <p>
+        Transfers are unavailable through this website.
+        No funds are sent or received.
       </p>
-      <div class="benefit">
-        <span class="benefit-icon">◇</span>
-        <div>
-          <strong>A personalized experience</strong>
-          <small>A simple overview of your sample account.</small>
-        </div>
-      </div>
-      <div class="benefit">
-        <span class="benefit-icon">✓</span>
-        <div>
-          <strong>Privacy-conscious design</strong>
-          <small>Never enter your real banking password.</small>
-        </div>
-      </div>
-      <div class="benefit">
-        <span class="benefit-icon">⌁</span>
-        <div>
-          <strong>Designed for clarity</strong>
-          <small>Explore a fictional banking dashboard.</small>
-        </div>
-      </div>
-    </section>
-    <section class="login-card">
-      <div class="card-heading">
-        <span class="brand-logo">O</span>
-        <span class="demo-badge">DEMO ACCOUNT</span>
-      </div>
-      <h2 id="formTitle">Welcome back</h2>
-      <p class="muted">
-        Sign in to explore the Oakmont demonstration.
-      </p>
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab active"
-                data-mode="signin">Sign In</button>
-        <button type="button" class="auth-tab"
-                data-mode="create">Create Demo Profile</button>
-      </div>
-      <form id="loginForm">
-        <label id="nameLabel" class="hidden">
-          Display name
-          <input id="fullName" type="text"
-                 placeholder="Your display name">
-        </label>
-        <label>
-          Email address
-          <input id="email" type="email"
-                 placeholder="you@example.com" required>
-        </label>
-        <label>
-          Demo password
-          <input id="password" type="password"
-                 placeholder="Enter a demo password"
-                 minlength="4" required>
-        </label>
-        <button class="primary-button" type="submit" id="submitButton">
-          Continue to Dashboard <span>→</span>
-        </button>
-        <p id="loginMessage" class="message" aria-live="polite"></p>
-      </form>
-      <div class="card-security">
-        <span>◇</span>
-        Educational demonstration only. No bank authentication
-        or real financial accounts are connected.
-      </div>
-    </section>
-  </main>
-  <footer class="footer">
-    <span>© <span data-year></span> Oakmont Demo</span>
-    <span>Vancouver, British Columbia ·
-      <a href="dashboard.html">Open dashboard</a>
-    </span>
-  </footer>
+      <button class="primary-button" id="okayButton" type="button">
+        Close
+      </button>
+    </div>
+  </div>
 </body>
 </html>
