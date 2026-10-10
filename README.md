@@ -1,43 +1,33 @@
-Oakmont Private Banking
 
-A personal account management application built with HTML, CSS, JavaScript, and Supabase.
+# Oakmont Private Banking Website
 
-Features
+A responsive banking-style website featuring a dark green and gold design.
 
-* Account registration and sign-in
-* Personal account overview
-* Balance display
-* Credit and debit records
-* Transaction history
-* Secure user authentication
-* Responsive mobile and desktop layout
+## Pages
 
-Technologies
+- `index.html` — Homepage
+- `login.html` — Sign-in page
+- `register.html` — Create-account page
+- `dashboard.html` — Dashboard
+- `style.css` — Shared website styling
 
-* HTML5
-* CSS3
-* JavaScript
-* Supabase
-* GitHub Pages
+## Setup
 
-Setup
+1. Upload the project files to your GitHub repository.
+2. Ensure the HTML files and `style.css` are in the correct locations.
+3. In your repository, open Settings → Pages.
+4. Configure GitHub Pages to deploy from your chosen branch and folder.
+5. Open the published website and test the page links.
 
-1. Keep index.html and style.css in the repository root.
-2. Configure the Supabase project URL and publishable key.
-3. Create and configure the required database table.
-4. Enable Row Level Security to protect each user’s records.
-5. Enable GitHub Pages in repository settings.
+## Troubleshooting
 
-Security
+If a page displays "File not found":
 
-* Never publish a Supabase secret or service_role key.
-* Apply appropriate database access policies.
-* Do not store real banking credentials or payment card details.
+- Confirm that the requested HTML file exists.
+- Check the spelling and capitalization of filenames.
+- Verify links use the correct relative paths.
+- Check that GitHub Pages deployment has completed.
 
-Usage Notice
+## Important
 
-This platform provides account management tools for viewing balances and organizing financial records. All account information is subject to verification and should be confirmed with the relevant financial institution.
-
-License
-
-All rights reserved unless otherwise specified.
+This project is a front-end website template. It does not provide real banking services, process payments, or maintain live account balances without a properly secured backend and authorized financial integrations.
