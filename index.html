@@ -1,388 +1,272 @@
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-CA">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#081727">
-  <title>Oakmont Private Banking</title>
 
-  <style>
-    :root {
-      --navy: #081727;
-      --navy2: #17334b;
-      --gold: #d7b875;
-      --paper: #f5f5f2;
-      --ink: #18283a;
-      --muted: #7b8795;
-      --line: #e8e9e6;
-      --green: #287755;
-    }
+  <title>Oakmont | Private Banking</title>
 
-    * { box-sizing: border-box; }
+  <link rel="stylesheet" href="./style.css">
 
-    body {
-      margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    }
-
-    button { font: inherit; cursor: pointer; }
-
-    .topbar {
-      background: var(--navy);
-      color: white;
-      padding: 23px 6%;
-      border-bottom: 1px solid rgba(215,184,117,.7);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      max-width: 1150px;
-      margin: auto;
-    }
-
-    .brand-mark {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--gold);
-      border-radius: 50%;
-      color: var(--gold);
-      font: 26px Georgia, serif;
-    }
-
-    .brand-name {
-      font: 22px Georgia, "Times New Roman", serif;
-      letter-spacing: 2px;
-    }
-
-    .brand-subtitle {
-      margin-top: 5px;
-      color: var(--gold);
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    .welcome, main {
-      max-width: 1150px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 22px;
-      padding-right: 22px;
-    }
-
-    .welcome { padding-top: 36px; padding-bottom: 22px; }
-
-    .eyebrow {
-      color: #91733c;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 10px 0;
-      font: 400 clamp(28px, 5vw, 39px) Georgia, serif;
-    }
-
-    .welcome p {
-      margin: 0;
-      color: #748091;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .balance-card {
-      position: relative;
-      overflow: hidden;
-      padding: 30px;
-      border-radius: 18px;
-      color: white;
-      background: linear-gradient(125deg, var(--navy), var(--navy2));
-      box-shadow: 0 15px 36px rgba(8,23,39,.14);
-    }
-
-    .balance-card::after {
-      content: "";
-      position: absolute;
-      top: -110px;
-      right: -70px;
-      width: 245px;
-      height: 245px;
-      border: 1px solid rgba(215,184,117,.25);
-      border-radius: 50%;
-      box-shadow:
-        0 0 0 24px rgba(215,184,117,.04),
-        0 0 0 48px rgba(215,184,117,.025);
-      pointer-events: none;
-    }
-
-    .balance-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .balance-label { color: #d0d9e2; font-size: 13px; }
-
-    .account-type {
-      border: 1px solid rgba(215,184,117,.7);
-      border-radius: 25px;
-      padding: 8px 13px;
-      color: var(--gold);
-      font-size: 11px;
-      letter-spacing: 1.5px;
-    }
-
-    .balance {
-      margin: 23px 0 8px;
-      font: clamp(35px, 7vw, 49px) Georgia, serif;
-      overflow-wrap: anywhere;
-    }
-
-    .currency-note { color: #bdcad7; font-size: 12px; }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 11px;
-      margin-top: 28px;
-    }
-
-    .action {
-      padding: 11px 16px;
-      border: 1px solid rgba(215,184,117,.75);
-      border-radius: 8px;
-      background: rgba(255,255,255,.05);
-      color: white;
-      font-size: 13px;
-    }
-
-    .action:hover { background: rgba(255,255,255,.12); }
-
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin: 32px 0 17px;
-    }
-
-    h2 { margin: 0; font: 400 24px Georgia, serif; }
-
-    .section-note { color: var(--muted); font-size: 12px; }
-
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .service {
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: white;
-    }
-
-    .service-icon {
-      width: 43px;
-      height: 43px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: #f4efe2;
-      color: #8b6c34;
-      font-size: 20px;
-    }
-
-    .service h3 { margin: 16px 0 7px; font-size: 15px; }
-
-    .service p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.65;
-    }
-
-    .activity {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: white;
-    }
-
-    .activity-row {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      padding: 17px 20px;
-      border-bottom: 1px solid #f0f0ec;
-    }
-
-    .activity-row:last-child { border-bottom: 0; }
-
-    .activity-icon {
-      width: 40px;
-      height: 40px;
-      flex: 0 0 40px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: #f0f3f5;
-    }
-
-    .activity-details { flex: 1; min-width: 0; }
-    .activity-title { font-size: 14px; font-weight: 600; }
-    .activity-date { margin-top: 5px; color: var(--muted); font-size: 12px; }
-    .amount { font-size: 13px; font-weight: 600; white-space: nowrap; }
-    .credit { color: var(--green); }
-    .debit { color: #29384a; }
-
-    .account-note {
-      margin: 22px 0 30px;
-      padding: 13px 15px;
-      border: 1px solid #e5dfd1;
-      border-radius: 10px;
-      background: #fbf9f4;
-      color: #716448;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    footer {
-      padding: 24px 15px;
-      background: var(--navy);
-      color: #c3ced9;
-      text-align: center;
-      font-size: 12px;
-    }
-
-    .footer-brand {
-      margin-bottom: 8px;
-      color: var(--gold);
-      font: 16px Georgia, serif;
-      letter-spacing: 2px;
-    }
-
-    @media (max-width: 650px) {
-      .topbar { padding: 19px 22px; }
-      .brand-name { font-size: 18px; }
-      .service-grid { grid-template-columns: 1fr; }
-      .service { padding: 18px; }
-      .balance-card { padding: 23px; }
-      .activity-row { gap: 10px; padding: 15px 12px; }
-      .amount { font-size: 12px; }
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="./app.js"></script>
 </head>
 
 <body>
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">O</div>
-      <div>
-        <div class="brand-name">OAKMONT</div>
-        <div class="brand-subtitle">Private Banking</div>
-      </div>
-    </div>
+    <a class="brand" href="#" aria-label="Oakmont Private Banking home">
+      <span class="brand-mark">O</span>
+      <span>
+        <strong>OAKMONT</strong>
+        <small>PRIVATE BANKING</small>
+      </span>
+    </a>
+
+    <button id="signOutBtn" class="btn outline hidden" type="button">
+      Sign out
+    </button>
   </header>
 
-  <section class="welcome">
-    <div class="eyebrow">Private Client Dashboard</div>
-    <h1>Welcome, Tianna Jack</h1>
-    <p>Your account overview, all in one place.</p>
-  </section>
-
   <main>
-    <section class="balance-card">
-      <div class="balance-top">
-        <div class="balance-label">Account Balance</div>
-        <div class="account-type">CHECKING</div>
+    <!-- SIGN-IN AND REGISTRATION -->
+    <section id="authView" class="auth-wrap">
+      <div class="intro">
+        <p class="eyebrow">PRIVATE CLIENT ACCESS</p>
+        <h1>Welcome to<br><em>Oakmont.</em></h1>
+        <p>Secure access to your account overview and activity.</p>
       </div>
 
-      <div class="balance">CA$50,000.00</div>
-      <div class="currency-note">CAD · Account Information</div>
+      <div class="panel">
+        <div class="tabs">
+          <button id="loginTab" class="tab active" type="button">
+            Sign in
+          </button>
 
-      <div class="actions">
-        <button class="action" onclick="showMessage('Transfer services are not available on this page.')">↗ Transfer</button>
-        <button class="action" onclick="showMessage('Payment services are not available on this page.')">⇧ Payments</button>
-        <button class="action" onclick="showMessage('Statements are not available on this page.')">▤ Statements</button>
+          <button id="signupTab" class="tab" type="button">
+            Create account
+          </button>
+        </div>
+
+        <form id="authForm">
+          <label id="fullNameLabel" for="fullName" class="hidden">
+            Full name
+          </label>
+
+          <input
+            id="fullName"
+            class="hidden"
+            type="text"
+            autocomplete="name"
+            placeholder="Full name"
+          >
+
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            type="email"
+            autocomplete="email"
+            required
+            placeholder="you@example.com"
+          >
+
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            minlength="8"
+            placeholder="At least 8 characters"
+          >
+
+          <button id="authSubmit" class="btn primary full" type="submit">
+            Sign in securely
+          </button>
+
+          <p id="authMessage" class="message" role="status"></p>
+        </form>
+
+        <p class="fineprint">
+          Never share your password or verification codes.
+        </p>
       </div>
     </section>
 
-    <div class="section-heading">
-      <h2>Account Services</h2>
-      <span class="section-note">Overview</span>
-    </div>
+    <!-- ACCOUNT DASHBOARD -->
+    <section id="dashboardView" class="hidden">
+      <div class="welcome-row">
+        <div>
+          <p class="eyebrow">PRIVATE CLIENT DASHBOARD</p>
+          <h1>Welcome, <span id="ownerName">Client</span></h1>
+          <p class="muted">Your account overview, all in one place.</p>
+        </div>
 
-    <section class="service-grid">
-      <article class="service">
-        <div class="service-icon" aria-hidden="true">▤</div>
-        <h3>Account Details</h3>
-        <p>View your checking account overview and account information.</p>
-      </article>
+        <span class="pill">ACCOUNT ACCESS</span>
+      </div>
 
-      <article class="service">
-        <div class="service-icon" aria-hidden="true">↗</div>
-        <h3>Transfers</h3>
-        <p>Explore transfer options and service information.</p>
-      </article>
+      <!-- ACCOUNT BALANCE -->
+      <section class="balance-card">
+        <div class="balance-top">
+          <span>Account Balance</span>
+          <span class="account-type">CHECKING</span>
+        </div>
 
-      <article class="service">
-        <div class="service-icon" aria-hidden="true">◷</div>
-        <h3>Recent Activity</h3>
-        <p>Review the example entries displayed in your activity section.</p>
-      </article>
+        <p id="balance" class="balance">CA$—</p>
+
+        <div class="balance-bottom">
+          <span>CAD · Account Information</span>
+          <span id="accountUpdated">Account record</span>
+        </div>
+      </section>
+
+      <!-- ACCOUNT SERVICES -->
+      <div class="section-head">
+        <h2>Account Services</h2>
+        <span class="muted small">Overview</span>
+      </div>
+
+      <div class="service-grid">
+        <article class="service-card">
+          <span class="service-icon" aria-hidden="true">▤</span>
+          <h3>Account Details</h3>
+          <p>Review your account balance and information.</p>
+        </article>
+
+        <article class="service-card">
+          <span class="service-icon" aria-hidden="true">↗</span>
+          <h3>Transfers</h3>
+          <p>Transfer between registered accounts.</p>
+
+          <button
+            id="showTransferBtn"
+            class="text-btn"
+            type="button"
+          >
+            Start a transfer →
+          </button>
+        </article>
+
+        <article class="service-card">
+          <span class="service-icon" aria-hidden="true">◷</span>
+          <h3>Transaction History</h3>
+          <p>Review posted account activity.</p>
+        </article>
+      </div>
+
+      <!-- TRANSFER FORM -->
+      <section id="transferPanel" class="panel transfer-panel hidden">
+        <div class="section-head">
+          <h2>Transfer funds</h2>
+
+          <button
+            id="hideTransferBtn"
+            class="text-btn"
+            type="button"
+          >
+            Close
+          </button>
+        </div>
+
+        <p class="muted small">
+          Internal transfers within this application only.
+          Confirm the recipient account ID before proceeding.
+        </p>
+
+        <form id="transferForm">
+          <label for="recipientId">Recipient account user ID</label>
+          <input
+            id="recipientId"
+            type="text"
+            required
+            placeholder="Recipient's Supabase user UUID"
+          >
+
+          <label for="transferAmount">Amount (CAD)</label>
+          <input
+            id="transferAmount"
+            type="number"
+            min="0.01"
+            max="100000"
+            step="0.01"
+            required
+            placeholder="0.00"
+          >
+
+          <label for="transferMemo">Description (optional)</label>
+          <input
+            id="transferMemo"
+            type="text"
+            maxlength="120"
+            placeholder="Transfer description"
+          >
+
+          <button class="btn primary" type="submit">
+            Review and send transfer
+          </button>
+
+          <p id="transferMessage" class="message" role="status"></p>
+        </form>
+      </section>
+
+      <!-- ADMINISTRATOR PANEL -->
+      <section id="adminPanel" class="panel hidden">
+        <div class="section-head">
+          <h2>Administrator</h2>
+          <span class="pill">ROLE-RESTRICTED</span>
+        </div>
+
+        <p class="muted small">
+          Access depends on the server-verified administrator role.
+        </p>
+
+        <button
+          id="loadAdminBtn"
+          class="btn outline-dark"
+          type="button"
+        >
+          Load account records
+        </button>
+
+        <p id="adminMessage" class="message" role="status"></p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Owner</th>
+                <th>Account ID</th>
+                <th>Balance</th>
+              </tr>
+            </thead>
+
+            <tbody id="adminRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RECENT TRANSACTIONS -->
+      <div class="section-head">
+        <h2>Recent Activity</h2>
+
+        <button id="refreshBtn" class="text-btn" type="button">
+          Refresh ↻
+        </button>
+      </div>
+
+      <section class="panel activity-panel">
+        <div id="transactions" class="transactions">
+          <p class="muted">Loading account activity…</p>
+        </div>
+      </section>
+
+      <p class="fineprint page-note">
+        This application is not itself a licensed bank or payment network.
+        Internal ledger transfers do not move money through Canadian banks.
+      </p>
     </section>
-
-    <div class="section-heading">
-      <h2>Recent Activity</h2>
-      <span class="section-note">Account History</span>
-    </div>
-
-    <section class="activity">
-      <div class="activity-row">
-        <div class="activity-icon" aria-hidden="true">↓</div>
-        <div class="activity-details">
-          <div class="activity-title">Deposit</div>
-          <div class="activity-date">Sample entry</div>
-        </div>
-        <div class="amount credit">+CA$2,500.00</div>
-      </div>
-
-      <div class="activity-row">
-        <div class="activity-icon" aria-hidden="true">↗</div>
-        <div class="activity-details">
-          <div class="activity-title">Payment</div>
-          <div class="activity-date">Sample entry</div>
-        </div>
-        <div class="amount debit">−CA$125.00</div>
-      </div>
-
-      <div class="activity-row">
-        <div class="activity-icon" aria-hidden="true">↓</div>
-        <div class="activity-details">
-          <div class="activity-title">Credit</div>
-          <div class="activity-date">Sample entry</div>
-        </div>
-        <div class="amount credit">+CA$750.00</div>
-      </div>
-    </section>
-
-    <div class="account-note">
-      Displayed balances and transactions are illustrative and are not verified banking records.
-    </div>
   </main>
 
   <footer>
@@ -390,10 +274,6 @@
     <div>Account Data</div>
   </footer>
 
-  <script>
-    function showMessage(message) {
-      window.alert(message);
-    }
-  </script>
+  <div id="toast" class="toast hidden" role="status"></div>
 </body>
 </html>
