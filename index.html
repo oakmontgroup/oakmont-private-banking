@@ -1,407 +1,498 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#001c15">
-  <title>Oakmont | Private Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#001b14">
+  <title>Oakmont Private Banking</title>
+
   <style>
     :root {
-      --green: #001c15;
-      --green-light: #052a20;
-      --gold: #d9b574;
-      --gold-light: #efd39b;
+      --green: #001b14;
+      --green-light: #092a20;
+      --gold: #d6b477;
+      --gold-light: #f0d49a;
       --white: #f8f5ef;
-      --muted: #c3cbd0;
+      --muted: #c5cbd0;
     }
+
     * {
       box-sizing: border-box;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
-    body {
       margin: 0;
-      min-height: 100vh;
+      padding: 0;
+    }
+
+    body {
       background: var(--green);
       color: var(--white);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
     }
+
     a {
       color: inherit;
       text-decoration: none;
     }
-    button {
-      font: inherit;
+
+    .page {
+      width: 100%;
+      max-width: 650px;
+      min-height: 100vh;
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 45%, #073326 0%, transparent 65%),
+        var(--green);
+      border-left: 1px solid rgba(214, 180, 119, .12);
+      border-right: 1px solid rgba(214, 180, 119, .12);
     }
-    .site-header {
-      height: 76px;
+
+    /* Brand header */
+
+    .header {
+      height: 74px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      background: #00150f;
+      justify-content: center;
       border-bottom: 2px solid var(--gold);
-      padding: 8px 16px;
+      background: rgba(0, 21, 15, .96);
+      position: relative;
+      z-index: 2;
     }
+
     .brand {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
+      gap: 14px;
     }
-    .tree-mark {
+
+    .tree {
       color: var(--gold);
-      font-size: 43px;
+      font-size: 49px;
       line-height: 1;
     }
-    .brand-name {
-      color: var(--gold);
+
+    .brand-title {
+      color: var(--gold-light);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(25px, 5vw, 37px);
-      letter-spacing: 3px;
-      line-height: 1.1;
+      font-size: clamp(24px, 6vw, 38px);
+      letter-spacing: 2px;
     }
+
     .brand-subtitle {
-      margin-top: 4px;
-      color: #eee5d5;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 4px;
       text-align: center;
+      margin-top: 3px;
+      font-size: 11px;
+      letter-spacing: 4px;
     }
-    .hero {
-      position: relative;
-      height: clamp(290px, 65vw, 430px);
-      overflow: hidden;
-      background: #102a28;
-    }
+
+    /* Skyline photograph */
+
     .hero-image {
-      position: absolute;
-      inset: 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 55%;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 15, 12, 0.05) 20%,
-        rgba(0, 22, 16, 0.15) 45%,
-        rgba(0, 28, 21, 0.94) 100%
-      );
-    }
-    .hero-caption {
-      position: absolute;
-      z-index: 1;
-      right: 16px;
-      bottom: 20px;
-      left: 16px;
-      color: #fff;
-      font-size: 12px;
-      text-align: center;
-      text-shadow: 0 2px 8px #000;
-    }
-    .main-content {
+      height: 360px;
       position: relative;
-      z-index: 2;
-      width: min(100% - 42px, 480px);
-      margin: -2px auto 0;
-      padding-bottom: 45px;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 18, 13, .02) 30%,
+          rgba(0, 27, 20, .36) 65%,
+          #001b14 100%
+        ),
+        url("https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1400&q=85")
+        center 48% / cover no-repeat;
+    }
+
+    /* Main content */
+
+    .content {
+      position: relative;
+      margin-top: -28px;
+      padding: 0 42px 35px;
       text-align: center;
     }
-    .main-brand {
-      margin-top: -5px;
+
+    .hero-brand {
+      margin: 0 auto 25px;
     }
-    .main-brand .tree-mark {
+
+    .hero-brand .tree {
       display: block;
-      margin-bottom: 3px;
-      font-size: 55px;
+      font-size: 65px;
+      margin-bottom: 2px;
     }
-    .main-brand .brand-name {
-      font-size: clamp(32px, 7vw, 43px);
-      letter-spacing: 3px;
+
+    .hero-brand .brand-title {
+      font-size: 38px;
+      letter-spacing: 2px;
     }
-    .main-brand .brand-subtitle {
+
+    .hero-brand .brand-subtitle {
       font-size: 12px;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
     }
-    .tagline {
-      margin: 30px 0 5px;
+
+    h1 {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(23px, 5.2vw, 30px);
-      font-weight: 500;
+      font-size: clamp(25px, 5vw, 32px);
+      font-weight: normal;
+      line-height: 1.35;
+      margin-bottom: 10px;
     }
-    .tagline-subtitle {
-      margin: 10px 0 28px;
-      color: #c9d0d7;
-      font-size: 17px;
+
+    .tagline {
+      color: #d1d6dc;
+      font-size: 18px;
+      margin-bottom: 30px;
     }
-    .action-list {
+
+    /* Sign-in and registration cards */
+
+    .account-links {
       display: grid;
-      gap: 24px;
+      gap: 25px;
     }
-    .action-card {
-      display: flex;
+
+    .account-card {
       min-height: 118px;
+      display: grid;
+      grid-template-columns: 65px 1fr 20px;
       align-items: center;
       gap: 20px;
-      padding: 20px 24px;
+      padding: 20px 25px;
       border: 2px solid var(--gold);
-      border-radius: 14px;
-      background: rgba(0, 23, 17, 0.76);
+      border-radius: 13px;
+      background: rgba(0, 25, 18, .67);
       text-align: left;
-      transition: background 0.2s, border-color 0.2s;
+      transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
     }
-    .action-card:hover {
-      background: #0b3024;
-      border-color: var(--gold-light);
+
+    .account-card:hover,
+    .account-card:focus-visible {
+      background: #10392b;
+      box-shadow: 0 0 20px rgba(214, 180, 119, .13);
+      transform: translateY(-2px);
+      outline: none;
     }
-    .action-icon {
+
+    .account-icon {
       display: grid;
-      width: 64px;
-      flex: 0 0 64px;
       place-items: center;
-      color: var(--gold);
-      font-size: 43px;
-      font-weight: 300;
+      color: var(--gold-light);
+      font-size: 45px;
     }
-    .action-copy {
-      flex: 1;
-      min-width: 0;
-    }
-    .action-copy strong {
-      display: block;
+
+    .account-text h2 {
       font-size: 22px;
       font-weight: 600;
+      margin-bottom: 8px;
     }
-    .action-copy span {
-      display: block;
-      margin-top: 5px;
-      color: #c8ced3;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .action-arrow {
-      color: var(--white);
-      font-size: 31px;
-      font-weight: 300;
-    }
-    .features {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin: 58px 0 48px;
-    }
-    .feature {
-      min-width: 0;
-      padding: 0 8px;
-      border-right: 1px solid rgba(217, 181, 116, 0.35);
-    }
-    .feature:last-child {
-      border-right: 0;
-    }
-    .feature-icon {
-      display: block;
-      margin-bottom: 10px;
-      color: var(--gold);
-      font-size: 31px;
-    }
-    .feature span:last-child {
-      display: block;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    .security-note {
-      display: flex;
-      align-items: flex-start;
-      gap: 13px;
-      margin: 0 auto;
-      max-width: 380px;
-      color: #c7ced1;
-      font-size: 12px;
-      line-height: 1.8;
-      text-align: left;
-    }
-    .security-note .shield {
-      flex: 0 0 auto;
-      color: var(--gold);
-      font-size: 25px;
+
+    .account-text p {
+      color: var(--muted);
+      font-size: 15px;
       line-height: 1.4;
     }
-    .site-footer {
-      display: flex;
-      min-height: 75px;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 20px max(22px, calc((100% - 900px) / 2));
-      border-top: 1px solid rgba(217, 181, 116, 0.55);
-      background: #00150f;
-      color: #c8c9c3;
-      font-size: 10px;
+
+    .arrow {
+      font-size: 30px;
+      font-weight: 300;
+      color: var(--white);
     }
+
+    /* Trust features */
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 60px;
+      margin-bottom: 47px;
+    }
+
+    .feature {
+      min-width: 0;
+      padding: 0 5px;
+      border-right: 1px solid rgba(214, 180, 119, .38);
+    }
+
+    .feature:last-child {
+      border-right: none;
+    }
+
+    .feature-icon {
+      display: block;
+      font-size: 34px;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* Security message */
+
+    .security {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+      max-width: 430px;
+      margin: 0 auto 25px;
+      text-align: left;
+    }
+
+    .security-icon {
+      flex-shrink: 0;
+      color: var(--gold-light);
+      font-size: 25px;
+    }
+
+    .security p {
+      color: #c5cbd0;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* Footer */
+
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 26px 35px;
+      border-top: 1px solid rgba(214, 180, 119, .5);
+      color: #b9c2bd;
+      font-size: 11px;
+    }
+
     .footer-links {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
     }
+
     .footer-links a:hover {
       color: var(--gold-light);
     }
-    .footer-disclosure {
-      width: 100%;
-      color: #aebbb3;
-      font-size: 10px;
-      text-align: center;
+
+    .separator {
+      color: var(--gold);
     }
-    @media (min-width: 700px) {
-      .hero {
+
+    @media (min-width: 651px) {
+      .hero-image {
         height: 410px;
       }
-      .main-content {
-        margin-top: -5px;
-      }
-      .action-card {
-        min-height: 112px;
+
+      .content {
+        padding-left: 55px;
+        padding-right: 55px;
       }
     }
-    @media (max-width: 380px) {
-      .main-content {
-        width: calc(100% - 30px);
+
+    @media (max-width: 420px) {
+      .header {
+        height: 70px;
       }
-      .action-card {
+
+      .brand {
+        gap: 8px;
+      }
+
+      .tree {
+        font-size: 39px;
+      }
+
+      .brand-title {
+        letter-spacing: 1px;
+      }
+
+      .brand-subtitle {
+        font-size: 9px;
+        letter-spacing: 3px;
+      }
+
+      .hero-image {
+        height: 315px;
+      }
+
+      .content {
+        padding: 0 25px 30px;
+      }
+
+      .hero-brand .tree {
+        font-size: 55px;
+      }
+
+      .hero-brand .brand-title {
+        font-size: 31px;
+      }
+
+      .hero-brand .brand-subtitle {
+        font-size: 10px;
+        letter-spacing: 4px;
+      }
+
+      .account-links {
+        gap: 17px;
+      }
+
+      .account-card {
+        grid-template-columns: 44px 1fr 14px;
         gap: 12px;
-        padding: 17px 13px;
+        min-height: 105px;
+        padding: 15px;
       }
-      .action-icon {
-        width: 48px;
-        flex-basis: 48px;
-        font-size: 36px;
+
+      .account-icon {
+        font-size: 35px;
       }
-      .action-copy strong {
-        font-size: 19px;
+
+      .account-text h2 {
+        font-size: 18px;
       }
-      .action-copy span {
+
+      .account-text p {
+        font-size: 13px;
+      }
+
+      .arrow {
+        font-size: 25px;
+      }
+
+      .features {
+        margin-top: 45px;
+        margin-bottom: 35px;
+      }
+
+      .feature-icon {
+        font-size: 28px;
+      }
+
+      .feature p {
         font-size: 12px;
       }
-      .feature {
-        padding: 0 4px;
-      }
-      .feature span:last-child {
-        font-size: 11px;
+
+      footer {
+        padding: 23px 20px;
+        justify-content: center;
+        text-align: center;
       }
     }
+
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-      * {
+      *,
+      *::before,
+      *::after {
         transition: none !important;
+        scroll-behavior: auto !important;
       }
     }
   </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html" aria-label="Oakmont home">
-      <span class="tree-mark" aria-hidden="true">♣</span>
-      <span>
-        <span class="brand-name">OAKMONT</span>
-        <span class="brand-subtitle" style="display:block">
-          PRIVATE BANKING
+  <div class="page">
+
+    <header class="header">
+      <a class="brand" href="index.html" aria-label="Oakmont homepage">
+        <span class="tree" aria-hidden="true">♣</span>
+        <span>
+          <span class="brand-title">OAKMONT</span>
+          <span class="brand-subtitle" style="display:block">
+            PRIVATE BANKING
+          </span>
         </span>
-      </span>
-    </a>
-  </header>
-  <section class="hero" aria-label="City skyline at sunset">
-    <img
-      class="hero-image"
-      src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1400&q=85"
-      alt="City skyline illuminated at dusk"
-    >
-    <div class="hero-caption">A considered approach to private client services.</div>
-  </section>
-  <main class="main-content">
-    <div class="main-brand" aria-label="Oakmont Private Banking">
-      <span class="tree-mark" aria-hidden="true">♣</span>
-      <div class="brand-name">OAKMONT</div>
-      <div class="brand-subtitle">PRIVATE BANKING</div>
-    </div>
-    <h1 class="tagline">Your Wealth. Our Priority.</h1>
-    <p class="tagline-subtitle">Secure. Trusted. Global.</p>
-    <nav class="action-list" aria-label="Account options">
-      <a class="action-card" href="login.html">
-        <span class="action-icon" aria-hidden="true">♙</span>
-        <span class="action-copy">
-          <strong>Sign In</strong>
-          <span>Access your account interface</span>
-        </span>
-        <span class="action-arrow" aria-hidden="true">›</span>
       </a>
-      <a class="action-card" href="login.html?mode=create">
-        <span class="action-icon" aria-hidden="true">⊕</span>
-        <span class="action-copy">
-          <strong>Create Account</strong>
-          <span>Set up your client profile</span>
-        </span>
-        <span class="action-arrow" aria-hidden="true">›</span>
-      </a>
-    </nav>
-    <section class="features" aria-label="Platform features">
-      <div class="feature">
-        <span class="feature-icon" aria-hidden="true">♧</span>
-        <span>Secure<br>Access</span>
+    </header>
+
+    <div class="hero-image" role="img"
+      aria-label="City skyline at sunset viewed from a luxury terrace"></div>
+
+    <main class="content">
+
+      <div class="hero-brand">
+        <span class="tree" aria-hidden="true">♣</span>
+        <div class="brand-title">OAKMONT</div>
+        <div class="brand-subtitle">PRIVATE BANKING</div>
       </div>
-      <div class="feature">
-        <span class="feature-icon" aria-hidden="true">♙</span>
-        <span>Trusted<br>Platform</span>
-      </div>
-      <div class="feature">
-        <span class="feature-icon" aria-hidden="true">◎</span>
-        <span>Global<br>Banking</span>
-      </div>
-      <div class="feature">
-        <span class="feature-icon" aria-hidden="true">♧</span>
-        <span>Client<br>Support</span>
-      </div>
-    </section>
-    <div class="security-note">
-      <span class="shield" aria-hidden="true">♢</span>
-      <span>
-        Protect your personal information. Never share passwords or
-        sensitive account details on an unverified website.
-      </span>
-    </div>
-  </main>
-  <footer class="site-footer">
-    <span>© <span id="currentYear">2026</span> Oakmont Private Banking</span>
-    <nav class="footer-links" aria-label="Legal links">
-      <a href="#privacy">Privacy Policy</a>
-      <span aria-hidden="true">|</span>
-      <a href="#terms">Terms of Service</a>
-    </nav>
-    <div class="footer-disclosure" id="terms">
-      Illustrative account interface; not a financial institution.
-    </div>
-  </footer>
-  <script>
-    document.getElementById("currentYear").textContent =
-      new Date().getFullYear();
-    const createLink = document.querySelector(
-      'a[href="login.html?mode=create"]'
-    );
-    createLink.addEventListener("click", function () {
-      try {
-        sessionStorage.setItem("oakmontRequestedMode", "create");
-      } catch (error) {
-        // The sign-in page remains available if storage is disabled.
-      }
-    });
-  </script>
+
+      <h1>Your Wealth. Our Priority.</h1>
+      <p class="tagline">Secure. Trusted. Global.</p>
+
+      <nav class="account-links" aria-label="Account access">
+
+        <a class="account-card" href="login.html">
+          <span class="account-icon" aria-hidden="true">♙</span>
+          <span class="account-text">
+            <h2>Sign In</h2>
+            <p>Access your account</p>
+          </span>
+          <span class="arrow" aria-hidden="true">›</span>
+        </a>
+
+        <a class="account-card" href="register.html">
+          <span class="account-icon" aria-hidden="true">⊕</span>
+          <span class="account-text">
+            <h2>Create Account</h2>
+            <p>Join Oakmont Private Banking</p>
+          </span>
+          <span class="arrow" aria-hidden="true">›</span>
+        </a>
+
+      </nav>
+
+      <section class="features" aria-label="Our service features">
+
+        <div class="feature">
+          <span class="feature-icon" aria-hidden="true">♢</span>
+          <p>Secure<br>Access</p>
+        </div>
+
+        <div class="feature">
+          <span class="feature-icon" aria-hidden="true">♙</span>
+          <p>Trusted<br>Platform</p>
+        </div>
+
+        <div class="feature">
+          <span class="feature-icon" aria-hidden="true">◎</span>
+          <p>Global<br>Banking</p>
+        </div>
+
+        <div class="feature">
+          <span class="feature-icon" aria-hidden="true">♧</span>
+          <p>24/7<br>Support</p>
+        </div>
+
+      </section>
+
+      <section class="security">
+        <span class="security-icon" aria-hidden="true">♢</span>
+        <p>
+          Your security is our top priority. All information is
+          protected with industry-leading encryption.
+        </p>
+      </section>
+
+    </main>
+
+    <footer>
+      <span>© 2026 Oakmont Private Banking. All rights reserved.</span>
+
+      <nav class="footer-links" aria-label="Legal information">
+        <a href="privacy.html">Privacy Policy</a>
+        <span class="separator">|</span>
+        <a href="terms.html">Terms of Service</a>
+      </nav>
+    </footer>
+
+  </div>
 </body>
 </html>
