@@ -1,138 +1,242 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0c1714">
-  <title>Oakmont Private Banking</title>
-  <style>
-    :root{color-scheme:dark;--bg:#07120f;--surface:#0d1e18;--surface2:#11271f;--gold:#d9b979;--gold-light:#f3dfb0;--text:#f6f5ef;--muted:#a8b7ae;--line:rgba(226,211,174,.18);--green:#9cdbb4;--red:#f0a5a0;--shadow:0 24px 70px rgba(0,0,0,.24)}
-    *{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55;background:radial-gradient(ellipse at 15% 0%,rgba(39,87,65,.24),transparent 40%),var(--bg);min-height:100vh}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}.shell{width:min(1120px,100%);margin:auto;padding:28px 24px 42px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0 24px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:13px}.mark{width:46px;height:46px;border:1px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold-light);font:normal 27px Georgia,serif;background:linear-gradient(145deg,#173a2c,#091710);box-shadow:inset 0 0 0 4px rgba(217,185,121,.05)}.brand h1{font:normal 21px Georgia,"Times New Roman",serif;letter-spacing:.13em;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:10px;letter-spacing:.21em;text-transform:uppercase}.status{font-size:11px;color:var(--gold-light);border:1px solid rgba(217,185,121,.38);padding:8px 12px;border-radius:999px;white-space:nowrap;letter-spacing:.04em}.notice{margin:20px 0;padding:12px 15px;background:rgba(217,185,121,.07);border:1px solid rgba(217,185,121,.23);border-radius:10px;color:#e7d8b5;font-size:12px}.eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:700}.hero{padding:36px 0 18px}.hero h2{font:normal clamp(30px,4.7vw,48px)/1.12 Georgia,"Times New Roman",serif;margin:0 0 12px;letter-spacing:-.025em;max-width:650px}.sub{color:var(--muted);margin:0;max-width:640px;font-size:15px}.panel{background:linear-gradient(125deg,rgba(25,57,43,.95),rgba(11,29,21,.98));border:1px solid rgba(217,185,121,.36);border-radius:18px;padding:28px;margin:20px 0;box-shadow:var(--shadow);position:relative;overflow:hidden}.panel:after{content:"O";position:absolute;right:22px;bottom:-78px;font:240px Georgia,serif;color:rgba(217,185,121,.035);pointer-events:none}.balance-label{color:#c4d0c8;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:650}.balance{font:normal clamp(34px,6vw,52px)/1.2 Georgia,"Times New Roman",serif;color:var(--gold-light);margin:9px 0 8px;overflow-wrap:anywhere;letter-spacing:-.025em}.small{font-size:12px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{border:1px solid var(--line);border-radius:15px;padding:24px;background:linear-gradient(150deg,rgba(255,255,255,.035),rgba(255,255,255,.012));min-width:0;box-shadow:0 12px 35px rgba(0,0,0,.12)}.card h3{font:normal 23px Georgia,"Times New Roman",serif;margin:0 0 5px}.card h3+p{margin-top:0}.field{margin:17px 0}.field label{display:block;font-size:12px;color:#d0d9d3;margin-bottom:7px}.field input,.field select{width:100%;background:#07150f;color:white;border:1px solid #344c3e;border-radius:10px;padding:13px 14px;min-height:48px;outline:none;transition:border-color .15s,box-shadow .15s}.field input:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,185,121,.1)}.btn{border:1px solid transparent;border-radius:10px;padding:12px 18px;min-height:46px;background:linear-gradient(135deg,#f0d69b,#c9a35c);color:#15221a;font-weight:700;transition:transform .15s,filter .15s}.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}.btn.secondary{background:rgba(217,185,121,.06);color:var(--gold-light);border-color:rgba(217,185,121,.45)}.btn.danger{background:transparent;color:var(--red);border-color:rgba(240,165,160,.42)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.muted-btn{color:var(--muted);background:none;border:0;text-decoration:underline;padding:8px 0}.msg{font-size:13px;margin-top:12px;overflow-wrap:anywhere;min-height:0}.error{color:var(--red)}.success{color:var(--green)}.hidden{display:none!important}.transactions{margin-top:12px}.tx{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}.tx:last-child{border-bottom:0}.tx strong{display:block;font-weight:600;font-size:13px}.tx small{color:var(--muted);font-size:11px}.amount{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:13px}.empty{color:var(--muted);font-size:13px;padding:8px 0 4px}.footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:#84958b;font-size:11px;text-align:center}.userbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0}.userbar span{color:var(--muted);font-size:13px}.userbar strong{color:var(--gold-light);letter-spacing:.04em}.dashboard-title{font:normal clamp(27px,4vw,38px) Georgia,serif;margin:0 0 5px}.section-note{color:var(--muted);font-size:13px;margin:0 0 12px}@media(max-width:680px){.shell{padding:16px 14px 30px}.grid{grid-template-columns:1fr}.panel{padding:22px}.card{padding:20px}.top{align-items:center}.brand h1{font-size:18px}.status{font-size:10px;padding:7px 9px}.hero{padding-top:28px}.balance{font-size:38px}.actions .btn{flex:1 1 auto}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
-  </style>
-</head>
-<body>
-  <main class="shell">
-    <header class="top">
-      <div class="brand"><div class="mark">O</div><div><h1>Oakmont Private Banking</h1><p>Private Account</p></div></div>
-      <div class="status">PERSONAL ACCESS</div>
-    </header>
-
-    <section id="authView">
-      <div class="hero"><p class="eyebrow">Personal access</p><h2>Your records, in one place.</h2><p class="sub">Sign in or create an account to access the personal account dashboard.</p></div>
-      <div class="grid" style="grid-template-columns:minmax(0,480px);justify-content:center">
-        <section class="card">
-          <div id="signInPanel">
-            <h3>Sign in</h3>
-            <p class="small">Welcome back. Sign in to view your personal records.</p>
-            <form id="signInForm">
-              <div class="field"><label for="signInEmail">Email address</label><input id="signInEmail" type="email" autocomplete="email" required></div>
-              <div class="field"><label for="signInPassword">Password</label><input id="signInPassword" type="password" autocomplete="current-password" required minlength="6"></div>
-              <button class="btn" type="submit">Sign in</button>
-            </form>
-            <p id="signInMsg" class="msg" aria-live="polite"></p>
-            <p class="small" style="margin:20px 0 0;text-align:center">Don't have an account? <button id="showSignUp" class="muted-btn" type="button" style="display:inline;color:var(--gold-light);font-weight:700">Create account</button></p>
-          </div>
-          <div id="signUpPanel" class="hidden">
-            <h3>Create account</h3>
-            <p class="small">Create an account to access your personal records.</p>
-            <form id="signUpForm">
-              <div class="field"><label for="signUpName">Display name</label><input id="signUpName" type="text" autocomplete="name" value="TIANNA JACK" required maxlength="80"></div>
-              <div class="field"><label for="signUpEmail">Email address</label><input id="signUpEmail" type="email" autocomplete="email" required></div>
-              <div class="field"><label for="signUpPassword">Create password (at least 6 characters)</label><input id="signUpPassword" type="password" autocomplete="new-password" required minlength="6"></div>
-              <button class="btn secondary" type="submit">Create account</button>
-            </form>
-            <p id="signUpMsg" class="msg" aria-live="polite"></p>
-            <p class="small" style="margin:20px 0 0;text-align:center">Already have an account? <button id="showSignIn" class="muted-btn" type="button" style="display:inline;color:var(--gold-light);font-weight:700">Sign in</button></p>
-          </div>
-        </section>
-      </div>
-    </section>
-
-    <section id="dashboard" class="hidden">
-      <div class="userbar"><span>Signed in as <strong id="ownerName">TIANNA JACK</strong></span><button id="signOutBtn" class="btn secondary" type="button">Sign out</button></div>
-      <section class="panel"><div class="balance-label">Recorded balance</div><div id="balance" class="balance">CA$35,000.00</div><div class="small">Canadian dollars · Illustrative record only</div></section>
-      <div class="grid">
-        <section class="card">
-          <h3>Add a record</h3>
-          <form id="entryForm">
-            <div class="field"><label for="entryDescription">Description</label><input id="entryDescription" type="text" maxlength="100" placeholder="e.g. Personal note" required></div>
-            <div class="field"><label for="entryAmount">Amount (CAD)</label><input id="entryAmount" type="number" min="0.01" max="100000000" step="0.01" placeholder="0.00" required></div>
-            <div class="field"><label for="entryType">Record type</label><select id="entryType" style="width:100%;background:#0b1712;color:white;border:1px solid #35483e;border-radius:9px;padding:12px"><option value="credit">Add to sample balance</option><option value="debit">Subtract from sample balance</option></select></div>
-            <div class="actions"><button class="btn" type="submit">Save record</button><button id="resetBtn" class="btn danger" type="button">Reset records</button></div>
-          </form>
-          <p id="entryMsg" class="msg" aria-live="polite"></p>
-        </section>
-        <section class="card"><h3>Recent records</h3><div id="transactions" class="transactions"><p class="empty">Loading records…</p></div></section>
-      </div>
-    </section>
-    <footer class="footer">Oakmont Private Banking · Personal account records only; no real funds or payments are processed.</footer>
-  </main>
-
-  <!-- Replace the placeholder below with your Supabase Publishable key. Never use a service_role or secret key here. -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
-  // Keep all your existing JavaScript here
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_km5xwN4pFYUp3-ZvCjniQw_CpMvDKBz';
+const STARTING_BALANCE = 35000;
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+let currentUser = null;
+let account = null;
+const $ = id => document.getElementById(id);
+const money = n => new Intl.NumberFormat('en-CA', {
+  style: 'currency',
+  currency: 'CAD'
+}).format(Number(n) || 0);
+function message(id, text, ok = false) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = 'msg ' + (ok ? 'success' : 'error');
+}
+function showDashboard(show) {
+  $('authView').classList.toggle('hidden', show);
+  $('dashboard').classList.toggle('hidden', !show);
+}
+$('showSignUp').addEventListener('click', () => {
+  $('signInPanel').classList.add('hidden');
+  $('signUpPanel').classList.remove('hidden');
+});
+$('showSignIn').addEventListener('click', () => {
+  $('signUpPanel').classList.add('hidden');
+  $('signInPanel').classList.remove('hidden');
+});
+function render() {
+  if (!account) return;
+  $('ownerName').textContent =
+    (account.owner_name || currentUser?.email || 'TIANNA JACK')
+      .toLocaleUpperCase();
+  $('balance').textContent = money(account.balance);
+  const list = Array.isArray(account.transactions)
+    ? account.transactions
+    : [];
+  $('transactions').replaceChildren();
+  if (!list.length) {
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = 'No records yet. Add a personal record to begin.';
+    $('transactions').append(empty);
+    return;
+  }
+  list.slice().reverse().slice(0, 20).forEach(tx => {
+    const row = document.createElement('div');
+    row.className = 'tx';
+    const left = document.createElement('div');
+    const strong = document.createElement('strong');
+    strong.textContent = tx.description;
+    const small = document.createElement('small');
+    small.textContent = new Date(tx.created_at).toLocaleString();
+    left.append(strong, small);
+    const amount = document.createElement('div');
+    amount.className = 'amount';
+    amount.textContent =
+      (tx.type === 'credit' ? '+' : '−') + money(tx.amount);
+    amount.style.color =
+      tx.type === 'credit' ? 'var(--green)' : 'var(--red)';
+    row.append(left, amount);
+    $('transactions').append(row);
+  });
+}
+async function loadAccount(user) {
+  currentUser = user;
+  const { data, error } = await db
+    .from('demo_accounts')
+    .select('*')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) {
+    const displayName = (
+      user.user_metadata?.display_name || 'TIANNA JACK'
+    ).toString().slice(0, 80).toLocaleUpperCase();
+    const { data: created, error: createError } = await db
+      .from('demo_accounts')
+      .insert({
+        user_id: user.id,
+        owner_name: displayName,
+        balance: STARTING_BALANCE,
+        transactions: []
+      })
+      .select()
+      .single();
+    if (createError) throw createError;
+    account = created;
+  } else {
+    account = data;
+  }
+  showDashboard(true);
+  render();
+}
+async function init() {
+  try {
+    const { data, error } = await db.auth.getSession();
+    if (error) throw error;
+    if (data.session) {
+      await loadAccount(data.session.user);
+    } else {
+      showDashboard(false);
+    }
+    db.auth.onAuthStateChange((_event, session) => {
+      setTimeout(async () => {
+        try {
+          if (session) {
+            await loadAccount(session.user);
+          } else {
+            currentUser = null;
+            account = null;
+            showDashboard(false);
+          }
+        } catch (err) {
+          showDashboard(false);
+          message('signInMsg', 'Could not load account: ' + err.message);
+        }
+      }, 0);
+    });
+  } catch (err) {
+    showDashboard(false);
+    message('signInMsg', 'Connection error: ' + err.message);
+  }
+}
+$('signInForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  message('signInMsg', 'Signing in…', true);
+  const { error } = await db.auth.signInWithPassword({
+    email: $('signInEmail').value.trim(),
+    password: $('signInPassword').value
+  });
+  if (error) {
+    message('signInMsg', error.message);
+  } else {
+    message('signInMsg', 'Signed in successfully.', true);
+  }
+});
+$('signUpForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  message('signUpMsg', 'Creating account…', true);
+  const name = $('signUpName').value.trim();
+  const { data, error } = await db.auth.signUp({
+    email: $('signUpEmail').value.trim(),
+    password: $('signUpPassword').value,
+    options: {
+      data: { display_name: name }
+    }
+  });
+  if (error) {
+    message('signUpMsg', error.message);
+    return;
+  }
+  if (data.session) {
+    try {
+      await loadAccount(data.session.user);
+      message('signUpMsg', 'Account created successfully.', true);
+    } catch (err) {
+      message('signUpMsg',
+        'Account created, but the database needs attention: ' + err.message);
+    }
+  } else {
+    message('signUpMsg',
+      'Check your email for the confirmation link, then sign in.', true);
+  }
+});
+$('entryForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!account || !currentUser) return;
+  const amount = Number($('entryAmount').value);
+  const type = $('entryType').value;
+  const description = $('entryDescription').value.trim();
+  if (!description || !Number.isFinite(amount) || amount <= 0) {
+    message('entryMsg', 'Enter a description and an amount greater than zero.');
+    return;
+  }
+  const nextBalance = Number(account.balance) +
+    (type === 'credit' ? amount : -amount);
+  if (nextBalance < 0) {
+    message('entryMsg', 'The sample balance cannot be negative.');
+    return;
+  }
+  const nextTransactions = [
+    ...(account.transactions || []),
+    {
+      id: crypto.randomUUID(),
+      description,
+      amount,
+      type,
+      created_at: new Date().toISOString()
+    }
+  ];
+  const { data, error } = await db
+    .from('demo_accounts')
+    .update({
+      balance: nextBalance,
+      transactions: nextTransactions
+    })
+    .eq('user_id', currentUser.id)
+    .select()
+    .single();
+  if (error) {
+    message('entryMsg', 'Could not save: ' + error.message);
+    return;
+  }
+  account = data;
+  render();
+  $('entryForm').reset();
+  message('entryMsg', 'Record saved.', true);
+});
+$('resetBtn').addEventListener('click', async () => {
+  if (!account || !currentUser) return;
+  if (!confirm('Reset the sample balance to CA$35,000 and remove all records?')) {
+    return;
+  }
+  const { data, error } = await db
+    .from('demo_accounts')
+    .update({
+      balance: STARTING_BALANCE,
+      transactions: []
+    })
+    .eq('user_id', currentUser.id)
+    .select()
+    .single();
+  if (error) {
+    message('entryMsg', 'Could not reset: ' + error.message);
+    return;
+  }
+  account = data;
+  render();
+  message('entryMsg', 'Records reset.', true);
+});
+$('signOutBtn').addEventListener('click', async () => {
+  const { error } = await db.auth.signOut();
+  if (error) message('entryMsg', 'Sign-out error: ' + error.message);
+});
+init();
 </script>
-
-  const SUPABASE_URL = 'https://qzyxcboyjqtxqqcxveil.supabase.co';
-  // Keep all your existing JavaScript here
-</script>
-    const SUPABASE_URL = ‘https://qzyxcboyjqtxqqcxveil.supabase.co’;
-    const SUPABASE_PUBLISHABLE_KEY = ‘sb_publishable_km5xwN4pFYUp3-ZvCjniQw_CpMvDKBz’;
-    const STARTING_BALANCE = 35000;
-    const { createClient } = supabase;
-    const configured = SUPABASE_PUBLISHABLE_KEY !== 'PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE' && SUPABASE_PUBLISHABLE_KEY.trim().length > 10;
-    const db = configured ? createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
-    let currentUser = null;
-    let account = null;
-    const $ = id => document.getElementById(id);
-    const money = n => new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(n)||0);
-    function message(id, text, ok=false){ const el=$(id); el.textContent=text; el.className='msg '+(ok?'success':'error'); }
-    function showDashboard(show){ $('authView').classList.toggle('hidden',show); $('dashboard').classList.toggle('hidden',!show); }
-    $('showSignUp').addEventListener('click',()=>{ $('signInPanel').classList.add('hidden'); $('signUpPanel').classList.remove('hidden'); });
-    $('showSignIn').addEventListener('click',()=>{ $('signUpPanel').classList.add('hidden'); $('signInPanel').classList.remove('hidden'); });
-    function render(){
-      if(!account) return;
-      $('ownerName').textContent=(account.owner_name || currentUser?.email || 'TIANNA JACK').toLocaleUpperCase();
-      $('balance').textContent=money(account.balance);
-      const list=Array.isArray(account.transactions)?account.transactions:[];
-      $('transactions').innerHTML='';
-      if(!list.length){ $('transactions').innerHTML='<p class="empty">No records yet. Add a personal record to begin.</p>'; return; }
-      list.slice().reverse().slice(0,20).forEach(tx=>{
-        const row=document.createElement('div'); row.className='tx';
-        const left=document.createElement('div'); const strong=document.createElement('strong'); strong.textContent=tx.description;
-        const small=document.createElement('small'); small.textContent=new Date(tx.created_at).toLocaleString(); left.append(strong,small);
-        const amount=document.createElement('div'); amount.className='amount'; amount.textContent=(tx.type==='credit'?'+':'−')+money(tx.amount); amount.style.color=tx.type==='credit'?'var(--green)':'var(--red)';
-        row.append(left,amount); $('transactions').append(row);
-      });
-    }
-    async function loadAccount(user){
-      currentUser=user;
-      const {data,error}=await db.from('demo_accounts').select('*').eq('user_id',user.id).maybeSingle();
-      if(error) throw error;
-      if(!data){
-        const displayName=(user.user_metadata?.display_name||'TIANNA JACK').toString().slice(0,80).toLocaleUpperCase();
-        const {data:created,error:createError}=await db.from('demo_accounts').insert({user_id:user.id,owner_name:displayName,balance:STARTING_BALANCE,transactions:[]}).select().single();
-        if(createError) throw createError; account=created;
-      } else account=data;
-      showDashboard(true); render();
-    }
-    async function init(){
-      if(!configured){showDashboard(false); message('signInMsg','Setup needed: add your Supabase Publishable key to this file, then save it in GitHub.'); return;}
-      const {data:{session},error}=await db.auth.getSession();
-      if(error) message('signInMsg',error.message);
-      if(session){try{await loadAccount(session.user)}catch(e){showDashboard(false);message('signInMsg','Database setup needed: '+e.message)}}
-      else showDashboard(false);
-      db.auth.onAuthStateChange((_event,session)=>{setTimeout(async()=>{if(session){try{await loadAccount(session.user)}catch(e){showDashboard(false);message('signInMsg','Database setup needed: '+e.message)}}else{currentUser=null;account=null;showDashboard(false)}},0)});
-    }
-    $('signInForm').addEventListener('submit',async e=>{e.preventDefault();if(!configured)return message('signInMsg','Add your Supabase Publishable key first.');message('signInMsg','Signing in…',true);const {error}=await db.auth.signInWithPassword({email:$('signInEmail').value.trim(),password:$('signInPassword').value});if(error)message('signInMsg',error.message);else message('signInMsg','Signed in.',true)});
-    $('signUpForm').addEventListener('submit',async e=>{e.preventDefault();if(!configured)return message('signUpMsg','Add your Supabase Publishable key first.');message('signUpMsg','Creating account…',true);const name=$('signUpName').value.trim();const {data,error}=await db.auth.signUp({email:$('signUpEmail').value.trim(),password:$('signUpPassword').value,user_metadata:{display_name:name}});if(error)return message('signUpMsg',error.message);if(data.session){try{await loadAccount(data.session.user);message('signUpMsg','Account created.',true)}catch(err){message('signUpMsg','Account created, but database setup is needed: '+err.message)}}else message('signUpMsg','Check your email for the confirmation link, then sign in.',true)});
-    $('entryForm').addEventListener('submit',async e=>{e.preventDefault();if(!account||!currentUser)return;const amount=Number($('entryAmount').value);const type=$('entryType').value;const description=$('entryDescription').value.trim();if(!description||!Number.isFinite(amount)||amount<=0)return message('entryMsg','Enter a description and amount greater than zero.');const nextBalance=Number(account.balance)+(type==='credit'?amount:-amount);if(nextBalance<0)return message('entryMsg','This record would make the sample balance negative.');const nextTransactions=[...(account.transactions||[]),{id:crypto.randomUUID(),description,amount,type,created_at:new Date().toISOString()}];const {data,error}=await db.from('demo_accounts').update({balance:nextBalance,transactions:nextTransactions}).eq('user_id',currentUser.id).select().single();if(error)return message('entryMsg','Could not save: '+error.message);account=data;render();$('entryForm').reset();message('entryMsg','Record saved.',true)});
-    $('resetBtn').addEventListener('click',async()=>{if(!account||!currentUser)return;if(!confirm('Reset this personal record to CA$35,000 and remove all entries?'))return;const {data,error}=await db.from('demo_accounts').update({balance:STARTING_BALANCE,transactions:[]}).eq('user_id',currentUser.id).select().single();if(error)return message('entryMsg','Could not reset: '+error.message);account=data;render();message('entryMsg','Records reset.',true)});
-    $('signOutBtn').addEventListener('click',async()=>{if(db)await db.auth.signOut();});
-    init();
-  </script>
- </body>
+</body>
 </html>
