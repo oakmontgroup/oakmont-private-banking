@@ -1,19 +1,21 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#001a14">
+  <meta name="description" content="Create an account for the Oakmont Digital Banking educational experience.">
   <title>Create Account | Oakmont Private Banking</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="auth-page">
   <header class="auth-header">
-    <a class="brand" href="index.html">
-      <span class="brand-tree">♣</span>
+    <a class="brand" href="index.html" aria-label="Oakmont Home">
+      <span class="brand-tree" aria-hidden="true">♣</span>
       <span>
         <span class="brand-name">OAKMONT</span>
         <span class="brand-subtitle">PRIVATE BANKING</span>
@@ -24,11 +26,11 @@
 
   <main class="auth-main register-main">
     <section class="auth-card">
-      <div class="auth-emblem">♙</div>
+      <div class="auth-emblem" aria-hidden="true">♙</div>
       <p class="eyebrow">GET STARTED</p>
       <h1>Create an Account</h1>
       <p class="auth-intro">
-        Register with your email address to get started.
+        Enter your details to create your digital experience account.
       </p>
 
       <div
@@ -36,6 +38,7 @@
         id="register-message"
         role="status"
         aria-live="polite"
+        hidden
       ></div>
 
       <form id="register-form">
@@ -45,8 +48,10 @@
             <input
               id="first-name"
               name="firstName"
+              type="text"
               autocomplete="given-name"
               placeholder="First name"
+              maxlength="80"
               required
             >
           </div>
@@ -56,8 +61,10 @@
             <input
               id="last-name"
               name="lastName"
+              type="text"
               autocomplete="family-name"
               placeholder="Last name"
+              maxlength="80"
               required
             >
           </div>
@@ -70,6 +77,7 @@
           type="email"
           autocomplete="email"
           placeholder="you@example.com"
+          maxlength="254"
           required
         >
 
@@ -80,6 +88,7 @@
           type="tel"
           autocomplete="tel"
           placeholder="Phone number"
+          maxlength="30"
         >
 
         <label for="new-password">Create Password</label>
@@ -97,6 +106,8 @@
             type="button"
             class="password-toggle"
             data-target="new-password"
+            aria-controls="new-password"
+            aria-pressed="false"
           >Show</button>
         </div>
 
@@ -113,7 +124,9 @@
 
         <label class="check-label terms-label">
           <input type="checkbox" id="terms" required>
-          <span>I have read and agree to the website terms.</span>
+          <span>
+            I agree to the terms of this educational demonstration.
+          </span>
         </label>
 
         <button
@@ -130,10 +143,19 @@
         <a href="login.html">Sign in</a>
       </p>
 
-      <p class="auth-security">
-        This website is a web application and is not itself a bank.
-        Do not enter real banking credentials or sensitive financial details.
-      </p>
+      <div class="auth-security">
+        <div class="security-heading">
+          <span aria-hidden="true">♧</span>
+          <strong>Account Registration</strong>
+        </div>
+        <p>
+          Registration and authentication are provided by Supabase.
+          Use an email address you control and a unique password.
+        </p>
+        <p class="security-caption">
+          Oakmont Digital Experience · Educational Demonstration
+        </p>
+      </div>
     </section>
   </main>
 
@@ -143,124 +165,147 @@
     <a href="login.html">Sign In</a>
   </footer>
 
-  <!-- Load Supabase before the registration code -->
+  <!-- Supabase JavaScript client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
 
   <script>
-    const registerForm = document.getElementById("register-form");
-    const registerMessage = document.getElementById("register-message");
-    const registerButton = document.getElementById("register-button");
+    (() => {
+      const form = document.getElementById("register-form");
+      const message = document.getElementById("register-message");
+      const submitButton = document.getElementById("register-button");
 
-    function showMessage(message, success = false) {
-      registerMessage.textContent = message;
-      registerMessage.classList.add("visible");
-      registerMessage.setAttribute("role", success ? "status" : "alert");
-    }
-
-    // Show/hide password buttons
-    document.querySelectorAll(".password-toggle").forEach(button => {
-      button.addEventListener("click", () => {
-        const input = document.getElementById(button.dataset.target);
-        const showing = input.type === "text";
-
-        input.type = showing ? "password" : "text";
-        button.textContent = showing ? "Show" : "Hide";
-      });
-    });
-
-    registerForm.addEventListener("submit", async event => {
-      event.preventDefault();
-      registerMessage.classList.remove("visible");
-
-      const firstName =
-        document.getElementById("first-name").value.trim();
-      const lastName =
-        document.getElementById("last-name").value.trim();
-      const email =
-        document.getElementById("email").value.trim();
-      const phone =
-        document.getElementById("phone").value.trim();
-      const password =
-        document.getElementById("new-password").value;
-      const confirmation =
-        document.getElementById("confirm-password").value;
-
-      if (password !== confirmation) {
-        showMessage("Your passwords do not match.");
-        return;
-      }
-
-      if (password.length < 8) {
-        showMessage("Your password must contain at least 8 characters.");
-        return;
-      }
-
-      if (!document.getElementById("terms").checked) {
-        showMessage("Please agree to the website terms to continue.");
-        return;
-      }
-
-      if (
-        typeof oakmontSupabase === "undefined" ||
-        !oakmontSupabase.auth
-      ) {
-        showMessage(
-          "Supabase is not connected. Check supabase-client.js and reload this page."
+      function showMessage(text, type = "error") {
+        message.textContent = text;
+        message.hidden = false;
+        message.classList.add("visible");
+        message.dataset.type = type;
+        message.setAttribute(
+          "role",
+          type === "error" ? "alert" : "status"
         );
-        return;
       }
 
-      registerButton.disabled = true;
-      registerButton.textContent = "Creating account...";
+      function clearMessage() {
+        message.textContent = "";
+        message.hidden = true;
+        message.classList.remove("visible");
+        delete message.dataset.type;
+      }
 
-      try {
-        const { data, error } =
-          await oakmontSupabase.auth.signUp({
+      // Show or hide password
+      document.querySelectorAll(".password-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+          const input = document.getElementById(button.dataset.target);
+          const isShowing = input.type === "text";
+
+          input.type = isShowing ? "password" : "text";
+          button.textContent = isShowing ? "Show" : "Hide";
+          button.setAttribute("aria-pressed", String(!isShowing));
+        });
+      });
+
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        clearMessage();
+
+        const firstName =
+          document.getElementById("first-name").value.trim();
+        const lastName =
+          document.getElementById("last-name").value.trim();
+        const email =
+          document.getElementById("email").value.trim();
+        const phone =
+          document.getElementById("phone").value.trim();
+        const password =
+          document.getElementById("new-password").value;
+        const confirmation =
+          document.getElementById("confirm-password").value;
+
+        if (!firstName || !lastName || !email) {
+          showMessage("Please complete all required fields.");
+          return;
+        }
+
+        if (password.length < 8) {
+          showMessage("Your password must contain at least 8 characters.");
+          return;
+        }
+
+        if (password !== confirmation) {
+          showMessage("Your passwords do not match.");
+          document.getElementById("confirm-password").focus();
+          return;
+        }
+
+        if (!document.getElementById("terms").checked) {
+          showMessage("Please agree to the educational demonstration terms.");
+          return;
+        }
+
+        if (
+          !window.supabase ||
+          typeof oakmontSupabase === "undefined" ||
+          !oakmontSupabase.auth
+        ) {
+          showMessage(
+            "The authentication service could not be loaded. Please check supabase-client.js and refresh the page."
+          );
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Creating Account…";
+
+        try {
+          const { data, error } = await oakmontSupabase.auth.signUp({
             email,
             password,
             options: {
               data: {
                 first_name: firstName,
                 last_name: lastName,
-                phone: phone
+                phone: phone || null
               },
               emailRedirectTo:
-                window.location.origin +
-                "/oakmont-private-banking/dashboard.html"
+                "https://oakmontgroup.github.io/oakmont-private-banking/dashboard.html"
             }
           });
 
-        if (error) {
-          showMessage(error.message);
-          return;
-        }
+          if (error) {
+            showMessage(error.message);
+            return;
+          }
 
-        if (data.session) {
+          if (data.session) {
+            showMessage(
+              "Your account has been created. Redirecting to your dashboard…",
+              "success"
+            );
+
+            window.location.replace("dashboard.html");
+            return;
+          }
+
           showMessage(
-            "Your account was created. Opening your dashboard...",
-            true
+            "Your registration request was received. If email confirmation is enabled, check your inbox and follow the confirmation link before signing in.",
+            "success"
           );
 
-          window.location.replace("dashboard.html");
-          return;
+          form.reset();
+
+        } catch (error) {
+          console.error("Supabase registration error:", error);
+
+          showMessage(
+            "We could not complete registration. Check your connection and Supabase configuration, then try again."
+          );
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "Create Account";
         }
-
-        showMessage(
-          "Registration submitted. Check your email for a confirmation link before signing in.",
-          true
-        );
-
-      } catch (error) {
-        console.error("Registration error:", error);
-        showMessage(
-          "Unable to contact Supabase. Check your internet connection and project settings."
-        );
-      } finally {
-        registerButton.disabled = false;
-        registerButton.textContent = "Create Account";
-      }
-    });
+      });
+    })();
   </script>
 </body>
 </html>
