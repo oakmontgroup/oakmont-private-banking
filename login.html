@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#001a14">
+  <title>Sign In | Oakmont Private Banking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <header class="auth-header">
+    <a class="brand" href="index.html">
+      <span class="brand-tree">♣</span>
+      <span>
+        <span class="brand-name">OAKMONT</span>
+        <span class="brand-subtitle">PRIVATE BANKING</span>
+      </span>
+    </a>
+    <a class="back-link" href="index.html">← Back to Home</a>
+  </header>
+
+  <main class="auth-main">
+    <section class="auth-card">
+      <div class="auth-emblem">♙</div>
+      <p class="eyebrow">ACCOUNT ACCESS</p>
+      <h1>Welcome Back</h1>
+      <p class="auth-intro">Enter your details to continue.</p>
+
+      <div class="form-message" id="login-message"
+        role="status" aria-live="polite"></div>
+
+      <form id="login-form">
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="email"
+          autocomplete="username" placeholder="you@example.com" required>
+
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input id="password" name="password" type="password"
+            autocomplete="current-password" placeholder="Enter your password"
+            required minlength="8">
+          <button type="button" class="password-toggle"
+            data-target="password">Show</button>
+        </div>
+
+        <div class="form-options">
+          <label class="check-label">
+            <input type="checkbox" name="remember">
+            <span>Remember me on this device</span>
+          </label>
+          <a href="#help" id="forgot-link">Forgot password?</a>
+        </div>
+
+        <button class="button button-gold button-full" type="submit">
+          Sign In →
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        New here? <a href="register.html">Create an account</a>
+      </p>
+
+      <p class="auth-security">
+        Protect your password. Never share your sign-in details.
+      </p>
+    </section>
+  </main>
+
+  <footer class="auth-footer">
+    <a href="index.html">Home</a>
+    <span>·</span>
+    <a href="index.html#contact">Contact</a>
+  </footer>
+
+  <script>
+    const loginMessage = document.getElementById("login-message");
+
+    document.querySelectorAll(".password-toggle").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        button.textContent = showing ? "Show" : "Hide";
+      });
+    });
+
+    document.getElementById("login-form").addEventListener("submit", event => {
+      event.preventDefault();
+      loginMessage.textContent =
+        "Sign-in is not connected yet. A secure authentication service is required.";
+      loginMessage.classList.add("visible");
+    });
+
+    document.getElementById("forgot-link").addEventListener("click", event => {
+      event.preventDefault();
+      loginMessage.textContent =
+        "Password recovery requires a configured account recovery service.";
+      loginMessage.classList.add("visible");
+    });
+  </script>
+</body>
+</html>
