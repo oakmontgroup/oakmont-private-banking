@@ -1,101 +1,509 @@
 
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#001b15">
+  <title>Create Account | Oakmont Private Banking</title>
 
-  const firstName = document.getElementById("first-name").value.trim();
-  const lastName = document.getElementById("last-name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  <style>
+    :root {
+      --bg: #001a14;
+      --panel: #05251e;
+      --gold: #d8b779;
+      --gold-light: #f0d49a;
+      --text: #f3f0e8;
+      --muted: #a9b8b0;
+      --border: rgba(216, 183, 121, .34);
+      --green: #82c9a2;
+      --error: #ffb5a9;
+    }
 
-  if (!firstName || !lastName || !email || !password) {
-    showMessage("Please complete all required fields.");
-    return;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  const client = window.oakmontSupabase;
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(ellipse at top, #103b2e 0%, transparent 55%),
+        var(--bg);
+      color: var(--text);
+    }
 
-  if (!client || !client.auth) {
-    showMessage(
-      "Supabase client missing. Check supabase-client.js and its script loading order."
-    );
-    console.error("Oakmont diagnostic: window.oakmontSupabase is unavailable.");
-    return;
-  }
+    .register-card {
+      width: 100%;
+      max-width: 490px;
+      padding: 34px;
+      background: rgba(5, 37, 30, .97);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+    }
 
-  submitButton.disabled = true;
-  submitButton.textContent = "Creating Account…";
-  showMessage("Connecting to the registration service…");
+    .brand {
+      margin-bottom: 30px;
+      text-align: center;
+    }
 
-  let timeoutId;
+    .brand-icon {
+      color: var(--gold);
+      font-size: 32px;
+    }
 
-  try {
-    const registrationRequest = client.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-          phone: phone || null
-        },
-        emailRedirectTo:
-          "https://oakmontgroup.github.io/oakmont-private-banking/dashboard.html"
+    .brand-name {
+      margin: 8px 0 4px;
+      color: var(--gold-light);
+      font-family: Georgia, serif;
+      font-size: 29px;
+      letter-spacing: 4px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 27px;
+      font-weight: normal;
+    }
+
+    .intro {
+      margin: 0 0 25px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    input {
+      width: 100%;
+      min-height: 47px;
+      padding: 12px 13px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      outline: none;
+      background: #001a14;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(216, 183, 121, .12);
+    }
+
+    input::placeholder {
+      color: #71877d;
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .message {
+      display: none;
+      margin: 0 0 18px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 13px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.success {
+      color: var(--green);
+      border-color: rgba(130, 201, 162, .45);
+    }
+
+    .message.error {
+      color: var(--error);
+      border-color: rgba(255, 181, 169, .45);
+    }
+
+    .message.info {
+      color: var(--gold-light);
+    }
+
+    .submit-button {
+      width: 100%;
+      min-height: 49px;
+      margin-top: 5px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--gold);
+      color: #17231b;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .submit-button:hover {
+      background: var(--gold-light);
+    }
+
+    .submit-button:disabled {
+      cursor: wait;
+      opacity: .7;
+    }
+
+    .footer {
+      margin-top: 23px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    a {
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .demo-note {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .register-card {
+        padding: 25px 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .brand-name {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="register-card">
+    <header class="brand">
+      <div class="brand-icon" aria-hidden="true">♣</div>
+      <div class="brand-name">OAKMONT</div>
+      <div class="brand-subtitle">PRIVATE BANKING</div>
+    </header>
+
+    <h1>Create Your Account</h1>
+    <p class="intro">
+      Complete the form below to register for Oakmont Online Banking.
+    </p>
+
+    <div
+      id="form-message"
+      class="message"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <form id="register-form">
+      <div class="form-row">
+        <div class="field">
+          <label for="first-name">First name *</label>
+          <input
+            id="first-name"
+            name="first_name"
+            type="text"
+            autocomplete="given-name"
+            placeholder="First name"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="last-name">Last name *</label>
+          <input
+            id="last-name"
+            name="last_name"
+            type="text"
+            autocomplete="family-name"
+            placeholder="Last name"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone number (optional)</label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          autocomplete="tel"
+          placeholder="Enter phone number"
+        >
+      </div>
+
+      <div class="field">
+        <label for="email">Email address *</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="password">Password *</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          placeholder="At least 6 characters"
+          required
+        >
+        <div class="hint">
+          Use a strong, unique password that you do not use elsewhere.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="confirm-password">Confirm password *</label>
+        <input
+          id="confirm-password"
+          name="confirm_password"
+          type="password"
+          autocomplete="new-password"
+          minlength="6"
+          placeholder="Enter your password again"
+          required
+        >
+      </div>
+
+      <button id="submit-button" class="submit-button" type="submit">
+        Create Account
+      </button>
+    </form>
+
+    <div class="footer">
+      Already registered?
+      <a href="login.html">Sign in</a>
+      <br>
+      <a href="index.html">Return to Home</a>
+    </div>
+
+    <div class="demo-note">
+      Oakmont Digital Banking· 
+      Credit cards are issued by JPMorgan Chase Bank, N.A.
+      Member FDIC 
+      © 2026 OPB & Co.
+    </div>
+  </main>
+
+  <!-- Load the Supabase library before your project configuration. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+
+  <script>
+    const form = document.getElementById("register-form");
+    const submitButton = document.getElementById("submit-button");
+    const messageElement = document.getElementById("form-message");
+
+    function showMessage(message, type = "error") {
+      messageElement.textContent = message;
+      messageElement.className = "message visible " + type;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const firstName =
+        document.getElementById("first-name").value.trim();
+      const lastName =
+        document.getElementById("last-name").value.trim();
+      const phone =
+        document.getElementById("phone").value.trim();
+      const email =
+        document.getElementById("email").value.trim();
+      const password =
+        document.getElementById("password").value;
+      const confirmPassword =
+        document.getElementById("confirm-password").value;
+
+      if (!firstName || !lastName || !email || !password) {
+        showMessage("Please complete all required fields.");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage("Your password must contain at least 6 characters.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("The passwords do not match.");
+        return;
+      }
+
+      // Support either client naming style in supabase-client.js.
+      let client = window.oakmontSupabase;
+
+      if (!client) {
+        try {
+          client = typeof oakmontSupabase !== "undefined"
+            ? oakmontSupabase
+            : null;
+        } catch (_) {
+          client = null;
+        }
+      }
+
+      if (!window.supabase) {
+        showMessage(
+          "The Supabase library did not load. Check your internet connection and refresh the page."
+        );
+        return;
+      }
+
+      if (!client || !client.auth) {
+        showMessage(
+          "The Supabase client is missing. Check the URL and publishable key in supabase-client.js."
+        );
+        console.error(
+          "Registration diagnostic: Supabase client is unavailable."
+        );
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Creating Account…";
+      showMessage("Connecting to registration service…", "info");
+
+      let timeoutId;
+
+      try {
+        const signupPromise = client.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              phone: phone || null
+            },
+            emailRedirectTo:
+              "https://oakmontgroup.github.io/oakmont-private-banking/dashboard.html"
+          }
+        });
+
+        const timeoutPromise = new Promise((_, reject) => {
+          timeoutId = setTimeout(() => {
+            reject(
+              new Error(
+                "Registration timed out after 15 seconds. Check your connection, Supabase project URL, publishable key, and project status."
+              )
+            );
+          }, 15000);
+        });
+
+        const { data, error } = await Promise.race([
+          signupPromise,
+          timeoutPromise
+        ]);
+
+        if (error) {
+          console.error("Supabase signup error:", error);
+          showMessage("Registration failed: " + error.message);
+          return;
+        }
+
+        if (data && data.user && data.session) {
+          showMessage(
+            "Your account was created. Redirecting to your dashboard…",
+            "success"
+          );
+
+          window.location.replace("dashboard.html");
+          return;
+        }
+
+        if (data && data.user) {
+          showMessage(
+            "Registration received. Check your email for a confirmation link if email confirmation is enabled. Then sign in.",
+            "success"
+          );
+          form.reset();
+          return;
+        }
+
+        showMessage(
+          "Supabase responded without returning a user. Check the browser console."
+        );
+        console.error("Unexpected Supabase response:", data);
+
+      } catch (error) {
+        console.error("Oakmont registration diagnostic:", error);
+
+        showMessage(
+          error && error.message
+            ? error.message
+            : "Registration failed unexpectedly. Check your connection and try again."
+        );
+
+      } finally {
+        clearTimeout(timeoutId);
+        submitButton.disabled = false;
+        submitButton.textContent = "Create Account";
       }
     });
-
-    const timeoutRequest = new Promise((_, reject) => {
-      timeoutId = setTimeout(() => {
-        reject(
-          new Error(
-            "TIMEOUT: Supabase did not respond within 15 seconds. Check your internet connection, project URL, publishable key, and browser console."
-          )
-        );
-      }, 15000);
-    });
-
-    const { data, error } = await Promise.race([
-      registrationRequest,
-      timeoutRequest
-    ]);
-
-    if (error) {
-      console.error("Supabase signup error:", error);
-      showMessage("Registration failed: " + error.message);
-      return;
-    }
-
-    if (data?.user && data.session) {
-      showMessage("Account created. Redirecting to your dashboard…", "success");
-      window.location.replace("dashboard.html");
-      return;
-    }
-
-    if (data?.user) {
-      showMessage(
-        "Your account was created. Check your email to confirm it, then sign in.",
-        "success"
-      );
-      return;
-    }
-
-    showMessage(
-      "Supabase responded, but no user was returned. Check the browser console."
-    );
-    console.error("Unexpected signup response:", data);
-
-  } catch (error) {
-    console.error("Oakmont registration diagnostic:", error);
-
-    showMessage(
-      error?.message ||
-      "Registration failed unexpectedly. Open the browser console for details."
-    );
-
-  } finally {
-    clearTimeout(timeoutId);
-    submitButton.disabled = false;
-    submitButton.textContent = "Create Account";
-  }
-});
+  </script>
+</body>
+</html>
