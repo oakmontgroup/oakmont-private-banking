@@ -353,157 +353,122 @@
   <script src="supabase-client.js"></script>
 
   <script>
-    const form = document.getElementById("register-form");
-    const submitButton = document.getElementById("submit-button");
-    const messageElement = document.getElementById("form-message");
+  const form = document.getElementById("register-form");
+  const submitButton = document.getElementById("submit-button");
+  const messageElement = document.getElementById("form-message");
 
-    function showMessage(message, type = "error") {
-      messageElement.textContent = message;
-      messageElement.className = "message visible " + type;
-    }
+  function showMessage(message, type = "error") {
+   messageElement.textContent = message;
+   messageElement.className = "message visible " + type;
+  }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-      const firstName =
-        document.getElementById("first-name").value.trim();
-      const lastName =
-        document.getElementById("last-name").value.trim();
-      const phone =
-        document.getElementById("phone").value.trim();
-      const email =
-        document.getElementById("email").value.trim();
-      const password =
-        document.getElementById("password").value;
-      const confirmPassword =
-        document.getElementById("confirm-password").value;
+  const firstName = document.getElementById("first-name").value.trim();
+  const lastName = document.getElementById("last-name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm-password");
 
-      if (!firstName || !lastName || !email || !password) {
-        showMessage("Please complete all required fields.");
-        return;
-      }
+  if (!firstName || !lastName || !email || !password) {
+    showMessage("Please complete all required fields.");
+    return;
+  }
 
-      if (password.length < 6) {
-        showMessage("Your password must contain at least 6 characters.");
-        return;
-      }
+  if (confirmPassword && password !== confirmPassword.value) {
+    showMessage("The passwords do not match.");
+    return;
+  }
 
-      if (password !== confirmPassword) {
-        showMessage("The passwords do not match.");
-        return;
-      }
+  if (password.length < 6) {
+    showMessage("Your password must contain at least 6 characters.");
+    return;
+  }
 
-      // Support either client naming style in supabase-client.js.
-      let client = window.oakmontSupabase;
+  const client =
+    window.oakmontSupabase ||
+    (typeof oakmontSupabase !== "undefined" ? oakmontSupabase : null);
 
-      if (!client) {
-        try {
-          client = typeof oakmontSupabase !== "undefined"
-            ? oakmontSupabase
-            : null;
-        } catch (_) {
-          client = null;
-        }
-      }
+  if (!client || !client.auth) {
+    showMessage(
+      "Authentication service could not load. Check supabase-client.js."
+    );
+    console.error("Supabase client is unavailable.");
+    return;
+  }
 
-      if (!window.supabase) {
-        showMessage(
-          "The Supabase library did not load. Check your internet connection and refresh the page."
-        );
-        return;
-      }
+  submitButton.disabled = true;
+  submitButton.textContent = "Creating Account…";
+  showMessage("Connecting to registration service…", "info");
 
-      if (!client || !client.auth) {
-        showMessage(
-          "The Supabase client is missing. Check the URL and publishable key in supabase-client.js."
-        );
-        console.error(
-          "Registration diagnostic: Supabase client is unavailable."
-        );
-        return;
-      }
+  let timeoutId;
 
-      submitButton.disabled = true;
-      submitButton.textContent = "Creating Account…";
-      showMessage("Connecting to registration service…", "info");
-
-      let timeoutId;
-
-      try {
-        const signupPromise = client.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              first_name: firstName,
-              last_name: lastName,
-              phone: phone || null
-            },
-            emailRedirectTo:
-              "https://oakmontgroup.github.io/oakmont-private-banking/dashboard.html"
-          }
-        });
-
-        const timeoutPromise = new Promise((_, reject) => {
-          timeoutId = setTimeout(() => {
-            reject(
-              new Error(
-                "Registration timed out after 15 seconds. Check your connection, Supabase project URL, publishable key, and project status."
-              )
-            );
-          }, 15000);
-        });
-
-        const { data, error } = await Promise.race([
-          signupPromise,
-          timeoutPromise
-        ]);
-
-        if (error) {
-          console.error("Supabase signup error:", error);
-          showMessage("Registration failed: " + error.message);
-          return;
-        }
-
-        if (data && data.user && data.session) {
-          showMessage(
-            "Your account was created. Redirecting to your dashboard…",
-            "success"
-          );
-
-          window.location.replace("dashboard.html");
-          return;
-        }
-
-        if (data && data.user) {
-          showMessage(
-            "Registration received. Check your email for a confirmation link if email confirmation is enabled. Then sign in.",
-            "success"
-          );
-          form.reset();
-          return;
-        }
-
-        showMessage(
-          "Supabase responded without returning a user. Check the browser console."
-        );
-        console.error("Unexpected Supabase response:", data);
-
-      } catch (error) {
-        console.error("Oakmont registration diagnostic:", error);
-
-        showMessage(
-          error && error.message
-            ? error.message
-            : "Registration failed unexpectedly. Check your connection and try again."
-        );
-
-      } finally {
-        clearTimeout(timeoutId);
-        submitButton.disabled = false;
-        submitButton.textContent = "Create Account";
+  try {
+    const signupPromise = client.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          phone: phone || null
+        },
+        emailRedirectTo:
+          "https://oakmontgroup.github.io/oakmont-private-banking/dashboard.html"
       }
     });
+
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(
+          new Error(
+            "Registration timed out after 15 seconds. Check your internet connection and Supabase configuration."
+          )
+        );
+      }, 15000);
+    });
+
+    const { data, error } = await Promise.race([
+      signupPromise,
+      timeoutPromise
+    ]);
+
+    if (error) {
+      console.error("Supabase signup error:", error);
+      showMessage("Registration failed: " + error.message);
+      return;
+    }
+
+    if (data?.user && data?.session) {
+      showMessage("Account created. Redirecting…", "success");
+      window.location.replace("dashboard.html");
+      return;
+    }
+
+    if (data?.user) {
+      showMessage(
+        "Registration received. Check your email for a confirmation link, then sign in.",
+        "success"
+      );
+      form.reset();
+      return;
+    }
+
+    showMessage("No user was returned. Check the browser console.");
+
+  } catch (error) {
+    console.error("Registration diagnostic:", error);
+    showMessage(
+      error?.message || "Registration failed. Please try again."
+    );
+  } finally {
+    clearTimeout(timeoutId);
+    submitButton.disabled = false;
+    submitButton.textContent = "Create Account";
+  }
+});
   </script>
 </body>
 </html>
