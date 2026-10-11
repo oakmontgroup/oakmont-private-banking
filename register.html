@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#001a14">
+  <title>Create Account | Oakmont Private Banking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <header class="auth-header">
+    <a class="brand" href="index.html">
+      <span class="brand-tree">♣</span>
+      <span>
+        <span class="brand-name">OAKMONT</span>
+        <span class="brand-subtitle">PRIVATE BANKING</span>
+      </span>
+    </a>
+    <a class="back-link" href="index.html">← Back to Home</a>
+  </header>
+
+  <main class="auth-main register-main">
+    <section class="auth-card">
+      <div class="auth-emblem">♙</div>
+      <p class="eyebrow">GET STARTED</p>
+      <h1>Create an Account</h1>
+      <p class="auth-intro">Enter your details to explore registration.</p>
+
+      <div class="form-message" id="register-message"
+        role="status" aria-live="polite"></div>
+
+      <form id="register-form">
+        <div class="form-grid">
+          <div>
+            <label for="first-name">First Name</label>
+            <input id="first-name" name="firstName" autocomplete="given-name"
+              placeholder="First name" required>
+          </div>
+          <div>
+            <label for="last-name">Last Name</label>
+            <input id="last-name" name="lastName" autocomplete="family-name"
+              placeholder="Last name" required>
+          </div>
+        </div>
+
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="email"
+          autocomplete="email" placeholder="you@example.com" required>
+
+        <label for="phone">Phone Number (optional)</label>
+        <input id="phone" name="phone" type="tel"
+          autocomplete="tel" placeholder="Phone number">
+
+        <label for="new-password">Create Password</label>
+        <div class="password-wrap">
+          <input id="new-password" name="password" type="password"
+            autocomplete="new-password" minlength="8"
+            placeholder="At least 8 characters" required>
+          <button type="button" class="password-toggle"
+            data-target="new-password">Show</button>
+        </div>
+
+        <label for="confirm-password">Confirm Password</label>
+        <input id="confirm-password" name="confirmPassword" type="password"
+          autocomplete="new-password" minlength="8"
+          placeholder="Re-enter password" required>
+
+        <label class="check-label terms-label">
+          <input type="checkbox" id="terms" required>
+          <span>I have read and agree to the website terms.</span>
+        </label>
+
+        <button class="button button-gold button-full" type="submit">
+          Continue →
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        Already have an account? <a href="login.html">Sign in</a>
+      </p>
+
+      <p class="auth-security">
+        This form does not create a real bank account or securely store
+        personal information.
+      </p>
+    </section>
+  </main>
+
+  <footer class="auth-footer">
+    <a href="index.html">Home</a>
+    <span>·</span>
+    <a href="login.html">Sign In</a>
+  </footer>
+
+  <script>
+    const registerMessage = document.getElementById("register-message");
+
+    document.querySelectorAll(".password-toggle").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        button.textContent = showing ? "Show" : "Hide";
+      });
+    });
+
+    document.getElementById("register-form").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const password = document.getElementById("new-password").value;
+      const confirmation =
+        document.getElementById("confirm-password").value;
+
+      if (password !== confirmation) {
+        registerMessage.textContent = "The passwords do not match.";
+        registerMessage.classList.add("visible");
+        return;
+      }
+
+      registerMessage.textContent =
+        "Your form is valid, but registration is not active. A secure backend is required to create and verify accounts.";
+      registerMessage.classList.add("visible");
+    });
+  </script>
+</body>
+</html>
