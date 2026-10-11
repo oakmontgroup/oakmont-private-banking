@@ -1,258 +1,439 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#001a14">
-  <meta name="description" content="Sign in to the Oakmont Digital Experience educational platform.">
   <title>Sign In | Oakmont Private Banking</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --bg: #001a14;
+      --panel: #06271f;
+      --gold: #d8b779;
+      --gold-light: #f0d49a;
+      --text: #f3f0e8;
+      --muted: #a9b8b0;
+      --border: rgba(216,183,121,.35);
+      --error: #ffb5a9;
+      --success: #a8e2bd;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(ellipse at 50% 0%, #174434, transparent 60%),
+        var(--bg);
+    }
+
+    .page {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand-symbol {
+      color: var(--gold);
+      font-size: 30px;
+    }
+
+    .brand-name {
+      margin: 7px 0 5px;
+      color: var(--gold-light);
+      font: 30px Georgia, serif;
+      letter-spacing: 5px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 4px;
+    }
+
+    .card {
+      padding: 34px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(6,39,31,.96);
+      box-shadow: 0 24px 70px rgba(0,0,0,.28);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      margin: 15px 0 10px;
+      font: normal 36px/1.15 Georgia, serif;
+    }
+
+    .intro {
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .field { margin-bottom: 19px; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      min-height: 49px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      background: #001a14;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(216,183,121,.1);
+    }
+
+    input::placeholder { color: #82948b; }
+
+    .password-wrap { position: relative; }
+
+    .password-wrap input { padding-right: 70px; }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      padding: 5px 0;
+      border: 0;
+      background: transparent;
+      color: var(--gold-light);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 5px 0 23px;
+      font-size: 12px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .remember input {
+      width: 16px;
+      min-height: 16px;
+      margin: 0;
+      accent-color: var(--gold);
+    }
+
+    a {
+      color: var(--gold-light);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .sign-in {
+      width: 100%;
+      min-height: 50px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--gold);
+      color: #14251c;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sign-in:hover { background: var(--gold-light); }
+
+    .sign-in:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .message.visible { display: block; }
+    .message.error { color: var(--error); }
+    .message.success { color: var(--success); }
+    .message.info { color: var(--gold-light); }
+
+    .register-link {
+      margin: 23px 0 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .security-note {
+      margin: 24px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .back-home {
+      display: block;
+      margin-top: 22px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 26px 21px; }
+      h1 { font-size: 32px; }
+      .brand-name { font-size: 27px; }
+    }
+  </style>
 </head>
 
-<body class="auth-page">
-  <header class="auth-header">
-    <a class="brand" href="index.html" aria-label="Oakmont Home">
-      <span class="brand-tree" aria-hidden="true">♣</span>
-      <span>
-        <span class="brand-name">OAKMONT</span>
-        <span class="brand-subtitle">PRIVATE BANKING</span>
-      </span>
-    </a>
-    <a class="back-link" href="index.html">← Back to Home</a>
-  </header>
+<body>
+  <main class="page">
+    <header class="brand">
+      <div class="brand-symbol" aria-hidden="true">♣</div>
+      <div class="brand-name">OAKMONT</div>
+      <div class="brand-subtitle">PRIVATE BANKING®</div>
+    </header>
 
-  <main class="auth-main">
-    <section class="auth-card">
-      <div class="auth-emblem" aria-hidden="true">♙</div>
-      <p class="eyebrow">ACCOUNT ACCESS</p>
-      <h1>Welcome Back</h1>
-      <p class="auth-intro">Enter your details to continue.</p>
+    <section class="card">
+      <div class="eyebrow">SECURE ACCOUNT ACCESS</div>
+      <h1>Welcome back.</h1>
+      <p class="intro">
+        Sign in to continue to your Oakmont Private Account.
+      </p>
 
-      <div
-        class="form-message"
-        id="login-message"
-        role="status"
-        aria-live="polite"
-        hidden
-      ></div>
+      <div id="login-message" class="message"
+           role="status" aria-live="polite"></div>
 
       <form id="login-form">
-        <label for="email">Email Address</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autocomplete="username"
-          placeholder="you@example.com"
-          required
-        >
-
-        <label for="password">Password</label>
-        <div class="password-wrap">
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Enter your password"
-            required
-            minlength="8"
-          >
-          <button
-            type="button"
-            class="password-toggle"
-            data-target="password"
-            aria-controls="password"
-            aria-pressed="false"
-          >Show</button>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email"
+                 autocomplete="username" placeholder="you@example.com"
+                 required>
         </div>
 
-        <div class="form-options">
-          <label class="check-label">
-            <input type="checkbox" id="remember">
-            <span>Remember me on this device</span>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="password-wrap">
+            <input id="password" name="password" type="password"
+                   autocomplete="current-password"
+                   placeholder="Enter your password" required>
+            <button class="toggle-password" id="toggle-password"
+                    type="button" aria-label="Show password">
+              Show
+            </button>
+          </div>
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input id="remember-me" type="checkbox">
+            Remember email on this device
           </label>
-          <a href="#help" id="forgot-link">Forgot password?</a>
+          <a href="forgot-password.html">Forgot password?</a>
         </div>
 
-        <button
-          class="button button-gold button-full"
-          id="login-button"
-          type="submit"
-        >
-          Sign In →
+        <button class="sign-in" id="sign-in-button" type="submit">
+          Sign In <span aria-hidden="true">→</span>
         </button>
       </form>
 
-      <p class="auth-switch">
-        New here? <a href="register.html">Create an account</a>
-      </p>
-
-      <p class="auth-security">
-        Oakmont Digital Banking·  
-        Credit cards are issued by JPMorgan Chase Bank, N.A. Member FDIC
-        
-        © 2026 OPB & Co.
+      <p class="register-link">
+        New to Oakmont?
+        <a href="register.html">Create an account</a>
       </p>
     </section>
+
+    <p class="security-note">
+      Keep your password private. Never share your sign-in details.
+      <br>
+      Oakmont is a website demonstration, not a real bank.
+    </p>
+
+    <a class="back-home" href="index.html">← Back to home</a>
   </main>
 
-  <footer class="auth-footer">
-    <a href="index.html">Home</a>
-    <span>·</span>
-    <a href="index.html#contact">Contact</a>
-  </footer>
-
-  <!-- Load Supabase before the login code -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
 
   <script>
-    (() => {
-      const form = document.getElementById("login-form");
-      const message = document.getElementById("login-message");
-      const loginButton = document.getElementById("login-button");
-      const forgotLink = document.getElementById("forgot-link");
+    const form = document.getElementById("login-form");
+    const button = document.getElementById("sign-in-button");
+    const message = document.getElementById("login-message");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const rememberMe = document.getElementById("remember-me");
+    const togglePassword = document.getElementById("toggle-password");
 
-      function showMessage(text, type = "error") {
-        message.textContent = text;
-        message.hidden = false;
-        message.classList.add("visible");
-        message.setAttribute(
-          "role",
-          type === "error" ? "alert" : "status"
-        );
+    function showMessage(text, type = "error") {
+      message.textContent = text;
+      message.className = "message visible " + type;
+    }
+
+    togglePassword.addEventListener("click", () => {
+      const showing = passwordInput.type === "text";
+      passwordInput.type = showing ? "password" : "text";
+      togglePassword.textContent = showing ? "Show" : "Hide";
+      togglePassword.setAttribute(
+        "aria-label", showing ? "Show password" : "Hide password"
+      );
+    });
+
+    // Only remember the email address, never the password.
+    try {
+      const savedEmail = localStorage.getItem("oakmont_saved_email");
+      if (savedEmail) {
+        emailInput.value = savedEmail;
+        rememberMe.checked = true;
+      }
+    } catch (error) {
+      console.warn("Email remembering is unavailable.");
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        showMessage("Enter your email address and password.");
+        return;
       }
 
-      function clearMessage() {
-        message.textContent = "";
-        message.hidden = true;
-        message.classList.remove("visible");
-      }
+      let client = window.oakmontSupabase;
 
-      // Show or hide password
-      document.querySelectorAll(".password-toggle").forEach(button => {
-        button.addEventListener("click", () => {
-          const input = document.getElementById(button.dataset.target);
-          const showing = input.type === "text";
-
-          input.type = showing ? "password" : "text";
-          button.textContent = showing ? "Show" : "Hide";
-          button.setAttribute("aria-pressed", String(!showing));
-        });
-      });
-
-      form.addEventListener("submit", async event => {
-        event.preventDefault();
-        clearMessage();
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-
-        if (!email || !password) {
-          showMessage("Enter your email address and password.");
-          return;
-        }
-
-        if (
-          typeof oakmontSupabase === "undefined" ||
-          !oakmontSupabase.auth
-        ) {
-          showMessage(
-            "The authentication service could not be loaded. Check supabase-client.js and refresh this page."
-          );
-          return;
-        }
-
-        loginButton.disabled = true;
-        loginButton.textContent = "Signing in…";
-
+      if (!client) {
         try {
-          const { data, error } =
-            await oakmontSupabase.auth.signInWithPassword({
-              email,
-              password
-            });
+          client = typeof oakmontSupabase !== "undefined"
+            ? oakmontSupabase
+            : null;
+        } catch (_) {
+          client = null;
+        }
+      }
 
-          if (error) {
-            showMessage(
-              error.message ||
-              "Sign-in failed. Check your details and try again."
-            );
-            return;
-          }
+      if (!window.supabase || !client || !client.auth) {
+        showMessage(
+          "Authentication is unavailable. Check supabase-client.js and refresh."
+        );
+        console.error("Supabase client is missing.");
+        return;
+      }
 
-          if (!data.session) {
-            showMessage(
-              "No active session was returned. Please try again."
-            );
-            return;
-          }
+      button.disabled = true;
+      button.textContent = "Signing In…";
+      showMessage("Verifying your details…", "info");
 
-          showMessage("Sign-in successful. Opening your dashboard…", "success");
-          window.location.replace("dashboard.html");
+      let timeoutId;
 
-        } catch (error) {
+      try {
+        const signInPromise = client.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        const timeoutPromise = new Promise((_, reject) => {
+          timeoutId = setTimeout(() => {
+            reject(new Error(
+              "Sign-in timed out. Check your connection and Supabase settings."
+            ));
+          }, 15000);
+        });
+
+        const { data, error } = await Promise.race([
+          signInPromise,
+          timeoutPromise
+        ]);
+
+        if (error) {
           console.error("Sign-in error:", error);
           showMessage(
-            "Unable to contact the authentication service. Check your connection and try again."
+            error.message || "Sign-in failed. Check your details and try again."
           );
-        } finally {
-          loginButton.disabled = false;
-          loginButton.textContent = "Sign In →";
-        }
-      });
-
-      // Password recovery
-      forgotLink.addEventListener("click", async event => {
-        event.preventDefault();
-        clearMessage();
-
-        const email = document.getElementById("email").value.trim();
-
-        if (!email) {
-          showMessage(
-            "Enter your email address first, then tap Forgot password again."
-          );
-          document.getElementById("email").focus();
           return;
         }
 
-        if (
-          typeof oakmontSupabase === "undefined" ||
-          !oakmontSupabase.auth
-        ) {
+        if (!data || !data.session) {
           showMessage(
-            "The authentication service could not be loaded. Check supabase-client.js."
+            "No active session was returned. Check your email confirmation status."
           );
           return;
         }
 
         try {
-          const { error } =
-            await oakmontSupabase.auth.resetPasswordForEmail(email, {
-              redirectTo:
-                "https://oakmontgroup.github.io/oakmont-private-banking/login.html"
-            });
-
-          if (error) {
-            showMessage(error.message);
-            return;
+          if (rememberMe.checked) {
+            localStorage.setItem("oakmont_saved_email", email);
+          } else {
+            localStorage.removeItem("oakmont_saved_email");
           }
-
-          showMessage(
-            "If an account exists for this address, password recovery instructions will be sent to your email.",
-            "success"
-          );
-        } catch (error) {
-          console.error("Password recovery error:", error);
-          showMessage(
-            "Unable to request password recovery. Please try again."
-          );
+        } catch (_) {
+          // Sign-in can continue if browser storage is unavailable.
         }
-      });
-    })();
+
+        showMessage("Signed in successfully. Opening your dashboard…", "success");
+        window.location.replace("dashboard.html");
+
+      } catch (error) {
+        console.error("Sign-in diagnostic:", error);
+        showMessage(
+          error && error.message
+            ? error.message
+            : "Unable to sign in. Check your connection and try again."
+        );
+      } finally {
+        clearTimeout(timeoutId);
+        button.disabled = false;
+        button.textContent = "Sign In →";
+      }
+    });
   </script>
 </body>
 </html>
