@@ -602,8 +602,8 @@
     </a>
 
     <div class="profile">
-      <div class="avatar" aria-hidden="true">T</div>
-      <span class="profile-name" id="profile-name">TIANNA JACK</span>
+      <div class="avatar" id="profile-avatar" aria-hidden="true">?</div>
+      <span class="profile-name" id="profile-name">Loading...</span>
       <button class="profile-button" id="profile-button" type="button">
         Profile ⌄
       </button>
@@ -633,7 +633,7 @@
       <a href="#settings" class="nav-link" data-notice="Settings">
         <span class="nav-icon">⚙</span> Settings
       </a>
-      <a href="login.html" class="nav-link">
+      <a href="#" class="nav-link" id="sign-out">
         <span class="nav-icon">⇥</span> Sign Out
       </a>
     </aside>
@@ -645,7 +645,7 @@
       <section class="welcome">
         <div>
           <h1>Welcome back,</h1>
-          <span class="customer-name" id="customer-name">TIANNA JACK</span>
+          <span class="customer-name" id="customer-name">Loading...</span>
           <p>Here's your account overview.</p>
         </div>
         <time class="current-date" id="current-date"></time>
@@ -660,13 +660,13 @@
           </button>
         </div>
 
-        <div class="balance" id="balance-value">CA$65,000.32</div>
+        <div class="balance" id="balance-value">Not available</div>
 
         <div class="balance-bottom">
           <div class="avatar" aria-hidden="true">♙</div>
           <div>
             <div class="owner-label">Account Owner</div>
-            <div class="owner-name" id="owner-name">TIANNA JACK</div>
+            <div class="owner-name" id="owner-name">Loading...</div>
           </div>
         </div>
       </section>
@@ -734,88 +734,179 @@
     </main>
   </div>
 
-  <script>
-    const message = document.getElementById("page-message");
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function () {
+  "use strict";
 
-    function showMessage(text) {
-      message.textContent = text;
-      message.style.display = "block";
-      message.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest"
-      });
+  const SUPABASE_URL =
+    "https://ppgfxdxwsbetdnqwkajd.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_rYMwJeR07pvLc68CbFMk9A_dZe9ERqs";
+
+  const message = document.getElementById("page-message");
+  const balance = document.getElementById("balance-value");
+  const toggleButton = document.getElementById("toggle-balance");
+
+  function showMessage(text) {
+    message.textContent = text;
+    message.style.display = "block";
+  }
+
+  function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+  }
+
+  function getDisplayName(user) {
+    const metadata = user.user_metadata || {};
+
+    const name =
+      metadata.full_name ||
+      metadata.name ||
+      [metadata.first_name, metadata.last_name]
+        .filter(Boolean)
+        .join(" ");
+
+    return name.trim() || user.email || "Account Holder";
+  }
+
+  // Do not display a made-up balance.
+  let balanceVisible = true;
+  balance.textContent = "Not available";
+
+  toggleButton.addEventListener("click", function () {
+    balanceVisible = !balanceVisible;
+
+    // No real balance has been loaded yet.
+    balance.textContent = "Not available";
+    toggleButton.textContent = balanceVisible ? "Hide" : "Show";
+
+    toggleButton.setAttribute(
+      "aria-label",
+      balanceVisible ? "Hide balance" : "Show balance"
+    );
+
+    toggleButton.setAttribute(
+      "aria-pressed",
+      String(!balanceVisible)
+    );
+  });
+
+  document.getElementById("current-date").textContent =
+    new Intl.DateTimeFormat("en", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }).format(new Date());
+
+  if (!window.supabase) {
+    showMessage("Secure sign-in could not load. Please try again.");
+    return;
+  }
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
+
+  try {
+    const { data, error } =
+      await supabaseClient.auth.getSession();
+
+    if (error || !data.session) {
+      window.location.replace("login.html");
+      return;
     }
 
-    // Set the date using the visitor's local date.
-    const today = new Date();
+    const user = data.session.user;
+    const displayName = getDisplayName(user);
 
-    document.getElementById("current-date").textContent =
-      new Intl.DateTimeFormat("en-CA", {
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-      }).format(today);
+    // Only use the name associated with the signed-in session.
+    setText("profile-name", displayName);
+    setText("customer-name", displayName);
+    setText("owner-name", displayName);
 
-    // Keep the displayed amount consistent when hiding or showing it.
-    const balance = document.getElementById("balance-value");
-    const toggleButton = document.getElementById("toggle-balance");
-    const accountBalance = "CA$65,000.32";
+    const avatar = document.getElementById("profile-avatar");
+    if (avatar) {
+      avatar.textContent = displayName.charAt(0).toUpperCase();
+    }
 
-    let balanceVisible = true;
+    // Never use a hardcoded customer's balance or transactions.
+    balance.textContent = "Not available";
 
-    toggleButton.addEventListener("click", function () {
-      balanceVisible = !balanceVisible;
+    // Recheck authentication when the session changes.
+    supabaseClient.auth.onAuthStateChange(
+      function (_event, session) {
+        if (!session) {
+          window.location.replace("login.html");
+        }
+      }
+    );
 
-      balance.textContent = balanceVisible
-        ? accountBalance
-        : "CA$ •••••••";
-
-      toggleButton.textContent = balanceVisible ? "Hide" : "Show";
-
-      toggleButton.setAttribute(
-        "aria-label",
-        balanceVisible ? "Hide balance" : "Show balance"
-      );
-
-      toggleButton.setAttribute(
-        "aria-pressed",
-        String(!balanceVisible)
-      );
-    });
-
-    // Actions require a connected banking service.
-    document.querySelectorAll("[data-action]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        showMessage(
-          button.dataset.action +
-          " is not available until a secure banking service is connected."
-        );
-      });
-    });
-
-    // Show a useful message for sections that aren't connected yet.
-    document.querySelectorAll("[data-notice]").forEach(function (link) {
-      link.addEventListener("click", function (event) {
+    document.getElementById("sign-out")
+      .addEventListener("click", async function (event) {
         event.preventDefault();
 
+        const { error: signOutError } =
+          await supabaseClient.auth.signOut();
+
+        if (signOutError) {
+          showMessage("Sign out failed. Please try again.");
+          return;
+        }
+
+        window.location.replace("login.html");
+      });
+
+    document.querySelectorAll("[data-action]")
+      .forEach(function (button) {
+        button.addEventListener("click", function () {
+          showMessage(
+            button.dataset.action +
+            " is unavailable until a secure banking service is configured."
+          );
+        });
+      });
+
+    document.querySelectorAll("[data-notice]")
+      .forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          showMessage(
+            link.dataset.notice +
+            " requires a connected account service."
+          );
+        });
+      });
+
+    document.getElementById("view-all")
+      .addEventListener("click", function () {
         showMessage(
-          link.dataset.notice +
-          " requires a connected account service."
+          "Transactions will appear here when a secure account data source is connected."
         );
       });
-    });
 
-    document.getElementById("view-all").addEventListener("click", function () {
-      showMessage(
-        "Transaction history will be available when an authorized banking data source is connected."
-      );
-    });
+    document.getElementById("profile-button")
+      .addEventListener("click", function () {
+        showMessage(
+          "Profile settings are not configured yet."
+        );
+      });
 
-    document.getElementById("profile-button").addEventListener("click", function () {
-      showMessage(
-        "Profile settings require a connected account and authentication service."
-      );
-    });
-  </script>
-</body>
-</html>
+  } catch (error) {
+    console.error("Dashboard initialization failed:", error);
+    showMessage("Unable to load your account. Please try again.");
+  }
+})();
+</script>
