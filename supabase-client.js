@@ -10,6 +10,6 @@ if (
 }
 
 const oakmontSupabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
+  https://ppgfxdxwsbetdnqwkajd.supabase.co,
+  sb_publishable_rYMwJeR07pvLc68CbFMk9A_dZe9ERq
 );
