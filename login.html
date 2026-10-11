@@ -5,13 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#001a14">
+  <meta name="description" content="Sign in to the Oakmont Digital Experience educational platform.">
   <title>Sign In | Oakmont Private Banking</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="auth-page">
   <header class="auth-header">
-    <a class="brand" href="index.html">
-      <span class="brand-tree">♣</span>
+    <a class="brand" href="index.html" aria-label="Oakmont Home">
+      <span class="brand-tree" aria-hidden="true">♣</span>
       <span>
         <span class="brand-name">OAKMONT</span>
         <span class="brand-subtitle">PRIVATE BANKING</span>
@@ -22,37 +24,63 @@
 
   <main class="auth-main">
     <section class="auth-card">
-      <div class="auth-emblem">♙</div>
+      <div class="auth-emblem" aria-hidden="true">♙</div>
       <p class="eyebrow">ACCOUNT ACCESS</p>
       <h1>Welcome Back</h1>
       <p class="auth-intro">Enter your details to continue.</p>
 
-      <div class="form-message" id="login-message"
-        role="status" aria-live="polite"></div>
+      <div
+        class="form-message"
+        id="login-message"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></div>
 
       <form id="login-form">
         <label for="email">Email Address</label>
-        <input id="email" name="email" type="email"
-          autocomplete="username" placeholder="you@example.com" required>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="username"
+          placeholder="you@example.com"
+          required
+        >
 
         <label for="password">Password</label>
         <div class="password-wrap">
-          <input id="password" name="password" type="password"
-            autocomplete="current-password" placeholder="Enter your password"
-            required minlength="8">
-          <button type="button" class="password-toggle"
-            data-target="password">Show</button>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter your password"
+            required
+            minlength="8"
+          >
+          <button
+            type="button"
+            class="password-toggle"
+            data-target="password"
+            aria-controls="password"
+            aria-pressed="false"
+          >Show</button>
         </div>
 
         <div class="form-options">
           <label class="check-label">
-            <input type="checkbox" name="remember">
+            <input type="checkbox" id="remember">
             <span>Remember me on this device</span>
           </label>
           <a href="#help" id="forgot-link">Forgot password?</a>
         </div>
 
-        <button class="button button-gold button-full" type="submit">
+        <button
+          class="button button-gold button-full"
+          id="login-button"
+          type="submit"
+        >
           Sign In →
         </button>
       </form>
@@ -62,7 +90,7 @@
       </p>
 
       <p class="auth-security">
-        Protect your password. Never share your sign-in details.
+        Oakmont Digital Experience · Educational Demonstration
       </p>
     </section>
   </main>
@@ -73,31 +101,155 @@
     <a href="index.html#contact">Contact</a>
   </footer>
 
+  <!-- Load Supabase before the login code -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+
   <script>
-    const loginMessage = document.getElementById("login-message");
+    (() => {
+      const form = document.getElementById("login-form");
+      const message = document.getElementById("login-message");
+      const loginButton = document.getElementById("login-button");
+      const forgotLink = document.getElementById("forgot-link");
 
-    document.querySelectorAll(".password-toggle").forEach(button => {
-      button.addEventListener("click", () => {
-        const input = document.getElementById(button.dataset.target);
-        const showing = input.type === "text";
-        input.type = showing ? "password" : "text";
-        button.textContent = showing ? "Show" : "Hide";
+      function showMessage(text, type = "error") {
+        message.textContent = text;
+        message.hidden = false;
+        message.classList.add("visible");
+        message.setAttribute(
+          "role",
+          type === "error" ? "alert" : "status"
+        );
+      }
+
+      function clearMessage() {
+        message.textContent = "";
+        message.hidden = true;
+        message.classList.remove("visible");
+      }
+
+      // Show or hide password
+      document.querySelectorAll(".password-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+          const input = document.getElementById(button.dataset.target);
+          const showing = input.type === "text";
+
+          input.type = showing ? "password" : "text";
+          button.textContent = showing ? "Show" : "Hide";
+          button.setAttribute("aria-pressed", String(!showing));
+        });
       });
-    });
 
-    document.getElementById("login-form").addEventListener("submit", event => {
-      event.preventDefault();
-      loginMessage.textContent =
-        "Sign-in is not connected yet. A secure authentication service is required.";
-      loginMessage.classList.add("visible");
-    });
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        clearMessage();
 
-    document.getElementById("forgot-link").addEventListener("click", event => {
-      event.preventDefault();
-      loginMessage.textContent =
-        "Password recovery requires a configured account recovery service.";
-      loginMessage.classList.add("visible");
-    });
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+          showMessage("Enter your email address and password.");
+          return;
+        }
+
+        if (
+          typeof oakmontSupabase === "undefined" ||
+          !oakmontSupabase.auth
+        ) {
+          showMessage(
+            "The authentication service could not be loaded. Check supabase-client.js and refresh this page."
+          );
+          return;
+        }
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Signing in…";
+
+        try {
+          const { data, error } =
+            await oakmontSupabase.auth.signInWithPassword({
+              email,
+              password
+            });
+
+          if (error) {
+            showMessage(
+              error.message ||
+              "Sign-in failed. Check your details and try again."
+            );
+            return;
+          }
+
+          if (!data.session) {
+            showMessage(
+              "No active session was returned. Please try again."
+            );
+            return;
+          }
+
+          showMessage("Sign-in successful. Opening your dashboard…", "success");
+          window.location.replace("dashboard.html");
+
+        } catch (error) {
+          console.error("Sign-in error:", error);
+          showMessage(
+            "Unable to contact the authentication service. Check your connection and try again."
+          );
+        } finally {
+          loginButton.disabled = false;
+          loginButton.textContent = "Sign In →";
+        }
+      });
+
+      // Password recovery
+      forgotLink.addEventListener("click", async event => {
+        event.preventDefault();
+        clearMessage();
+
+        const email = document.getElementById("email").value.trim();
+
+        if (!email) {
+          showMessage(
+            "Enter your email address first, then tap Forgot password again."
+          );
+          document.getElementById("email").focus();
+          return;
+        }
+
+        if (
+          typeof oakmontSupabase === "undefined" ||
+          !oakmontSupabase.auth
+        ) {
+          showMessage(
+            "The authentication service could not be loaded. Check supabase-client.js."
+          );
+          return;
+        }
+
+        try {
+          const { error } =
+            await oakmontSupabase.auth.resetPasswordForEmail(email, {
+              redirectTo:
+                "https://oakmontgroup.github.io/oakmont-private-banking/login.html"
+            });
+
+          if (error) {
+            showMessage(error.message);
+            return;
+          }
+
+          showMessage(
+            "If an account exists for this address, password recovery instructions will be sent to your email.",
+            "success"
+          );
+        } catch (error) {
+          console.error("Password recovery error:", error);
+          showMessage(
+            "Unable to request password recovery. Please try again."
+          );
+        }
+      });
+    })();
   </script>
 </body>
 </html>
