@@ -267,33 +267,107 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
 
-    const form = document.getElementById("register-form");
-    const password = document.getElementById("password");
-    const confirmation = document.getElementById("confirm-password");
-    const message = document.getElementById("register-message");
+  const SUPABASE_URL = "https://otlfqoonsuvwhmyfhfff.supabase.co/rest/v1/";
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
 
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
+  const { createClient } = window.supabase;
+  const supabaseClient = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
-      message.classList.remove("hidden", "error");
-      message.textContent = "";
+  const form = document.getElementById("register-form");
+  const password = document.getElementById("password");
+  const confirmation = document.getElementById("confirm-password");
+  const message = document.getElementById("register-message");
+  const submitButton = form.querySelector('button[type="submit"]');
 
-      if (password.value !== confirmation.value) {
-        message.classList.add("error");
-        message.textContent = "Your passwords do not match.";
-        confirmation.focus();
+  function showMessage(text, type) {
+    message.className = "register-message " + (type || "");
+    message.textContent = text;
+    message.style.display = "block";
+  }
+
+  form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    if (
+      SUPABASE_URL.includes("PASTE_") ||
+      SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
+    ) {
+      showMessage("Supabase settings are not configured yet.", "error");
+      return;
+    }
+
+    if (password.value !== confirmation.value) {
+      showMessage("Your passwords do not match.", "error");
+      confirmation.focus();
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Creating account…";
+
+    try {
+      const email = document.getElementById("email").value.trim();
+      const firstName =
+        document.getElementById("first-name").value.trim();
+      const lastName =
+        document.getElementById("last-name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      const emailRedirectTo = new URL(
+        "login.html",
+        window.location.href
+      ).href;
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password.value,
+        options: {
+          emailRedirectTo: emailRedirectTo,
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.session) {
+        showMessage(
+          "Your account was created successfully. Opening sign-in…",
+          "success"
+        );
+
+        window.location.assign("dashboard.html");
         return;
       }
 
-      message.classList.add("error");
-      message.textContent =
-        "Registration needs to be connected to the authentication service before an account can be created.";
-    });
-  </script>
+      showMessage(
+        "Your registration request was submitted. If confirmation is required, check your email and follow the confirmation link before signing in.",
+        "success"
+      );
 
-</body>
-</html>
+      form.reset();
+    } catch (error) {
+      showMessage(
+        error.message || "Registration failed. Please try again.",
+        "error"
+      );
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = "Create Account →";
+    }
+  });
+</script>
