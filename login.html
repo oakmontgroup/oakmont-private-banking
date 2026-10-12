@@ -383,16 +383,15 @@
     <p><a href="index.html">Back to home</a></p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://otlfqoonsuvwhmyfhfff.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
+(() => {
+  const SUPABASE_URL =
+    "https://otlfqoonsuvwhmyfhfff.supabase.co";
 
-  const { createClient } = window.supabase;
-  const supabaseClient = createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
 
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
@@ -400,76 +399,111 @@
   const passwordToggle = document.getElementById("password-toggle");
   const loginForm = document.getElementById("login-form");
   const loginMessage = document.getElementById("login-message");
-  const submitButton = loginForm.querySelector('button[type="submit"]');
 
-  function showMessage(text, type) {
-    loginMessage.textContent = text;
-    loginMessage.className = "login-message " + (type || "");
-  }
-
-  passwordToggle.addEventListener("click", function () {
-    const hidden = passwordInput.type === "password";
-    passwordInput.type = hidden ? "text" : "password";
-    passwordToggle.textContent = hidden ? "Hide" : "Show";
-    passwordToggle.setAttribute("aria-pressed", String(hidden));
-  });
-
-  try {
-    const savedEmail = localStorage.getItem("oakmont_saved_email");
-    if (savedEmail) {
-      emailInput.value = savedEmail;
-      rememberEmail.checked = true;
-    }
-  } catch (_) {}
-
-  loginForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    if (!loginForm.reportValidity()) return;
-
-    if (
-      SUPABASE_URL.includes("PASTE_") ||
-      SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
-    ) {
-      showMessage("Please configure your Supabase project settings first.", "error");
+  function showMessage(message, type = "error") {
+    if (!loginMessage) {
+      alert(message);
       return;
     }
 
-    submitButton.disabled = true;
-    submitButton.textContent = "Signing in…";
+    loginMessage.textContent = message;
+    loginMessage.className = "login-message " + type;
+  }
+
+  try {
+    if (!window.supabase?.createClient) {
+      throw new Error("The Supabase library did not load. Refresh and try again.");
+    }
+
+    if (
+      !emailInput ||
+      !passwordInput ||
+      !rememberEmail ||
+      !passwordToggle ||
+      !loginForm ||
+      !loginMessage
+    ) {
+      throw new Error("A login form element is missing. Please check the HTML IDs.");
+    }
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const submitButton =
+      loginForm.querySelector('button[type="submit"]');
+
+    if (!submitButton) {
+      throw new Error("The Sign In button was not found.");
+    }
+
+    passwordToggle.addEventListener("click", () => {
+      const hidden = passwordInput.type === "password";
+      passwordInput.type = hidden ? "text" : "password";
+      passwordToggle.textContent = hidden ? "Hide" : "Show";
+      passwordToggle.setAttribute("aria-pressed", String(hidden));
+    });
 
     try {
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email: emailInput.value.trim(),
-          password: passwordInput.value
-        });
+      const savedEmail = localStorage.getItem("oakmont_saved_email");
+      if (savedEmail) {
+        emailInput.value = savedEmail;
+        rememberEmail.checked = true;
+      }
+    } catch (_) {}
 
-      if (error) throw error;
-      if (!data.session) {
-        throw new Error("No active session was created. Please try again.");
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!loginForm.reportValidity()) return;
+
+      if (SUPABASE_PUBLISHABLE_KEY === "PASTE_YOUR_FULL_PUBLISHABLE_KEY_HERE") {
+        showMessage("Please add your full Supabase publishable key.");
+        return;
       }
 
-      try {
-        if (rememberEmail.checked) {
-          localStorage.setItem(
-            "oakmont_saved_email",
-            emailInput.value.trim()
-          );
-        } else {
-          localStorage.removeItem("oakmont_saved_email");
-        }
-      } catch (_) {}
+      submitButton.disabled = true;
+      submitButton.textContent = "Signing in…";
 
-      showMessage("Sign-in successful. Opening your account…", "success");
-      window.location.assign("dashboard.html");
-    } catch (error) {
-      showMessage(
-        error.message || "Unable to sign in. Please try again.",
-        "error"
-      );
-      submitButton.disabled = false;
-      submitButton.innerHTML = 'Sign In <span aria-hidden="true">→</span>';
-    }
-  });
+      try {
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: emailInput.value.trim(),
+            password: passwordInput.value
+          });
+
+        if (error) throw error;
+
+        if (!data.session) {
+          throw new Error("No session was created. Please try again.");
+        }
+
+        try {
+          if (rememberEmail.checked) {
+            localStorage.setItem(
+              "oakmont_saved_email",
+              emailInput.value.trim()
+            );
+          } else {
+            localStorage.removeItem("oakmont_saved_email");
+          }
+        } catch (_) {}
+
+        showMessage("Sign-in successful. Opening your account…", "success");
+
+        window.location.href = "./dashboard.html";
+      } catch (error) {
+        showMessage(
+          error.message || "Unable to sign in. Please try again."
+        );
+        submitButton.disabled = false;
+        submitButton.textContent = "Sign In →";
+      }
+    });
+  } catch (error) {
+    console.error("Oakmont login setup error:", error);
+    showMessage(error.message || "Unable to initialize the login page.");
+  }
+})();
 </script>
