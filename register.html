@@ -272,12 +272,13 @@
   document.getElementById("year").textContent =
     new Date().getFullYear();
 
-  const SUPABASE_URL = "https://oakmontgroup.github.io/oakmont-private-banking/";
-  const SUPABASE_PUBLISHABLE_KEY =
-    "s";
+  const SUPABASE_URL =
+    "https://otlfqoonsuvwhmyfhfff.supabase.co";
 
-  const { createClient } = window.supabase;
-  const supabaseClient = createClient(
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
+
+  const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
@@ -286,7 +287,8 @@
   const password = document.getElementById("password");
   const confirmation = document.getElementById("confirm-password");
   const message = document.getElementById("register-message");
-  const submitButton = form.querySelector('button[type="submit"]');
+  const submitButton =
+    form.querySelector('button[type="submit"]');
 
   function showMessage(text, type) {
     message.className = "register-message " + (type || "");
@@ -299,14 +301,6 @@
 
     if (!form.reportValidity()) return;
 
-    if (
-      SUPABASE_URL.includes("PASTE_") ||
-      SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
-    ) {
-      showMessage("Supabase settings are not configured yet.", "error");
-      return;
-    }
-
     if (password.value !== confirmation.value) {
       showMessage("Your passwords do not match.", "error");
       confirmation.focus();
@@ -317,34 +311,38 @@
     submitButton.textContent = "Creating account…";
 
     try {
-      const email = document.getElementById("email").value.trim();
+      const email =
+        document.getElementById("email").value.trim();
+
       const firstName =
         document.getElementById("first-name").value.trim();
+
       const lastName =
         document.getElementById("last-name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
 
-      const emailRedirectTo =
-  "https://oakmontgroup.github.io/oakmont-private-banking/login.html";
+      const phone =
+        document.getElementById("phone").value.trim();
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password.value,
-        options: {
-          emailRedirectTo: emailRedirectTo,
-          data: {
-            first_name: firstName,
-            last_name: lastName,
-            phone: phone
+      const { data, error } =
+        await supabaseClient.auth.signUp({
+          email: email,
+          password: password.value,
+          options: {
+            emailRedirectTo:
+              "https://oakmontgroup.github.io/oakmont-private-banking/login.html",
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              phone: phone
+            }
           }
-        }
-      });
+        });
 
       if (error) throw error;
 
       if (data.session) {
         showMessage(
-          "Your account was created successfully. Opening sign-in…",
+          "Account created successfully. Opening your account…",
           "success"
         );
 
@@ -352,11 +350,27 @@
         return;
       }
 
+      showMessage(
+        "Registration submitted. Check your email for a confirmation link if confirmation is required.",
+        "success"
+      );
+
+      form.reset();
+
+    } catch (error) {
       console.error("Oakmont registration error:", error);
 
-showMessage(
-  "Registration failed: " +
-  (error.message || String(error)),
-  "error"
-);
+      showMessage(
+        "Registration failed: " +
+          (error.message || "Please try again."),
+        "error"
+      );
+
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = "Create Account →";
+    }
+  });
 </script>
+</body>
+</html>
