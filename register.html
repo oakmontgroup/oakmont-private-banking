@@ -1,474 +1,299 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#001b15">
-  <title>Create Account | Oakmont Private Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#001a14">
+  <title>Create Your Account | Oakmont Private Banking</title>
+  <link rel="stylesheet" href="style.css">
 
   <style>
-    :root {
-      --bg: #001a14;
-      --panel: #05251e;
-      --gold: #d8b779;
-      --gold-light: #f0d49a;
-      --text: #f3f0e8;
-      --muted: #a9b8b0;
-      --border: rgba(216, 183, 121, .34);
-      --green: #82c9a2;
-      --error: #ffb5a9;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
+    body.register-page {
       min-height: 100vh;
-      padding: 24px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(ellipse at top, #103b2e 0%, transparent 55%),
-        var(--bg);
-      color: var(--text);
+        radial-gradient(ellipse at top, #0b3025, transparent 52%),
+        #001a14;
     }
 
     .register-card {
-      width: 100%;
-      max-width: 490px;
-      padding: 34px;
-      background: rgba(5, 37, 30, .97);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+      width: min(100% - 28px, 820px);
+      margin: 14px auto 38px;
+      padding: clamp(25px, 5vw, 52px);
+      border: 2px solid rgba(216,183,121,.34);
+      border-radius: 28px;
+      background: rgba(5,37,29,.94);
+      box-shadow: 0 25px 70px rgba(0,0,0,.18);
     }
 
-    .brand {
-      margin-bottom: 30px;
+    .register-brand {
+      margin: 0 auto 55px;
       text-align: center;
     }
 
-    .brand-icon {
-      color: var(--gold);
-      font-size: 32px;
-    }
-
-    .brand-name {
-      margin: 8px 0 4px;
-      color: var(--gold-light);
-      font-family: Georgia, serif;
-      font-size: 29px;
-      letter-spacing: 4px;
-    }
-
-    .brand-subtitle {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 3px;
-    }
-
-    h1 {
-      margin: 0 0 10px;
-      text-align: center;
-      font-family: Georgia, serif;
-      font-size: 27px;
-      font-weight: normal;
-    }
-
-    .intro {
-      margin: 0 0 25px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .field {
-      margin-bottom: 17px;
-    }
-
-    label {
+    .register-symbol {
       display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      color: var(--text);
+      margin-bottom: 18px;
+      color: var(--gold);
+      font-size: 3rem;
+      line-height: 1;
     }
 
-    input {
-      width: 100%;
-      min-height: 47px;
-      padding: 12px 13px;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      outline: none;
-      background: #001a14;
-      color: var(--text);
-      font-size: 15px;
+    .register-brand .brand-name {
+      font-size: clamp(2rem, 7vw, 3rem);
+      letter-spacing: .15em;
     }
 
-    input:focus {
+    .register-brand .brand-subtitle {
+      margin-top: 8px;
+      font-size: .85rem;
+      letter-spacing: .27em;
+    }
+
+    .register-heading {
+      margin: 0 0 20px;
+      color: #f3f0e8;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .register-description {
+      margin: 0 0 48px;
+      color: #a9b8b0;
+      font-size: clamp(1rem, 3vw, 1.45rem);
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .register-form .form-group {
+      margin-bottom: 29px;
+    }
+
+    .register-form label {
+      margin-bottom: 12px;
+      color: #f3f0e8;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+    }
+
+    .register-form input {
+      min-height: 72px;
+      padding: 18px 22px;
+      border: 2px solid rgba(216,183,121,.34);
+      border-radius: 15px;
+      background: #001c15;
+      color: #f3f0e8;
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      font-weight: 600;
+    }
+
+    .register-form input::placeholder {
+      color: #81968c;
+      opacity: 1;
+    }
+
+    .register-form input:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 2px rgba(216, 183, 121, .12);
+      box-shadow: 0 0 0 4px rgba(216,183,121,.12);
     }
 
-    input::placeholder {
-      color: #71877d;
+    .register-help {
+      margin: 12px 0 0;
+      color: #a9b8b0;
+      font-size: .95rem;
     }
 
-    .hint {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
+    .register-submit {
+      width: 100%;
+      min-height: 76px;
+      margin-top: 12px;
+      border: 1px solid var(--gold-light);
+      border-radius: 15px;
+      background: #f0d49a;
+      color: #10251d;
+      font-size: 1.25rem;
+      font-weight: 800;
     }
 
-    .message {
-      display: none;
-      margin: 0 0 18px;
-      padding: 12px;
+    .register-submit:hover {
+      background: #ffe3ac;
+      color: #10251d;
+    }
+
+    .register-footer {
+      margin: 30px 0 0;
+      color: #a9b8b0;
+      text-align: center;
+    }
+
+    .register-footer a {
+      color: var(--gold-light);
+    }
+
+    .register-message {
+      margin-bottom: 25px;
+      padding: 15px;
       border: 1px solid var(--border);
-      border-radius: 7px;
-      font-size: 13px;
-      line-height: 1.55;
+      border-radius: 12px;
       overflow-wrap: anywhere;
     }
 
-    .message.visible {
-      display: block;
+    .register-message.error {
+      color: #ffb4aa;
+      border-color: rgba(241,165,165,.6);
     }
 
-    .message.success {
-      color: var(--green);
-      border-color: rgba(130, 201, 162, .45);
-    }
-
-    .message.error {
-      color: var(--error);
-      border-color: rgba(255, 181, 169, .45);
-    }
-
-    .message.info {
-      color: var(--gold-light);
-    }
-
-    .submit-button {
-      width: 100%;
-      min-height: 49px;
-      margin-top: 5px;
-      border: 0;
-      border-radius: 7px;
-      background: var(--gold);
-      color: #17231b;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .submit-button:hover {
-      background: var(--gold-light);
-    }
-
-    .submit-button:disabled {
-      cursor: wait;
-      opacity: .7;
-    }
-
-    .footer {
-      margin-top: 23px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.8;
-      text-align: center;
-    }
-
-    a {
-      color: var(--gold-light);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .demo-note {
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    @media (max-width: 480px) {
+    @media(max-width:520px) {
       .register-card {
-        padding: 25px 20px;
+        padding: 24px 20px;
+        border-radius: 23px;
       }
 
-      .form-row {
-        grid-template-columns: 1fr;
-        gap: 0;
+      .register-brand {
+        margin-bottom: 42px;
       }
 
-      .brand-name {
-        font-size: 25px;
+      .register-description {
+        margin-bottom: 35px;
+      }
+
+      .register-form .form-group {
+        margin-bottom: 24px;
+      }
+
+      .register-form input {
+        min-height: 64px;
+        padding: 15px;
+      }
+
+      .register-submit {
+        min-height: 68px;
       }
     }
   </style>
 </head>
 
-<body>
+<body class="register-page">
+
   <main class="register-card">
-    <header class="brand">
-      <div class="brand-icon" aria-hidden="true">♣</div>
-      <div class="brand-name">OAKMONT</div>
-      <div class="brand-subtitle">PRIVATE BANKING</div>
+    <header class="register-brand">
+      <a href="index.html" aria-label="Oakmont home">
+        <span class="register-symbol" aria-hidden="true">♣</span>
+        <span class="brand-name">OAKMONT</span>
+        <span class="brand-subtitle">PRIVATE BANKING</span>
+      </a>
     </header>
 
-    <h1>Create Your Account</h1>
-    <p class="intro">
+    <h1 class="register-heading">Create Your Account</h1>
+
+    <p class="register-description">
       Complete the form below to register for Oakmont Online Banking.
     </p>
 
-    <div
-      id="form-message"
-      class="message"
-      role="status"
-      aria-live="polite"
-    ></div>
+    <div id="register-message"
+         class="register-message hidden"
+         role="status"
+         aria-live="polite"></div>
 
-    <form id="register-form">
-      <div class="form-row">
-        <div class="field">
-          <label for="first-name">First name *</label>
-          <input
-            id="first-name"
-            name="first_name"
-            type="text"
-            autocomplete="given-name"
-            placeholder="First name"
-            required
-          >
-        </div>
-
-        <div class="field">
-          <label for="last-name">Last name *</label>
-          <input
-            id="last-name"
-            name="last_name"
-            type="text"
-            autocomplete="family-name"
-            placeholder="Last name"
-            required
-          >
-        </div>
+    <form id="register-form" class="register-form">
+      <div class="form-group">
+        <label for="first-name">First name *</label>
+        <input id="first-name" name="firstName"
+               type="text" autocomplete="given-name"
+               maxlength="80" required
+               placeholder="First name">
       </div>
 
-      <div class="field">
+      <div class="form-group">
+        <label for="last-name">Last name *</label>
+        <input id="last-name" name="lastName"
+               type="text" autocomplete="family-name"
+               maxlength="80" required
+               placeholder="Last name">
+      </div>
+
+      <div class="form-group">
         <label for="phone">Phone number (optional)</label>
-        <input
-          id="phone"
-          name="phone"
-          type="tel"
-          autocomplete="tel"
-          placeholder="Enter phone number"
-        >
+        <input id="phone" name="phone"
+               type="tel" autocomplete="tel"
+               maxlength="30"
+               placeholder="Enter phone number">
       </div>
 
-      <div class="field">
+      <div class="form-group">
         <label for="email">Email address *</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          autocomplete="email"
-          placeholder="you@example.com"
-          required
-        >
+        <input id="email" name="email"
+               type="email" autocomplete="email"
+               maxlength="254" required
+               placeholder="you@example.com">
       </div>
 
-      <div class="field">
+      <div class="form-group">
         <label for="password">Password *</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autocomplete="new-password"
-          minlength="6"
-          placeholder="At least 6 characters"
-          required
-        >
-        <div class="hint">
+        <input id="password" name="password"
+               type="password" autocomplete="new-password"
+               minlength="12" required
+               placeholder="At least 12 characters">
+        <p class="register-help">
           Use a strong, unique password that you do not use elsewhere.
-        </div>
+        </p>
       </div>
 
-      <div class="field">
+      <div class="form-group">
         <label for="confirm-password">Confirm password *</label>
-        <input
-          id="confirm-password"
-          name="confirm_password"
-          type="password"
-          autocomplete="new-password"
-          minlength="6"
-          placeholder="Enter your password again"
-          required
-        >
+        <input id="confirm-password" name="confirmPassword"
+               type="password" autocomplete="new-password"
+               minlength="12" required
+               placeholder="Enter your password again">
       </div>
 
-      <button id="submit-button" class="submit-button" type="submit">
-        Create Account
+      <button class="register-submit" type="submit">
+        Create Account →
       </button>
     </form>
 
-    <div class="footer">
+    <p class="register-footer">
       Already registered?
       <a href="login.html">Sign in</a>
-      <br>
-      <a href="index.html">Return to Home</a>
-    </div>
-
-    <div class="demo-note">
-      Oakmont Digital Banking· 
-      Credit cards are issued by JPMorgan Chase Bank, N.A.
-      Member FDIC 
-      © 2026 OPB & Co.
-    </div>
+    </p>
+    <p class="register-footer">
+      <a href="index.html">Back to home</a>
+    </p>
   </main>
 
-  <!-- Load the Supabase library before your project configuration. -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> Oakmont Private Banking</p>
+    </div>
+  </footer>
 
   <script>
-  const form = document.getElementById("register-form");
-  const submitButton = document.getElementById("submit-button");
-  const messageElement = document.getElementById("form-message");
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
 
-  function showMessage(message, type = "error") {
-   messageElement.textContent = message;
-   messageElement.className = "message visible " + type;
-  }
+    const form = document.getElementById("register-form");
+    const password = document.getElementById("password");
+    const confirmation = document.getElementById("confirm-password");
+    const message = document.getElementById("register-message");
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
 
-  const firstName = document.getElementById("first-name").value.trim();
-  const lastName = document.getElementById("last-name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirm-password");
+      message.classList.remove("hidden", "error");
+      message.textContent = "";
 
-  if (!firstName || !lastName || !email || !password) {
-    showMessage("Please complete all required fields.");
-    return;
-  }
-
-  if (confirmPassword && password !== confirmPassword.value) {
-    showMessage("The passwords do not match.");
-    return;
-  }
-
-  if (password.length < 6) {
-    showMessage("Your password must contain at least 6 characters.");
-    return;
-  }
-
-  const client =
-    window.oakmontSupabase ||
-    (typeof oakmontSupabase !== "undefined" ? oakmontSupabase : null);
-
-  if (!client || !client.auth) {
-    showMessage(
-      "Authentication service could not load. Check supabase-client.js."
-    );
-    console.error("Supabase client is unavailable.");
-    return;
-  }
-
-  submitButton.disabled = true;
-  submitButton.textContent = "Creating Account…";
-  showMessage("Connecting to registration service…", "info");
-
-  let timeoutId;
-
-  try {
-    const signupPromise = client.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-          phone: phone || null
-        },
-        emailRedirectTo:
-          "https://oakmontgroup.github.io/oakmont-private-banking/dashboard.html"
+      if (password.value !== confirmation.value) {
+        message.classList.add("error");
+        message.textContent = "Your passwords do not match.";
+        confirmation.focus();
+        return;
       }
+
+      message.classList.add("error");
+      message.textContent =
+        "Registration needs to be connected to the authentication service before an account can be created.";
     });
-
-    const timeoutPromise = new Promise((_, reject) => {
-      timeoutId = setTimeout(() => {
-        reject(
-          new Error(
-            "Registration timed out after 15 seconds. Check your internet connection and Supabase configuration."
-          )
-        );
-      }, 15000);
-    });
-
-    const { data, error } = await Promise.race([
-      signupPromise,
-      timeoutPromise
-    ]);
-
-    if (error) {
-      console.error("Supabase signup error:", error);
-      showMessage("Registration failed: " + error.message);
-      return;
-    }
-
-    if (data?.user && data?.session) {
-      showMessage("Account created. Redirecting…", "success");
-      window.location.replace("dashboard.html");
-      return;
-    }
-
-    if (data?.user) {
-      showMessage(
-        "Registration received. Check your email for a confirmation link, then sign in.",
-        "success"
-      );
-      form.reset();
-      return;
-    }
-
-    showMessage("No user was returned. Check the browser console.");
-
-  } catch (error) {
-    console.error("Registration diagnostic:", error);
-    showMessage(
-      error?.message || "Registration failed. Please try again."
-    );
-  } finally {
-    clearTimeout(timeoutId);
-    submitButton.disabled = false;
-    submitButton.textContent = "Create Account";
-  }
-});
   </script>
+
 </body>
 </html>
