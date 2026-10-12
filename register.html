@@ -274,7 +274,7 @@
 
   const SUPABASE_URL = "https://oakmontgroup.github.io/oakmont-private-banking/";
   const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
+    "s";
 
   const { createClient } = window.supabase;
   const supabaseClient = createClient(
@@ -324,10 +324,8 @@
         document.getElementById("last-name").value.trim();
       const phone = document.getElementById("phone").value.trim();
 
-      const emailRedirectTo = new URL(
-        "login.html",
-        window.location.href
-      ).href;
+      const emailRedirectTo =
+  "https://oakmontgroup.github.io/oakmont-private-banking/login.html";
 
       const { data, error } = await supabaseClient.auth.signUp({
         email: email,
