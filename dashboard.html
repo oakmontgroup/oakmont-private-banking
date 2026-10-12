@@ -1,22 +1,30 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#001a14">
+  <meta name="description" content="Oakmont Private Banking account dashboard">
   <title>Oakmont Private Banking | Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --bg: #001a14;
       --panel: #05251e;
+      --panel-light: #0a3027;
       --gold: #d8b779;
       --gold-light: #f0d49a;
       --text: #f3f0e8;
       --muted: #a9b8b0;
-      --border: rgba(216,183,121,.34);
+      --border: rgba(216,183,121,.28);
       --green: #82c9a2;
+      --danger: #ffaaa3;
+      --shadow: 0 18px 45px rgba(0,0,0,.18);
+      --radius: 18px;
     }
 
     * {
@@ -30,20 +38,25 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background:
+        radial-gradient(ellipse at 90% 0%, rgba(16,78,58,.22), transparent 40%),
+        var(--bg);
       color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "DM Sans", Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    button, a {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     a {
       color: inherit;
       text-decoration: none;
-    }
-
-    button {
-      font: inherit;
-      cursor: pointer;
-      color: inherit;
     }
 
     button:focus-visible,
@@ -53,699 +66,1616 @@
     }
 
     .topbar {
-      min-height: 65px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 28px;
-      padding: 15px 4%;
-      border-bottom: 1px solid var(--border);
-      background: #00150f;
-    }
-
-    .topbar a:hover,
-    .topbar a.active {
-      color: var(--gold-light);
-    }
-
-    .secure-link {
-      padding-left: 22px;
-      border-left: 1px solid var(--border);
-    }
-
-    .brandbar {
-      min-height: 98px;
+      min-height: 43px;
+      padding: 0 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 18px 4%;
       border-bottom: 1px solid var(--border);
-      background: linear-gradient(90deg, #001b14, #04271e);
+      background: rgba(0,15,11,.8);
+    }
+
+    .topbar-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .topbar-links a:hover,
+    .topbar-links a.active {
+      color: var(--gold-light);
+    }
+
+    .secure-label {
+      color: var(--green);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+
+    .brandbar {
+      min-height: 82px;
+      padding: 14px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(3,31,24,.76);
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
+      min-width: 0;
     }
 
-    .brand-tree {
-      color: var(--gold);
-      font-size: 42px;
-      line-height: 1;
-    }
-
-    .brand-name {
-      display: block;
-      color: var(--gold-light);
-      font: 26px Georgia, "Times New Roman", serif;
-      letter-spacing: 2px;
-    }
-
-    .brand-subtitle {
-      display: block;
-      margin-top: 4px;
-      text-align: center;
-      font-size: 9px;
-      letter-spacing: 3px;
-    }
-
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
+    .brand-mark {
       display: grid;
       place-items: center;
-      flex-shrink: 0;
+      width: 43px;
+      height: 43px;
       border: 1px solid var(--gold);
       border-radius: 50%;
       color: var(--gold-light);
-      background: #10372a;
-      font-size: 19px;
+      font-family: Georgia, serif;
+      font-size: 25px;
     }
 
-    .profile-name {
-      font-size: 12px;
-      letter-spacing: .6px;
-      font-weight: bold;
+    .brand-name {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 23px;
+      letter-spacing: .12em;
+    }
+
+    .brand-subtitle {
+      margin-top: 4px;
+      color: var(--gold);
+      font-size: 9px;
+      letter-spacing: .29em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .secure-status {
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    .profile-wrap {
+      position: relative;
     }
 
     .profile-button {
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 11px;
       background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #d8b779, #8b6b35);
+      color: #092219;
+      font-weight: 700;
+    }
+
+    .profile-name {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .profile-caption {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .profile-menu {
+      position: absolute;
+      z-index: 10;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 190px;
+      padding: 7px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .profile-menu[hidden] {
+      display: none;
+    }
+
+    .profile-menu button {
+      display: block;
+      width: 100%;
+      padding: 11px;
+      border: 0;
+      border-radius: 8px;
+      text-align: left;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .profile-menu button:hover {
+      background: var(--panel-light);
     }
 
     .layout {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      padding: 28px 5%;
       display: grid;
       grid-template-columns: 225px minmax(0, 1fr);
-      min-height: calc(100vh - 163px);
+      gap: 27px;
     }
 
     .sidebar {
-      padding: 24px 12px;
-      border-right: 1px solid var(--border);
-      background: #001c15;
+      align-self: start;
+      padding: 18px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(5,37,30,.76);
     }
 
-    .nav-link {
+    .side-heading {
+      padding: 0 12px;
+      margin: 6px 0 14px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .side-link {
       display: flex;
       align-items: center;
-      gap: 13px;
-      padding: 14px;
-      margin-bottom: 5px;
-      border-radius: 8px;
-      color: #d7ded8;
-      font-size: 14px;
+      gap: 12px;
+      width: 100%;
+      min-height: 44px;
+      margin: 3px 0;
+      padding: 0 12px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      font-size: 12px;
     }
 
-    .nav-link:hover,
-    .nav-link.active {
-      background: #10392d;
-      color: var(--gold-light);
-    }
-
-    .nav-link.active {
-      box-shadow: inset 3px 0 var(--gold);
-    }
-
-    .nav-icon {
-      width: 23px;
+    .side-link .nav-icon {
+      width: 19px;
       text-align: center;
-      font-size: 20px;
+      font-size: 16px;
+    }
+
+    .side-link:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.025);
+    }
+
+    .side-link.active {
+      color: var(--gold-light);
+      border-color: var(--border);
+      background: linear-gradient(90deg, rgba(216,183,121,.12), transparent);
+    }
+
+    .side-divider {
+      height: 1px;
+      margin: 17px 7px;
+      background: var(--border);
+    }
+
+    .side-link.signout {
+      color: #e9b0a7;
     }
 
     .main {
-      width: 100%;
-      max-width: 1120px;
-      padding: 32px;
-      margin: 0 auto;
       min-width: 0;
     }
 
     .page-message {
-      display: none;
-      padding: 14px 16px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
+      padding: 13px 15px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--gold-light);
-      background: #08271e;
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--muted);
       line-height: 1.6;
     }
 
-    .welcome {
+    .page-message[hidden] {
+      display: none;
+    }
+
+    .page-message.error {
+      border-color: rgba(255,170,163,.4);
+      color: var(--danger);
+    }
+
+    .page-message.success {
+      color: var(--green);
+    }
+
+    .welcome-row {
       display: flex;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: space-between;
-      gap: 15px;
+      gap: 18px;
       margin-bottom: 24px;
     }
 
-    h1,
-    h2 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-weight: normal;
+    .eyebrow {
+      margin-bottom: 10px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 500;
     }
 
     h1 {
-      font-size: 29px;
-      margin: 0 0 6px;
+      margin-bottom: 8px;
+      font-size: clamp(25px, 3vw, 35px);
     }
 
-    .customer-name {
-      display: block;
+    h1 span {
       color: var(--gold-light);
-      font-size: 32px;
-      margin-top: 3px;
-      overflow-wrap: anywhere;
     }
 
-    .welcome p {
-      margin: 9px 0 0;
+    .welcome-copy {
+      margin-bottom: 0;
       color: var(--muted);
-      font-size: 15px;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
-    .current-date {
+    .date-label {
       color: var(--muted);
-      font-size: 13px;
+      font-size: 11px;
+      text-align: right;
       white-space: nowrap;
-      margin-top: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(235px, 1fr);
+      gap: 18px;
     }
 
     .card {
+      min-width: 0;
+      padding: 23px;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      background: linear-gradient(120deg, #09271f, #031d17);
-      margin-bottom: 20px;
-      overflow: hidden;
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(8,46,36,.96), rgba(3,29,22,.96));
+      box-shadow: var(--shadow);
     }
 
     .balance-card {
       position: relative;
-      padding: 25px;
-      background:
-        radial-gradient(ellipse at 90% 10%, #bfa15c24, transparent 42%),
-        linear-gradient(120deg, #09271f, #06382a);
+      overflow: hidden;
+      min-height: 240px;
     }
 
     .balance-card::after {
-      content: "♣";
+      content: "";
       position: absolute;
-      right: 16px;
-      bottom: -66px;
-      color: #d8b7790d;
-      font-size: 190px;
+      width: 230px;
+      height: 230px;
+      right: -85px;
+      bottom: -130px;
+      border: 1px solid rgba(216,183,121,.17);
+      border-radius: 50%;
+      box-shadow: 0 0 0 25px rgba(216,183,121,.025),
+                  0 0 0 50px rgba(216,183,121,.025);
       pointer-events: none;
     }
 
-    .balance-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
-      font-size: 15px;
-    }
-
-    .balance {
-      margin: 14px 0 23px;
-      color: var(--gold-light);
-      font: clamp(30px, 4vw, 43px) Georgia, "Times New Roman", serif;
-      overflow-wrap: anywhere;
-      position: relative;
-      z-index: 1;
-    }
-
-    .icon-button {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 12px;
-      background: #001b1466;
-      font-size: 12px;
-    }
-
-    .balance-bottom {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .owner-label {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .owner-name {
-      margin-top: 4px;
-      font-size: 14px;
-      font-weight: bold;
-      letter-spacing: .5px;
-    }
-
-    .action-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .action {
-      min-height: 96px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 7px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: var(--panel);
-      text-align: center;
-      transition: background .2s, border-color .2s;
-    }
-
-    .action:hover {
-      background: #154638;
-      border-color: var(--gold);
-    }
-
-    .action-icon {
-      color: var(--gold-light);
-      font-size: 24px;
-    }
-
-    .action-label {
-      font-size: 13px;
-    }
-
-    .transactions {
-      padding: 0 18px;
-    }
-
+    .card-top,
     .section-heading {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 17px 0;
-      border-bottom: 1px solid var(--border);
     }
 
-    .section-heading h2 {
-      margin: 0;
+    .card-label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .06em;
+    }
+
+    .outline-button,
+    .gold-button,
+    .action-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 39px;
+      padding: 9px 13px;
+      border-radius: 9px;
+      font-size: 11px;
+      transition: background .2s, transform .2s;
+    }
+
+    .outline-button {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--gold-light);
+    }
+
+    .outline-button:hover {
+      background: rgba(216,183,121,.09);
+    }
+
+    .balance-amount {
+      position: relative;
+      z-index: 1;
+      margin: 25px 0 9px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(30px, 3.7vw, 44px);
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+
+    .balance-currency {
+      color: var(--gold-light);
+      font-size: 11px;
+      letter-spacing: .12em;
+    }
+
+    .account-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 25px;
+      padding-top: 17px;
+      border-top: 1px solid var(--border);
+    }
+
+    .account-bottom .label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .account-bottom .value {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .account-number {
+      color: var(--muted);
+      font-size: 11px;
+      text-align: right;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 9px;
+      border: 1px solid rgba(130,201,162,.23);
+      border-radius: 30px;
+      color: var(--green);
+      font-size: 10px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .quick-card h2,
+    .transactions-card h2,
+    .details-card h2,
+    .services-card h2 {
+      margin-bottom: 6px;
       font-size: 20px;
     }
 
-    .view-all {
-      border: 0;
-      background: transparent;
-      color: var(--gold-light);
-      font-size: 13px;
-    }
-
-    .empty-transactions {
-      padding: 26px 8px;
+    .section-subtitle {
+      margin-bottom: 20px;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.7;
-      text-align: center;
+      font-size: 11px;
+      line-height: 1.6;
     }
 
-    .promo {
-      min-height: 195px;
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .action-button {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      min-height: 88px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.015);
+      color: var(--text);
+      text-align: left;
+    }
+
+    .action-button:hover {
+      border-color: var(--gold);
+      background: rgba(216,183,121,.07);
+      transform: translateY(-1px);
+    }
+
+    .action-icon {
+      color: var(--gold-light);
+      font-size: 20px;
+    }
+
+    .action-name {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .action-description {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .transactions-card {
+      grid-column: 1 / -1;
+    }
+
+    .section-heading {
+      margin-bottom: 16px;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 0;
+    }
+
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .transaction-row {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(216,183,121,.13);
+    }
+
+    .transaction-row:last-child {
+      border-bottom: 0;
+    }
+
+    .transaction-icon {
+      display: grid;
+      place-items: center;
+      width: 39px;
+      height: 39px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--gold-light);
+      background: rgba(216,183,121,.04);
+      font-size: 16px;
+    }
+
+    .transaction-name {
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .transaction-date {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .transaction-amount {
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .transaction-amount.credit {
+      color: var(--green);
+    }
+
+    .transaction-amount.debit {
+      color: var(--text);
+    }
+
+    .transaction-status {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 9px;
+      text-align: right;
+    }
+
+    .empty-state {
+      padding: 30px 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .details-card,
+    .services-card {
+      grid-column: 1 / -1;
+    }
+
+    .detail-row {
       display: flex;
       align-items: center;
-      padding: 25px;
-      background:
-        linear-gradient(90deg, #00180ff2, #00180fa8 68%, #00180f55),
-        url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80")
-        center/cover;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(216,183,121,.13);
     }
 
-    .promo-content {
-      max-width: 390px;
+    .detail-row:last-child {
+      border-bottom: 0;
     }
 
-    .promo h2 {
-      margin: 0 0 12px;
-      font-size: 25px;
-      line-height: 1.25;
+    .detail-label {
+      color: var(--muted);
+      font-size: 11px;
     }
 
-    .promo p {
-      color: #d3ded5;
-      font-size: 13px;
-      line-height: 1.7;
-      margin: 0 0 17px;
-    }
-
-    .gold-button {
-      display: inline-block;
-      padding: 11px 20px;
-      border: 0;
-      border-radius: 7px;
-      background: linear-gradient(110deg, #f0d49a, #d2ad66);
-      color: #10271d;
-      font-weight: bold;
-    }
-
-    .gold-button:hover {
-      filter: brightness(1.08);
-    }
-
-    .security-note {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 3px 5px 20px;
-      color: #d4ded5;
+    .detail-value {
       font-size: 12px;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .service-tile {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,.015);
+    }
+
+    .service-tile strong {
+      display: block;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+
+    .service-tile p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 11px;
       line-height: 1.7;
     }
 
-    .security-icon {
-      color: var(--gold-light);
-      font-size: 24px;
+    .hidden {
+      display: none !important;
     }
 
-    .security-note p {
-      margin: 0;
+    .loader {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 90px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold-light);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .footer {
-      padding: 15px 0;
-      color: #8fa69a;
-      text-align: center;
-      font-size: 11px;
+      margin-top: 25px;
+      padding: 20px 0 5px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.8;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    @media (min-width: 1500px) {
+      .layout {
+        padding-top: 36px;
+      }
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 190px minmax(0, 1fr);
+        gap: 17px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .transactions-card,
+      .details-card,
+      .services-card {
+        grid-column: auto;
+      }
     }
 
     @media (max-width: 760px) {
       .topbar {
-        justify-content: center;
-        gap: 16px;
-        padding: 14px 10px;
-        font-size: 12px;
+        padding: 12px 5%;
       }
 
-      .secure-link {
-        padding-left: 12px;
+      .topbar-links {
+        gap: 13px;
+      }
+
+      .topbar-links a:nth-child(2),
+      .topbar-links a:nth-child(3) {
+        display: none;
       }
 
       .brandbar {
-        min-height: 80px;
-        padding: 14px 16px;
+        padding: 13px 5%;
       }
 
       .brand-name {
-        font-size: 21px;
+        font-size: 18px;
       }
 
-      .brand-tree {
-        font-size: 34px;
+      .brand-subtitle {
+        font-size: 8px;
+      }
+
+      .secure-status {
+        display: none;
       }
 
       .layout {
-        grid-template-columns: 1fr;
+        display: block;
+        padding-top: 20px;
       }
 
       .sidebar {
         display: flex;
         gap: 5px;
         overflow-x: auto;
+        margin-bottom: 22px;
         padding: 9px;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
+        border-radius: 13px;
+        scrollbar-width: thin;
       }
 
-      .nav-link {
-        flex: 0 0 auto;
-        gap: 7px;
-        padding: 11px;
-        margin: 0;
-        white-space: nowrap;
-        font-size: 12px;
-      }
-
-      .main {
-        padding: 23px 16px;
-      }
-
-      .customer-name {
-        font-size: 28px;
-      }
-    }
-
-    @media (max-width: 440px) {
-      .topbar {
-        gap: 11px;
-        font-size: 11px;
-      }
-
-      .brand-name {
-        font-size: 17px;
-        letter-spacing: 1px;
-      }
-
-      .brand-subtitle {
-        letter-spacing: 1.5px;
-      }
-
-      .brand-tree {
-        font-size: 29px;
-      }
-
-      .profile {
-        gap: 7px;
-      }
-
-      .profile-name,
-      .profile-button {
+      .side-heading,
+      .side-divider {
         display: none;
       }
 
-      .welcome {
-        gap: 8px;
+      .side-link {
+        flex: 0 0 auto;
+        width: auto;
+        min-height: 40px;
+        padding: 0 12px;
+        white-space: nowrap;
       }
 
-      h1 {
-        font-size: 23px;
+      .side-link .nav-icon {
+        width: auto;
       }
 
-      .customer-name {
-        font-size: 24px;
+      .welcome-row {
+        align-items: flex-start;
       }
 
-      .current-date {
-        max-width: 95px;
-        white-space: normal;
-        text-align: right;
+      .date-label {
+        padding-top: 5px;
+        font-size: 10px;
+      }
+
+      .card {
+        padding: 19px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar-links {
         font-size: 11px;
       }
 
-      .balance-card {
-        padding: 20px 16px;
+      .brand-mark {
+        width: 35px;
+        height: 35px;
+        font-size: 21px;
       }
 
-      .balance {
-        font-size: 29px;
+      .brand-name {
+        font-size: 15px;
+        letter-spacing: .08em;
       }
 
-      .action-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
+      .brand-subtitle {
+        letter-spacing: .16em;
       }
 
-      .action {
-        min-height: 85px;
+      .header-right {
+        gap: 8px;
       }
 
-      .promo {
-        padding: 21px 16px;
+      .profile-button {
+        padding: 5px;
+        border: 0;
       }
 
-      .promo h2 {
-        font-size: 22px;
+      .profile-button .avatar {
+        width: 33px;
+        height: 33px;
+      }
+
+      .profile-name,
+      .profile-caption {
+        display: none;
+      }
+
+      .welcome-row {
+        display: block;
+      }
+
+      .date-label {
+        margin-top: 12px;
+        text-align: left;
+      }
+
+      .balance-amount {
+        font-size: 32px;
+      }
+
+      .account-bottom {
+        align-items: flex-start;
+      }
+
+      .account-number {
+        max-width: 110px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-row {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
-  <nav class="topbar" aria-label="Website navigation">
-    <a href="index.html">Home</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#services">Services</a>
-    <a href="index.html#contact">Contact</a>
-    <a href="login.html" class="secure-link">♙ Secure Access</a>
-  </nav>
+  <header>
+    <div class="topbar">
+      <nav class="topbar-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <span class="secure-label">♧ SECURE ACCESS</span>
+    </div>
 
-  <header class="brandbar">
-    <a class="brand" href="index.html" aria-label="Oakmont home">
-      <span class="brand-tree" aria-hidden="true">♣</span>
-      <span>
-        <span class="brand-name">OAKMONT</span>
-        <span class="brand-subtitle">PRIVATE BANKING</span>
-      </span>
-    </a>
+    <div class="brandbar">
+      <a href="dashboard.html" class="brand" aria-label="Oakmont dashboard">
+        <div class="brand-mark" aria-hidden="true">♣</div>
+        <div>
+          <div class="brand-name">OAKMONT</div>
+          <div class="brand-subtitle">PRIVATE BANKING</div>
+        </div>
+      </a>
 
-    <div class="profile">
-      <div class="avatar" id="profile-avatar" aria-hidden="true">?</div>
-      <span class="profile-name" id="profile-name">Loading...</span>
-      <button class="profile-button" id="profile-button" type="button">
-        Profile ⌄
-      </button>
+      <div class="header-right">
+        <span class="secure-status">● Secure session</span>
+        <div class="profile-wrap">
+          <button
+            class="profile-button"
+            id="profile-button"
+            type="button"
+            aria-expanded="false"
+            aria-controls="profile-menu"
+          >
+            <span class="avatar" aria-hidden="true">TJ</span>
+            <span>
+              <span class="profile-name" id="header-owner">Tianna Jack</span>
+              <span class="profile-caption">Account holder</span>
+            </span>
+            <span aria-hidden="true">⌄</span>
+          </button>
+
+          <div class="profile-menu" id="profile-menu" hidden>
+            <button type="button" data-view="profile">My profile</button>
+            <button type="button" data-view="settings">Account details</button>
+            <button type="button" id="menu-signout">Sign out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
   <div class="layout">
-    <aside class="sidebar" aria-label="Dashboard menu">
-      <a href="dashboard.html" class="nav-link active">
+    <aside class="sidebar" aria-label="Account navigation">
+      <div class="side-heading">Your account</div>
+
+      <button class="side-link active" data-view="overview">
         <span class="nav-icon">⌂</span> Dashboard
-      </a>
-      <a href="#accounts" class="nav-link">
+      </button>
+      <button class="side-link" data-view="accounts">
         <span class="nav-icon">▤</span> Accounts
-      </a>
-      <a href="#transactions" class="nav-link">
-        <span class="nav-icon">⇄</span> Transactions
-      </a>
-      <a href="#services" class="nav-link" data-notice="Transfers">
-        <span class="nav-icon">➤</span> Transfers
-      </a>
-      <a href="#statements" class="nav-link" data-notice="Statements">
+      </button>
+      <button class="side-link" data-view="transactions">
+        <span class="nav-icon">↔</span> Transactions
+      </button>
+      <button class="side-link" data-view="transfers">
+        <span class="nav-icon">⇄</span> Transfers
+      </button>
+      <button class="side-link" data-view="statements">
         <span class="nav-icon">▧</span> Statements
-      </a>
-      <a href="#profile" class="nav-link" data-notice="Profile">
+      </button>
+
+      <div class="side-divider"></div>
+
+      <div class="side-heading">Personal</div>
+      <button class="side-link" data-view="profile">
         <span class="nav-icon">♙</span> Profile
-      </a>
-      <a href="#settings" class="nav-link" data-notice="Settings">
-        <span class="nav-icon">⚙</span> Settings
-      </a>
-      <a href="#" class="nav-link" id="sign-out">
-        <span class="nav-icon">⇥</span> Sign Out
-      </a>
+      </button>
+      <button class="side-link" data-view="settings">
+        <span class="nav-icon">⚙</span> Account details
+      </button>
+
+      <div class="side-divider"></div>
+
+      <button class="side-link signout" id="sidebar-signout">
+        <span class="nav-icon">↪</span> Sign out
+      </button>
     </aside>
 
     <main class="main">
-      <div class="page-message" id="page-message"
-        role="status" aria-live="polite"></div>
+      <div id="page-message" class="page-message" role="status" aria-live="polite" hidden></div>
 
-      <section class="welcome">
-        <div>
-          <h1>Welcome back,</h1>
-          <span class="customer-name" id="customer-name">Loading...</span>
-          <p>Here's your account overview.</p>
-        </div>
-        <time class="current-date" id="current-date"></time>
-      </section>
-
-      <section class="card balance-card" id="accounts">
-        <div class="balance-top">
-          <span>Total Account Balance</span>
-          <button class="icon-button" id="toggle-balance"
-            type="button" aria-label="Hide balance" aria-pressed="false">
-            Hide
-          </button>
-        </div>
-
-        <div class="balance" id="balance-value">Not available</div>
-
-        <div class="balance-bottom">
-          <div class="avatar" aria-hidden="true">♙</div>
-          <div>
-            <div class="owner-label">Account Owner</div>
-            <div class="owner-name" id="owner-name">Loading...</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="action-grid" id="services" aria-label="Quick actions">
-        <button class="action" data-action="Deposit" type="button">
-          <span class="action-icon">↓</span>
-          <span class="action-label">Deposit</span>
-        </button>
-
-        <button class="action" data-action="Transfer" type="button">
-          <span class="action-icon">⇄</span>
-          <span class="action-label">Transfer</span>
-        </button>
-
-        <button class="action" data-action="Pay Bills" type="button">
-          <span class="action-icon">▤</span>
-          <span class="action-label">Pay Bills</span>
-        </button>
-
-        <button class="action" data-action="More services" type="button">
-          <span class="action-icon">•••</span>
-          <span class="action-label">More</span>
-        </button>
-      </section>
-
-      <section class="card transactions" id="transactions">
-        <div class="section-heading">
-          <h2>Recent Transactions</h2>
-          <button class="view-all" id="view-all" type="button">
-            View All
-          </button>
-        </div>
-
-        <div class="empty-transactions">
-          Transaction history will appear here when connected to an
-          authorized banking data source.
-        </div>
-      </section>
-
-      <section class="card promo">
-        <div class="promo-content">
-          <h2>Building a stronger<br>financial future together</h2>
-          <p>
-            Discover banking services and financial solutions
-            designed around your goals.
-          </p>
-          <a href="index.html#services" class="gold-button">
-            Learn More &nbsp; ›
-          </a>
-        </div>
-      </section>
-
-      <div class="security-note">
-        <span class="security-icon" aria-hidden="true">♧</span>
-        <p>
-          Protect your account by keeping your sign-in details private.
-          Never share your password or security codes.
-        </p>
+      <div id="loading-state" class="card loader" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Loading Tianna Jack's account securely…</span>
       </div>
 
-      <footer class="footer">
-        Oakmont Private Banking
-      </footer>
+      <div id="dashboard-content" class="hidden">
+        <section class="welcome-row">
+          <div>
+            <div class="eyebrow" id="page-eyebrow">Private client banking</div>
+            <h1 id="welcome-heading">Welcome back, <span>Tianna Jack</span></h1>
+            <p class="welcome-copy" id="welcome-copy">
+              Here is your account overview.
+            </p>
+          </div>
+          <div class="date-label" id="current-date"></div>
+        </section>
+
+        <div class="grid">
+          <section class="card balance-card" id="overview-balance">
+            <div class="card-top">
+              <span class="card-label">Total Account Balance</span>
+              <span class="status-pill">
+                <span class="status-dot"></span> Account overview
+              </span>
+            </div>
+
+            <div class="balance-amount" id="balance-amount"
+                 aria-live="polite">••••••••</div>
+
+            <div class="balance-currency" id="balance-currency">ACCOUNT BALANCE</div>
+
+            <div class="card-top" style="justify-content:flex-start;margin-top:15px">
+              <button class="outline-button" id="toggle-balance" type="button"
+                      aria-pressed="false">
+                ◉ Show balance
+              </button>
+            </div>
+
+            <div class="account-bottom">
+              <div>
+                <div class="label">Account Owner</div>
+                <div class="value" id="account-owner">Tianna Jack</div>
+              </div>
+              <div>
+                <div class="label" style="text-align:right">Account</div>
+                <div class="account-number" id="account-number">•••• ••••</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card quick-card">
+            <h2>Quick Actions</h2>
+            <p class="section-subtitle">Access your account services.</p>
+
+            <div class="quick-actions">
+              <button class="action-button" data-view="transfers">
+                <span class="action-icon">＋</span>
+                <span class="action-name">Deposit</span>
+                <span class="action-description">Deposit information</span>
+              </button>
+
+              <button class="action-button" data-view="transfers">
+                <span class="action-icon">⇄</span>
+                <span class="action-name">Transfer</span>
+                <span class="action-description">Transfer information</span>
+              </button>
+
+              <button class="action-button" data-view="services">
+                <span class="action-icon">▤</span>
+                <span class="action-name">Pay Bills</span>
+                <span class="action-description">Payment services</span>
+              </button>
+
+              <button class="action-button" data-view="services">
+                <span class="action-icon">⋯</span>
+                <span class="action-name">More Services</span>
+                <span class="action-description">Explore services</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="card transactions-card" id="transactions-section">
+            <div class="section-heading">
+              <div>
+                <h2>Recent Transactions</h2>
+                <p class="section-subtitle" style="margin:6px 0 0">
+                  Activity recorded on your account.
+                </p>
+              </div>
+              <button class="outline-button" id="view-all" type="button">
+                View All →
+              </button>
+            </div>
+
+            <div class="transaction-list" id="transaction-list">
+              <div class="empty-state">Loading account activity…</div>
+            </div>
+          </section>
+
+          <section class="card details-card hidden" id="details-section">
+            <h2 id="details-title">Account Details</h2>
+            <p class="section-subtitle">Information associated with your signed-in account.</p>
+            <div id="details-content"></div>
+          </section>
+
+          <section class="card services-card hidden" id="services-section">
+            <h2>Account Services</h2>
+            <p class="section-subtitle">
+              Review available service information. Financial actions require
+              an authorized, server-side banking workflow.
+            </p>
+            <div class="services-grid">
+              <div class="service-tile">
+                <span class="action-icon">⇄</span>
+                <strong>Transfers</strong>
+                <p>Contact your authorized banking service to initiate or confirm a transfer.</p>
+              </div>
+              <div class="service-tile">
+                <span class="action-icon">▤</span>
+                <strong>Payments</strong>
+                <p>Use an approved payment workflow to review payee details and authorize payments.</p>
+              </div>
+              <div class="service-tile">
+                <span class="action-icon">▧</span>
+                <strong>Statements</strong>
+                <p>Access statements only when a statement service has been configured for your account.</p>
+              </div>
+              <div class="service-tile">
+                <span class="action-icon">♙</span>
+                <strong>Account Support</strong>
+                <p>Contact your banking administrator for account-specific assistance.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <footer class="footer">
+          <div class="footer-row">
+            <span>Oakmont Private Banking</span>
+            <span>Secure account access</span>
+          </div>
+          <p>
+            Account information is displayed from available authorized records.
+            Contact your banking administrator if information appears incorrect.
+          </p>
+        </footer>
+      </div>
     </main>
   </div>
 
-  
+  <!-- Supabase JavaScript client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    "use strict";
 
-<script>
-(async function () {
-  "use strict";
+    /*
+     * Public browser configuration.
+     * Never place a Supabase service_role key in this file.
+     */
+    const SUPABASE_URL =
+      "https://ppgfxdxwsbetdnqwkajd.supabase.co";
 
-  const SUPABASE_URL =
-    "https://otlfqoonsuvwhmyfhfff.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_rYMwJeR07pvLc68CbFMk9A_dZe9ERqs";
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
+    const OWNER_DISPLAY_NAME = "Tianna Jack";
+    const LOGIN_PAGE = "login.html";
 
-  // Keep the rest of your existing code below.
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
+
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      user: null,
+      account: null,
+      transactions: [],
+      showBalance: false,
+      currentView: "overview",
+      authCheckComplete: false
+    };
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]);
+    }
+
+    function showMessage(message, type = "") {
+      const element = $("page-message");
+      element.textContent = message;
+      element.className = "page-message" + (type ? " " + type : "");
+      element.hidden = false;
+    }
+
+    function hideMessage() {
+      $("page-message").hidden = true;
+      $("page-message").textContent = "";
+    }
+
+    function setLoading(isLoading, message = "Loading Tianna Jack's account securely…") {
+      $("loading-state").classList.toggle("hidden", !isLoading);
+      $("dashboard-content").classList.toggle("hidden", isLoading);
+
+      if (isLoading) {
+        $("loading-state").querySelector("span:last-child").textContent = message;
+      }
+    }
+
+    function formatMoney(value, currency = "CAD") {
+      const amount = Number(value);
+
+      if (!Number.isFinite(amount)) {
+        return "Balance unavailable";
+      }
+
+      try {
+        return new Intl.NumberFormat("en-CA", {
+          style: "currency",
+          currency,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(amount);
+      } catch {
+        return currency + " " + amount.toFixed(2);
+      }
+    }
+
+    function formatDate(value) {
+      if (!value) return "Date unavailable";
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Date unavailable";
+      }
+
+      return new Intl.DateTimeFormat("en-CA", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function displayOwner() {
+      /*
+       * This requested display name is presentation only.
+       * Access control must rely on the authenticated user ID,
+       * never on a name supplied by the browser.
+       */
+      $("header-owner").textContent = OWNER_DISPLAY_NAME;
+      $("account-owner").textContent = OWNER_DISPLAY_NAME;
+      $("welcome-heading").innerHTML =
+        "Welcome back, <span>" + escapeHTML(OWNER_DISPLAY_NAME) + "</span>";
+    }
+
+    function renderBalance() {
+      const account = state.account;
+      const amountElement = $("balance-amount");
+      const toggleButton = $("toggle-balance");
+
+      if (!account || account.balance == null ||
+          !Number.isFinite(Number(account.balance))) {
+        amountElement.textContent = "Unavailable";
+        $("balance-currency").textContent = "BALANCE NOT AVAILABLE";
+        toggleButton.disabled = true;
+        return;
+      }
+
+      const currency = account.currency || "CAD";
+
+      amountElement.textContent = state.showBalance
+        ? formatMoney(account.balance, currency)
+        : "••••••••";
+
+      $("balance-currency").textContent =
+        state.showBalance ? "AVAILABLE ACCOUNT RECORD" : "ACCOUNT BALANCE HIDDEN";
+
+      toggleButton.textContent = state.showBalance
+        ? "◎ Hide balance"
+        : "◉ Show balance";
+
+      toggleButton.setAttribute("aria-pressed", String(state.showBalance));
+    }
+
+    function renderAccountNumber() {
+      const account = state.account;
+      const element = $("account-number");
+
+      if (!account) {
+        element.textContent = "Not available";
+        return;
+      }
+
+      /*
+       * Do not reveal full account numbers in the dashboard.
+       */
+      const value = String(account.account_number || account.id || "");
+
+      element.textContent = value
+        ? "•••• " + value.replace(/\s/g, "").slice(-4)
+        : "Not available";
+    }
+
+    function renderTransactions() {
+      const container = $("transaction-list");
+      const transactions = state.transactions;
+
+      if (!transactions.length) {
+        container.innerHTML =
+          '<div class="empty-state">No transaction records are available for this account.</div>';
+        return;
+      }
+
+      container.innerHTML = transactions.map((transaction) => {
+        const rawAmount = Number(transaction.amount);
+        const amountValid = Number.isFinite(rawAmount);
+        const isCredit =
+          transaction.type === "credit" ||
+          transaction.type === "deposit" ||
+          (amountValid && rawAmount > 0);
+
+        const description =
+          transaction.description || transaction.type || "Account transaction";
+
+        const amountText = amountValid
+          ? formatMoney(Math.abs(rawAmount), transaction.currency || state.account.currency || "CAD")
+          : "Amount unavailable";
+
+        const sign = isCredit ? "+" : "−";
+        const status = transaction.status || "Recorded";
+
+        return `
+          <div class="transaction-row">
+            <div class="transaction-icon" aria-hidden="true">
+              ${isCredit ? "↙" : "↗"}
+            </div>
+            <div>
+              <div class="transaction-name">${escapeHTML(description)}</div>
+              <div class="transaction-date">${escapeHTML(formatDate(
+                transaction.transaction_date || transaction.created_at
+              ))}</div>
+            </div>
+            <div>
+              <div class="transaction-amount ${isCredit ? "credit" : "debit"}">
+                ${amountValid ? sign + " " + escapeHTML(amountText) : escapeHTML(amountText)}
+              </div>
+              <div class="transaction-status">${escapeHTML(status)}</div>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    function renderDetails(view) {
+      const account = state.account || {};
+      const user = state.user || {};
+
+      let title = "Account Details";
+      let rows = [];
+
+      if (view === "profile") {
+        title = "My Profile";
+        rows = [
+          ["Account Owner", OWNER_DISPLAY_NAME],
+          ["Sign-in Email", user.email || "Not available"],
+          ["User ID", user.id || "Not available"],
+          ["Account Status", account.status || "Not available"]
+        ];
+      } else if (view === "accounts" || view === "settings") {
+        title = "Account Details";
+        rows = [
+          ["Account Owner", OWNER_DISPLAY_NAME],
+          ["Account Type", account.account_type || "Not available"],
+          ["Account Currency", account.currency || "CAD"],
+          ["Account Status", account.status || "Not available"],
+          ["Account Number", account.account_number
+            ? "•••• " + String(account.account_number).replace(/\s/g, "").slice(-4)
+            : "Not available"],
+          ["Account Created", formatDate(account.created_at)]
+        ];
+      } else if (view === "statements") {
+        title = "Statements";
+        rows = [
+          ["Statement access", "Not configured"],
+          ["Next step", "Configure a secure statement service"]
+        ];
+      }
+
+      $("details-title").textContent = title;
+      $("details-content").innerHTML = rows.map(([label, value]) => `
+        <div class="detail-row">
+          <span class="detail-label">${escapeHTML(label)}</span>
+          <span class="detail-value">${escapeHTML(value)}</span>
+        </div>
+      `).join("");
+    }
+
+    function setView(view) {
+      const allowedViews = [
+        "overview", "accounts", "transactions", "transfers",
+        "statements", "profile", "settings", "services"
+      ];
+
+      if (!allowedViews.includes(view)) {
+        view = "overview";
+      }
+
+      state.currentView = view;
+
+      document.querySelectorAll(".side-link[data-view]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.view === view);
+      });
+
+      $("overview-balance").classList.toggle(
+        "hidden",
+        !["overview", "accounts", "settings"].includes(view)
+      );
+
+      document.querySelector(".quick-card").classList.toggle(
+        "hidden",
+        view !== "overview"
+      );
+
+      $("transactions-section").classList.toggle(
+        "hidden",
+        !["overview", "transactions"].includes(view)
+      );
+
+      $("details-section").classList.toggle(
+        "hidden",
+        !["accounts", "profile", "settings", "statements"].includes(view)
+      );
+
+      $("services-section").classList.toggle(
+        "hidden",
+        !["transfers", "services"].includes(view)
+      );
+
+      const headings = {
+        overview: ["Private client banking", "Here is your account overview."],
+        accounts: ["Your accounts", "Review your available account information."],
+        transactions: ["Account activity", "Review recorded account transactions."],
+        transfers: ["Transfers", "Review information about transfer services."],
+        statements: ["Statements", "Review statement access information."],
+        profile: ["Personal information", "Review your signed-in profile."],
+        settings: ["Account details", "Review your account information."],
+        services: ["Banking services", "Review available service information."]
+      };
+
+      $("page-eyebrow").textContent = headings[view][0];
+      $("welcome-copy").textContent = headings[view][1];
+
+      if (["accounts", "profile", "settings", "statements"].includes(view)) {
+        renderDetails(view);
+      }
+
+      $("profile-menu").hidden = true;
+      $("profile-button").setAttribute("aria-expanded", "false");
+    }
+
+    async function loadAccount(user) {
+      /*
+       * These queries depend on the database schema described below.
+       * Supabase RLS must restrict rows to this authenticated user.
+       */
+      const { data: accounts, error: accountError } = await supabaseClient
+        .from("accounts")
+        .select("id, user_id, account_number, account_type, balance, currency, status, created_at")
+        .eq("user_id", user.id)
+        .limit(2);
+
+      if (accountError) {
+        console.error("Account query failed:", accountError);
+        throw new Error(
+          "We couldn't load your account records. Check the accounts table and its Row Level Security policies."
+        );
+      }
+
+      if (!accounts || accounts.length === 0) {
+        state.account = null;
+        state.transactions = [];
+        renderBalance();
+        renderAccountNumber();
+        renderTransactions();
+
+        showMessage(
+          "No account record is linked to this signed-in user. Ask your authorized administrator to verify the account assignment.",
+          "error"
+        );
+        return;
+      }
+
+      if (accounts.length > 1) {
+        throw new Error(
+          "More than one account record was returned. Account selection must be configured before continuing."
+        );
+      }
+
+      state.account = accounts[0];
+
+      const { data: transactions, error: transactionError } =
+        await supabaseClient
+          .from("transactions")
+          .select("id, account_id, user_id, description, amount, currency, type, status, transaction_date, created_at")
+          .eq("account_id", state.account.id)
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(10);
+
+      if (transactionError) {
+        console.error("Transaction query failed:", transactionError);
+        state.transactions = [];
+        showMessage(
+          "Your account was loaded, but transaction history could not be retrieved. Check the transactions table and its access policies.",
+          "error"
+        );
+      } else {
+        state.transactions = transactions || [];
+      }
+
+      renderBalance();
+      renderAccountNumber();
+      renderTransactions();
+    }
+
+    async function handleSignOut() {
+      $("sidebar-signout").disabled = true;
+      $("menu-signout").disabled = true;
+
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+          throw error;
+        }
+
+        window.location.replace(LOGIN_PAGE);
+      } catch (error) {
+        console.error("Sign-out failed:", error);
+        showMessage(
+          "Sign-out could not be completed. Please try again.",
+          "error"
+        );
+      } finally {
+        $("sidebar-signout").disabled = false;
+        $("menu-signout").disabled = false;
+      }
+    }
+
+    async function initializeDashboard() {
+      setLoading(true);
+
+      try {
+        if (!window.supabase || !window.supabase.createClient) {
+          throw new Error(
+            "The secure authentication library could not load. Check your internet connection and reload the page."
+          );
+        }
+
+        const { data, error } = await supabaseClient.auth.getSession();
+
+        if (error) {
+          throw error;
+        }
+
+        if (!data.session || !data.session.user) {
+          window.location.replace(LOGIN_PAGE);
+          return;
+        }
+
+        state.user = data.session.user;
+        state.authCheckComplete = true;
+
+        displayOwner();
+
+        $("current-date").textContent =
+          new Intl.DateTimeFormat("en-CA", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          }).format(new Date());
+
+        setLoading(false);
+        $("transaction-list").innerHTML =
+          '<div class="empty-state">Loading account activity…</div>';
+
+        try {
+          await loadAccount(state.user);
+        } catch (error) {
+          console.error("Dashboard data loading failed:", error);
+          showMessage(
+            error.message || "Account information could not be loaded.",
+            "error"
+          );
+          state.account = null;
+          state.transactions = [];
+          renderBalance();
+          renderAccountNumber();
+          renderTransactions();
+        }
+      } catch (error) {
+        console.error("Dashboard initialization failed:", error);
+        setLoading(false);
+        $("dashboard-content").classList.add("hidden");
+        showMessage(
+          error.message || "Secure access could not be verified.",
+          "error"
+        );
+      }
+    }
+
+    $("toggle-balance").addEventListener("click", () => {
+      if (!state.account) return;
+      state.showBalance = !state.showBalance;
+      renderBalance();
+    });
+
+    document.querySelectorAll("[data-view]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!state.authCheckComplete) return;
+        hideMessage();
+        setView(button.dataset.view);
+      });
+    });
+
+    $("view-all").addEventListener("click", () => {
+      hideMessage();
+      setView("transactions");
+    });
+
+    $("profile-button").addEventListener("click", () => {
+      const menu = $("profile-menu");
+      menu.hidden = !menu.hidden;
+      $("profile-button").setAttribute(
+        "aria-expanded",
+        String(!menu.hidden)
+      );
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".profile-wrap")) {
+        $("profile-menu").hidden = true;
+        $("profile-button").setAttribute("aria-expanded", "false");
+      }
+    });
+
+    $("sidebar-signout").addEventListener("click", handleSignOut);
+    $("menu-signout").addEventListener("click", handleSignOut);
+
+    /*
+     * If the session expires or is removed, return to the sign-in page.
+     */
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (
+        state.authCheckComplete &&
+        (event === "SIGNED_OUT" || !session)
+      ) {
+        window.location.replace(LOGIN_PAGE);
+      }
+    });
+
+    initializeDashboard();
+  </script>
+</body>
+</html>
