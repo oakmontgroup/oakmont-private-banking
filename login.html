@@ -383,42 +383,72 @@
     <p><a href="index.html">Back to home</a></p>
   </footer>
 
-  <script>
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const rememberEmail = document.getElementById("remember-email");
-    const passwordToggle = document.getElementById("password-toggle");
-    const loginForm = document.getElementById("login-form");
-    const loginMessage = document.getElementById("login-message");
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://otlfqoonsuvwhmyfhfff.supabase.co/rest/v1/";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_dVi-_qsBmlJANURtQob6fw_CVdY6GDK";
 
-    function showMessage(text, type) {
-      loginMessage.textContent = text;
-      loginMessage.className = "login-message " + (type || "");
+  const { createClient } = window.supabase;
+  const supabaseClient = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const rememberEmail = document.getElementById("remember-email");
+  const passwordToggle = document.getElementById("password-toggle");
+  const loginForm = document.getElementById("login-form");
+  const loginMessage = document.getElementById("login-message");
+  const submitButton = loginForm.querySelector('button[type="submit"]');
+
+  function showMessage(text, type) {
+    loginMessage.textContent = text;
+    loginMessage.className = "login-message " + (type || "");
+  }
+
+  passwordToggle.addEventListener("click", function () {
+    const hidden = passwordInput.type === "password";
+    passwordInput.type = hidden ? "text" : "password";
+    passwordToggle.textContent = hidden ? "Hide" : "Show";
+    passwordToggle.setAttribute("aria-pressed", String(hidden));
+  });
+
+  try {
+    const savedEmail = localStorage.getItem("oakmont_saved_email");
+    if (savedEmail) {
+      emailInput.value = savedEmail;
+      rememberEmail.checked = true;
+    }
+  } catch (_) {}
+
+  loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!loginForm.reportValidity()) return;
+
+    if (
+      SUPABASE_URL.includes("PASTE_") ||
+      SUPABASE_PUBLISHABLE_KEY.includes("PASTE_")
+    ) {
+      showMessage("Please configure your Supabase project settings first.", "error");
+      return;
     }
 
-    passwordToggle.addEventListener("click", function () {
-      const isHidden = passwordInput.type === "password";
-
-      passwordInput.type = isHidden ? "text" : "password";
-      passwordToggle.textContent = isHidden ? "Hide" : "Show";
-      passwordToggle.setAttribute("aria-pressed", String(isHidden));
-    });
+    submitButton.disabled = true;
+    submitButton.textContent = "Signing in…";
 
     try {
-      const savedEmail = localStorage.getItem("oakmont_saved_email");
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+          email: emailInput.value.trim(),
+          password: passwordInput.value
+        });
 
-      if (savedEmail) {
-        emailInput.value = savedEmail;
-        rememberEmail.checked = true;
+      if (error) throw error;
+      if (!data.session) {
+        throw new Error("No active session was created. Please try again.");
       }
-    } catch (error) {
-      // Remember-email is optional if browser storage is unavailable.
-    }
-
-    loginForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      if (!loginForm.reportValidity()) return;
 
       try {
         if (rememberEmail.checked) {
@@ -429,16 +459,17 @@
         } else {
           localStorage.removeItem("oakmont_saved_email");
         }
-      } catch (error) {
-        // Authentication must not depend on local storage.
-      }
+      } catch (_) {}
 
+      showMessage("Sign-in successful. Opening your account…", "success");
+      window.location.assign("dashboard.html");
+    } catch (error) {
       showMessage(
-        "Sign-in is not connected yet. Configure the authentication service before signing in.",
+        error.message || "Unable to sign in. Please try again.",
         "error"
       );
-    });
-  </script>
-
-</body>
-</html>
+      submitButton.disabled = false;
+      submitButton.innerHTML = 'Sign In <span aria-hidden="true">→</span>';
+    }
+  });
+</script>
