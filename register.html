@@ -352,20 +352,11 @@
         return;
       }
 
-      showMessage(
-        "Your registration request was submitted. If confirmation is required, check your email and follow the confirmation link before signing in.",
-        "success"
-      );
+      console.error("Oakmont registration error:", error);
 
-      form.reset();
-    } catch (error) {
-      showMessage(
-        error.message || "Registration failed. Please try again.",
-        "error"
-      );
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = "Create Account →";
-    }
-  });
+showMessage(
+  "Registration failed: " +
+  (error.message || String(error)),
+  "error"
+);
 </script>
