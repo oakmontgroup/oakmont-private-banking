@@ -1,441 +1,444 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#001a14">
+  <meta name="description" content="Oakmont account sign-in page">
   <title>Sign In | Oakmont Private Banking</title>
+  <link rel="stylesheet" href="style.css">
 
   <style>
     :root {
-      --bg: #001a14;
-      --panel: #06271f;
-      --gold: #d8b779;
-      --gold-light: #f0d49a;
-      --text: #f3f0e8;
-      --muted: #a9b8b0;
-      --border: rgba(216,183,121,.35);
-      --error: #ffb5a9;
-      --success: #a8e2bd;
+      --login-input: #fffdbb;
+      --login-input-text: #11170f;
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
+    body.login-page {
       min-height: 100vh;
-      padding: 24px 16px;
-      display: grid;
-      place-items: center;
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(ellipse at 50% 0%, #174434, transparent 60%),
-        var(--bg);
+        radial-gradient(ellipse at 50% 0%, #0b3025 0%, transparent 48%),
+        #001a14;
     }
 
-    .page {
-      width: 100%;
-      max-width: 440px;
-    }
-
-    .brand {
+    .login-brand {
+      padding: 16px 0 30px;
       text-align: center;
-      margin-bottom: 25px;
     }
 
-    .brand-symbol {
+    .login-brand a {
+      display: inline-block;
+    }
+
+    .login-brand .brand-name {
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      letter-spacing: .16em;
+    }
+
+    .login-brand .brand-subtitle {
+      margin-top: 8px;
+      font-size: .88rem;
+      letter-spacing: .28em;
+    }
+
+    .login-card {
+      width: min(100% - 28px, 820px);
+      margin: 22px auto 34px;
+      padding: clamp(26px, 6vw, 70px);
+      border: 2px solid rgba(216,183,121,.38);
+      border-radius: 30px;
+      background: rgba(5,37,29,.94);
+      box-shadow: 0 25px 75px rgba(0,0,0,.16);
+    }
+
+    .login-eyebrow {
+      margin: 0 0 28px;
       color: var(--gold);
-      font-size: 30px;
+      font-size: clamp(.85rem, 2.5vw, 1.1rem);
+      font-weight: 700;
+      letter-spacing: .2em;
     }
 
-    .brand-name {
-      margin: 7px 0 5px;
-      color: var(--gold-light);
-      font: 30px Georgia, serif;
-      letter-spacing: 5px;
+    .login-heading {
+      margin: 0 0 20px;
+      color: #f5f2eb;
+      font-size: clamp(2.7rem, 8vw, 5rem);
+      font-weight: 400;
+      letter-spacing: -.035em;
     }
 
-    .brand-subtitle {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 4px;
-    }
-
-    .card {
-      padding: 34px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: rgba(6,39,31,.96);
-      box-shadow: 0 24px 70px rgba(0,0,0,.28);
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    h1 {
-      margin: 15px 0 10px;
-      font: normal 36px/1.15 Georgia, serif;
-    }
-
-    .intro {
-      margin: 0 0 26px;
-      color: var(--muted);
-      font-size: 14px;
+    .login-description {
+      margin: 0 0 54px;
+      color: #a9bcb4;
+      font-size: clamp(1.05rem, 3.5vw, 1.8rem);
       line-height: 1.65;
     }
 
-    .field { margin-bottom: 19px; }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
+    .login-form .form-group {
+      margin-bottom: 32px;
     }
 
-    input {
-      display: block;
-      width: 100%;
-      min-height: 49px;
-      padding: 13px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      outline: none;
-      background: #001a14;
-      color: var(--text);
-      font-size: 15px;
+    .login-form label {
+      margin-bottom: 12px;
+      color: #f1f0e9;
+      font-size: clamp(1rem, 3vw, 1.35rem);
     }
 
-    input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(216,183,121,.1);
+    .login-form input[type="email"],
+    .login-form input[type="password"],
+    .login-form input[type="text"] {
+      min-height: 76px;
+      padding: 18px 22px;
+      border: 2px solid rgba(216,183,121,.6);
+      border-radius: 17px;
+      background: var(--login-input);
+      color: var(--login-input-text);
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      font-weight: 600;
     }
 
-    input::placeholder { color: #82948b; }
+    .login-form input::placeholder {
+      color: #737762;
+    }
 
-    .password-wrap { position: relative; }
+    .login-form input:focus {
+      border-color: var(--gold-light);
+      box-shadow: 0 0 0 4px rgba(216,183,121,.15);
+    }
 
-    .password-wrap input { padding-right: 70px; }
+    .password-wrap {
+      position: relative;
+    }
 
-    .toggle-password {
+    .password-wrap input {
+      padding-right: 95px !important;
+    }
+
+    .password-toggle {
       position: absolute;
       top: 50%;
       right: 12px;
+      min-height: 42px;
+      padding: 8px 12px;
       transform: translateY(-50%);
-      padding: 5px 0;
       border: 0;
       background: transparent;
-      color: var(--gold-light);
-      font-size: 12px;
+      color: #856c36;
+      font-size: 1rem;
+    }
+
+    .password-toggle:hover {
+      transform: translateY(-50%);
+      background: rgba(0,0,0,.05);
+      color: #5e4b24;
+    }
+
+    .login-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 8px 0 48px;
+    }
+
+    .remember-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      color: #a9bcb4 !important;
+      font-size: clamp(.9rem, 2.8vw, 1.2rem) !important;
       cursor: pointer;
     }
 
-    .options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 5px 0 23px;
-      font-size: 12px;
-    }
-
-    .remember {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-    }
-
-    .remember input {
-      width: 16px;
-      min-height: 16px;
-      margin: 0;
+    .remember-option input {
+      width: 25px;
+      height: 25px;
+      min-height: 25px;
+      flex: 0 0 25px;
       accent-color: var(--gold);
     }
 
-    a {
+    .forgot-link {
       color: var(--gold-light);
-      text-decoration: none;
+      font-size: clamp(.9rem, 2.8vw, 1.2rem);
+      white-space: nowrap;
     }
 
-    a:hover { text-decoration: underline; }
-
-    .sign-in {
+    .login-submit {
       width: 100%;
-      min-height: 50px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--gold);
-      color: #14251c;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
+      min-height: 86px;
+      border: 1px solid var(--gold-light);
+      border-radius: 17px;
+      background: #f0d49a;
+      color: #09271c;
+      font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+      font-weight: 800;
     }
 
-    .sign-in:hover { background: var(--gold-light); }
-
-    .sign-in:disabled {
-      opacity: .65;
-      cursor: wait;
+    .login-submit:hover {
+      background: #ffe3ac;
+      color: #09271c;
     }
 
-    .message {
-      display: none;
-      margin-bottom: 18px;
-      padding: 12px;
+    .login-submit span {
+      font-size: 1.4em;
+      line-height: 1;
+    }
+
+    .register-prompt {
+      margin: 46px 0 4px;
+      color: #a9bcb4;
+      font-size: clamp(.95rem, 3vw, 1.3rem);
+      text-align: center;
+    }
+
+    .register-prompt a {
+      color: var(--gold-light);
+    }
+
+    .login-footer {
+      width: min(100% - 28px, 900px);
+      margin: 0 auto;
+      padding: 12px 0 30px;
+      color: #9bafa7;
+      text-align: center;
+      font-size: .88rem;
+    }
+
+    .login-footer p {
+      margin: 8px 0;
+      color: inherit;
+    }
+
+    .login-footer a {
+      color: var(--gold-light);
+    }
+
+    .login-message {
+      margin-bottom: 28px;
+      padding: 17px 20px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      line-height: 1.5;
+      border-radius: 15px;
+      color: var(--muted);
+      font-size: 1rem;
       overflow-wrap: anywhere;
     }
 
-    .message.visible { display: block; }
-    .message.error { color: var(--error); }
-    .message.success { color: var(--success); }
-    .message.info { color: var(--gold-light); }
-
-    .register-link {
-      margin: 23px 0 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.8;
+    .login-message.error {
+      border-color: rgba(241,165,165,.65);
+      color: #ffb4aa;
     }
 
-    .security-note {
-      margin: 24px 0 0;
-      color: var(--muted);
-      text-align: center;
-      font-size: 11px;
-      line-height: 1.7;
+    .login-message.success {
+      border-color: rgba(130,201,162,.65);
+      color: var(--green);
     }
 
-    .back-home {
-      display: block;
-      margin-top: 22px;
-      text-align: center;
-      font-size: 12px;
+    @media (max-width: 520px) {
+      .login-brand {
+        padding: 18px 0 28px;
+      }
+
+      .login-card {
+        margin-top: 18px;
+        border-radius: 25px;
+      }
+
+      .login-description {
+        margin-bottom: 36px;
+      }
+
+      .login-form .form-group {
+        margin-bottom: 25px;
+      }
+
+      .login-form input[type="email"],
+      .login-form input[type="password"],
+      .login-form input[type="text"] {
+        min-height: 64px;
+        padding: 15px;
+        border-radius: 14px;
+      }
+
+      .login-options {
+        margin-bottom: 34px;
+      }
+
+      .remember-option {
+        gap: 9px;
+      }
+
+      .login-submit {
+        min-height: 72px;
+      }
+
+      .register-prompt {
+        margin-top: 34px;
+      }
     }
 
-    @media (max-width: 420px) {
-      .card { padding: 26px 21px; }
-      h1 { font-size: 32px; }
-      .brand-name { font-size: 27px; }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
     }
   </style>
 </head>
 
-<body>
-  <main class="page">
-    <header class="brand">
-      <div class="brand-symbol" aria-hidden="true">♣</div>
-      <div class="brand-name">OAKMONT</div>
-      <div class="brand-subtitle">PRIVATE BANKING®</div>
-    </header>
+<body class="login-page">
 
-    <section class="card">
-      <div class="eyebrow">SECURE ACCOUNT ACCESS</div>
-      <h1>Welcome back.</h1>
-      <p class="intro">
-        Sign in to continue to your Oakmont Private Account.
+  <header class="login-brand">
+    <a href="index.html" aria-label="Oakmont home">
+      <span class="brand-name">OAKMONT</span>
+      <span class="brand-subtitle">PRIVATE BANKING</span>
+    </a>
+  </header>
+
+  <main>
+    <section class="login-card">
+      <p class="login-eyebrow">SECURE ACCOUNT ACCESS</p>
+
+      <h1 class="login-heading">Welcome back.</h1>
+
+      <p class="login-description">
+        Sign in to continue to your Oakmont account.
       </p>
 
-      <div id="login-message" class="message"
-           role="status" aria-live="polite"></div>
+      <div id="login-message"
+           class="login-message hidden"
+           role="status"
+           aria-live="polite"></div>
 
-      <form id="login-form">
-        <div class="field">
+      <form id="login-form" class="login-form">
+        <div class="form-group">
           <label for="email">Email address</label>
-          <input id="email" name="email" type="email"
-                 autocomplete="username" placeholder="you@example.com"
-                 required>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            placeholder="you@example.com"
+            maxlength="254"
+            required
+          >
         </div>
 
-        <div class="field">
+        <div class="form-group">
           <label for="password">Password</label>
+
           <div class="password-wrap">
-            <input id="password" name="password" type="password"
-                   autocomplete="current-password"
-                   placeholder="Enter your password" required>
-            <button class="toggle-password" id="toggle-password"
-                    type="button" aria-label="Show password">
-              Show
-            </button>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              required
+            >
+
+            <button
+              class="password-toggle"
+              id="password-toggle"
+              type="button"
+              aria-controls="password"
+              aria-pressed="false"
+            >Show</button>
           </div>
         </div>
 
-        <div class="options">
-          <label class="remember">
-            <input id="remember-me" type="checkbox">
-            Remember email on this device
+        <div class="login-options">
+          <label class="remember-option" for="remember-email">
+            <input
+              id="remember-email"
+              type="checkbox"
+            >
+            <span>Remember email on this device</span>
           </label>
-          <a href="forgot-password.html">Forgot password?</a>
+
+          <a class="forgot-link" href="reset-password.html">
+            Forgot password?
+          </a>
         </div>
 
-        <button class="sign-in" id="sign-in-button" type="submit">
+        <button class="login-submit" type="submit">
           Sign In <span aria-hidden="true">→</span>
         </button>
       </form>
 
-      <p class="register-link">
+      <p class="register-prompt">
         New to Oakmont?
         <a href="register.html">Create an account</a>
       </p>
     </section>
-
-    <p class="security-note">
-      Keep your password private. Never share your sign-in details.
-      <br>
-      Oakmont Digital Banking· 
-      Credit cards are issued by JPMorgan Chase Bank, N.A. Member FDIC
-      © 2026 OPB & Co.
-    </p>
-
-    <a class="back-home" href="index.html">← Back to home</a>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-client.js"></script>
+  <footer class="login-footer">
+    <p>Keep your password private. Never share your sign-in details.</p>
+    <p>Oakmont account-management website.</p>
+    <p><a href="index.html">Back to home</a></p>
+  </footer>
 
   <script>
-    const form = document.getElementById("login-form");
-    const button = document.getElementById("sign-in-button");
-    const message = document.getElementById("login-message");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
-    const rememberMe = document.getElementById("remember-me");
-    const togglePassword = document.getElementById("toggle-password");
+    const rememberEmail = document.getElementById("remember-email");
+    const passwordToggle = document.getElementById("password-toggle");
+    const loginForm = document.getElementById("login-form");
+    const loginMessage = document.getElementById("login-message");
 
-    function showMessage(text, type = "error") {
-      message.textContent = text;
-      message.className = "message visible " + type;
+    function showMessage(text, type) {
+      loginMessage.textContent = text;
+      loginMessage.className = "login-message " + (type || "");
     }
 
-    togglePassword.addEventListener("click", () => {
-      const showing = passwordInput.type === "text";
-      passwordInput.type = showing ? "password" : "text";
-      togglePassword.textContent = showing ? "Show" : "Hide";
-      togglePassword.setAttribute(
-        "aria-label", showing ? "Show password" : "Hide password"
-      );
+    passwordToggle.addEventListener("click", function () {
+      const isHidden = passwordInput.type === "password";
+
+      passwordInput.type = isHidden ? "text" : "password";
+      passwordToggle.textContent = isHidden ? "Hide" : "Show";
+      passwordToggle.setAttribute("aria-pressed", String(isHidden));
     });
 
-    // Only remember the email address, never the password.
     try {
       const savedEmail = localStorage.getItem("oakmont_saved_email");
+
       if (savedEmail) {
         emailInput.value = savedEmail;
-        rememberMe.checked = true;
+        rememberEmail.checked = true;
       }
     } catch (error) {
-      console.warn("Email remembering is unavailable.");
+      // Remember-email is optional if browser storage is unavailable.
     }
 
-    form.addEventListener("submit", async (event) => {
+    loginForm.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!email || !password) {
-        showMessage("Enter your email address and password.");
-        return;
-      }
-
-      let client = window.oakmontSupabase;
-
-      if (!client) {
-        try {
-          client = typeof oakmontSupabase !== "undefined"
-            ? oakmontSupabase
-            : null;
-        } catch (_) {
-          client = null;
-        }
-      }
-
-      if (!window.supabase || !client || !client.auth) {
-        showMessage(
-          "Authentication is unavailable. Check supabase-client.js and refresh."
-        );
-        console.error("Supabase client is missing.");
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "Signing In…";
-      showMessage("Verifying your details…", "info");
-
-      let timeoutId;
+      if (!loginForm.reportValidity()) return;
 
       try {
-        const signInPromise = client.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        const timeoutPromise = new Promise((_, reject) => {
-          timeoutId = setTimeout(() => {
-            reject(new Error(
-              "Sign-in timed out. Check your connection and Supabase settings."
-            ));
-          }, 15000);
-        });
-
-        const { data, error } = await Promise.race([
-          signInPromise,
-          timeoutPromise
-        ]);
-
-        if (error) {
-          console.error("Sign-in error:", error);
-          showMessage(
-            error.message || "Sign-in failed. Check your details and try again."
+        if (rememberEmail.checked) {
+          localStorage.setItem(
+            "oakmont_saved_email",
+            emailInput.value.trim()
           );
-          return;
+        } else {
+          localStorage.removeItem("oakmont_saved_email");
         }
-
-        if (!data || !data.session) {
-          showMessage(
-            "No active session was returned. Check your email confirmation status."
-          );
-          return;
-        }
-
-        try {
-          if (rememberMe.checked) {
-            localStorage.setItem("oakmont_saved_email", email);
-          } else {
-            localStorage.removeItem("oakmont_saved_email");
-          }
-        } catch (_) {
-          // Sign-in can continue if browser storage is unavailable.
-        }
-
-        showMessage("Signed in successfully. Opening your dashboard…", "success");
-        window.location.replace("dashboard.html");
-
       } catch (error) {
-        console.error("Sign-in diagnostic:", error);
-        showMessage(
-          error && error.message
-            ? error.message
-            : "Unable to sign in. Check your connection and try again."
-        );
-      } finally {
-        clearTimeout(timeoutId);
-        button.disabled = false;
-        button.textContent = "Sign In →";
+        // Authentication must not depend on local storage.
       }
+
+      showMessage(
+        "Sign-in is not connected yet. Configure the authentication service before signing in.",
+        "error"
+      );
     });
   </script>
+
 </body>
 </html>
